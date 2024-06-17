@@ -1,0 +1,31 @@
+:root {
+    --white: #fff;
+    --brightBlue: rgb(44, 116, 179);
+    --darkBlue: rgb(20, 66, 114);
+    --pText: #8f8f8f;
+}
+body {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    background-color: var(--white);
+    letter-spacing: 1.5 !important;
+    line-height: 1.5 !important;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track
+    {
+    background: var(--white);
+}
+
+::-webkit-scrollbar-thumb
+    {
+    background-color: var(--brightBlue);
+    border-radius: 10px;
+}
+
+
+

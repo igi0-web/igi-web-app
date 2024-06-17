@@ -1,0 +1,34 @@
+@import url('../../index.css');
+.navLink {
+    color: var(--brightBlue) !important;
+}
+
+.nav-link:hover {
+    opacity: 0.8;
+}
+
+.footerH5-white {
+    color: var(--white) !important;
+    font-weight: bold;
+}
+
+.footer-p-white {
+    color: var(--white) !important;
+}
+
+.coloredBackground {
+    background-color: var(--brightBlue);
+}
+
+.linkFix {
+    text-decoration: none !important;
+    color: var(--white) !important;
+}
+
+.linkFix:hover {
+    opacity: 0.8;
+}
+
+.linkFix:active {
+    opacity: 0.5;
+}
