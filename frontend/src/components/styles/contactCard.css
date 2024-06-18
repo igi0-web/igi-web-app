@@ -1,0 +1,17 @@
+@import url('../../index.css');
+
+.h6Color{
+    color: var(--brightBlue);
+}
+
+.contact-link
+{
+    text-decoration: none;
+    color: var(--brightBlue);
+}
+.contact-link:hover{
+    opacity: 0.8;
+}
+.contact-link:active{
+    opacity: 0.6;
+}

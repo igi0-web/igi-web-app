@@ -2,7 +2,7 @@ import "./styles/components.css";
 
 export const Footer = () => {
   return (
-        <section id="footer-section" className="container-fluid coloredBackground mt-5 fixed-bottom">
+        <section id="footer-section" className="container-fluid coloredBackground mt-5 ">
 
             <footer className="pt-5 pb-2 container">
 

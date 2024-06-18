@@ -27,5 +27,23 @@ body {
     border-radius: 10px;
 }
 
+.desiredBtn {
+    background-color: var(--brightBlue) !important;
+    color: var(--white) !important;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 7px;
+    transition: 0.15s;
+    cursor: pointer;
+}
+
+.desiredBtn:hover {
+    opacity: 0.9;
+}
+
+.desiredBtn:active {
+    opacity: 0.8;
+}
+
 
 
