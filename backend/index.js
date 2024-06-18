@@ -1,7 +1,7 @@
 import express from 'express'
-
+import dbConnect from './config/dbConnection.js';
 const app = express();
-
+dbConnect();
 
 
 app.get("/", (req, res) => {
