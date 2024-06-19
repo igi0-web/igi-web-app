@@ -7,7 +7,7 @@ export const News = () => {
 
 
   useEffect(() => {
-    const fetchAllListing = async () => {
+    const fetchAllNews = async () => {
       try {
 
         const res = await fetch(`/api/news/`);
@@ -22,7 +22,7 @@ export const News = () => {
         console.log(error.message);
       }
     }
-    fetchAllListing();
+    fetchAllNews();
   });
 
 
