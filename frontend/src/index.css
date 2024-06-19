@@ -10,6 +10,7 @@ body {
     background-color: var(--white);
     letter-spacing: 1.5 !important;
     line-height: 1.5 !important;
+    text-decoration: none !important;
 }
 
 ::-webkit-scrollbar {
@@ -52,5 +53,30 @@ body {
     font-weight: bold;
 }
 
+.section-p{
+    text-decoration: none !important;
+    color: var(--brightBlue);
+}
+
+
+
+.desiredH2 {
+    text-decoration: none !important;
+    margin-top: 15px;
+    font-size: 1.2rem;
+    color: var(--brightBlue);
+    font-weight: bold;
+}
+
+.desiredH5 {
+    text-decoration: none !important;
+    margin-top: 15px;
+    font-size: 1.2rem;
+    color: var(--brightBlue) !important;
+}
+
+.contentsec{
+    height: 100% !important;
+}
 
 

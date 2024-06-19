@@ -11,6 +11,7 @@ import { Certificates } from './pages/Certificates'
 import { Header } from './components/Header'
 import { News } from './pages/News';
 import { Footer } from './components/Footer';
+import { SingleNews } from './pages/SingleNews';
 
 function App() {
 
@@ -24,8 +25,10 @@ function App() {
         <Route path='/projects' element={<Projects />}></Route>
         <Route path='/certificates' element={<Certificates />}></Route>
         <Route path='/news' element={<News />}></Route>
+        <Route path='/news/:id' element={<SingleNews />}></Route>
         <Route path='/about-us' element={<AboutUs />}></Route>
         <Route path='/contact-us' element={<ContactUs />}></Route>
+        
       </Routes>
       <Footer />
     </BrowserRouter>

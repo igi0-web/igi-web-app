@@ -58,7 +58,7 @@ export const ContactUs = () => {
         backgroundImage: `url(${backImage})`, backgroundSize: 'cover',
         backgroundPosition: 'center', backgroundRepeat: 'no-repeat', height: "300px"
       }}>
-        <h1>CONTACT US</h1>
+        <h1 className='fw-bold'>CONTACT US</h1>
       </div>
 
       <section id="direct-contact-us-section" className="container justify-content-center ">
