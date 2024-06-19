@@ -1,0 +1,20 @@
+@import url('../../index.css');
+
+.aboutus-section-heading{
+    margin: 1% 0 1%;
+    color: var(--brightBlue);
+    font-size: 2.8rem !important;
+    font-weight: bold;
+}
+
+.aboutImg
+{
+    width: 50% !important;
+}
+
+@media (max-width:900px) {
+    .aboutImg
+    {
+        width: 100% !important;
+    }
+    }

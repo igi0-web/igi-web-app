@@ -27,7 +27,7 @@ export const Header = () => {
                 <Nav.Link className='navLink' href="/products">Products</Nav.Link>
                 <Nav.Link className='navLink' href="/projects">Projects</Nav.Link>
                 <Nav.Link className='navLink' href="/certificates">Certificates</Nav.Link>
-                <Nav.Link className='navLink' href="/news">News</Nav.Link>
+                <Nav.Link className='navLink' href="/news">News & Events</Nav.Link>
                 <Nav.Link className='navLink' href="/about-us">About Us</Nav.Link>
                 <Nav.Link className='navLink' href="/contact-us">Contact Us</Nav.Link>
 
