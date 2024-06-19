@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
 const certificateSchema = new mongoose.Schema({
+    imageUrl: {
+        type: String,
+        required: true
+    },
     title: {
         type: String,
         required: true
