@@ -56,6 +56,28 @@ export const getCategories = async (req, res, next) => {
 
 // Products Controller ==========================================================
 
+export const searchProducts = async (req, res, next) => {
+    const query = req.query.queryTerm;
+    console.log(req.query);
+    console.log(query);
+    if (query != undefined && query != "") {
+        try {
+            const products = await Product.find({
+                code: {
+                    $regex: query,
+                    $options: "i"
+                }
+            }).populate('category', 'name');
+            if (!products) {
+                return next(errorHandler(404, "No products found!"));
+            }
+            res.status(200).json(products);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+}
 
 export const getProducts = async (req, res, next) => {
     try {
@@ -104,7 +126,7 @@ export const editProduct = async (req, res, next) => {
         return next(errorHandler(404, "Product not found!"));
     }
     try {
-        let {category} = req.body;
+        let { category } = req.body;
         category = new mongoose.Types.ObjectId(category);
         const categoryExists = await Category.findById(category);
         if (!categoryExists) {

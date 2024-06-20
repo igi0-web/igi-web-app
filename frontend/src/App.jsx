@@ -14,6 +14,7 @@ import { Footer } from './components/Footer';
 import { SingleNews } from './pages/SingleNews';
 import { SingleProject } from './pages/SingleProject';
 import { SingleProduct } from './pages/SingleProduct';
+import { Search } from './pages/Search';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
         <Route path='/' element={<Home />}></Route>
         <Route path='/products' element={<Products />}></Route>
         <Route path='/products/:id' element={<SingleProduct />}></Route>
+        <Route path='/search' element={<Search />}></Route>
         <Route path='/projects' element={<Projects />}></Route>
         <Route path='/projects/:id' element={<SingleProject />}></Route>
         <Route path='/certificates' element={<Certificates />}></Route>

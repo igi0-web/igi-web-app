@@ -32,7 +32,7 @@ export const Footer = () => {
                             <li className="mb-2 footer-p-white"><a href="/certificates"
                                     className="linkFix p-0 ">Certificates</a></li>
                                     <li className="mb-2 footer-p-white"><a href="/news"
-                                    className="linkFix p-0 ">News</a></li>
+                                    className="linkFix p-0 ">News & Events</a></li>
                             <li className="mb-2 footer-p-white"><a href="/about-us" className=" p-0 linkFix">About
                                     Us</a></li>
                             <li className="mb-2 footer-p-white"><a href="/contact-us"
