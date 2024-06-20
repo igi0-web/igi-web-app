@@ -1,0 +1,20 @@
+@import url('../../index.css');
+
+.filter-container button {
+    margin-right: 0.5rem;
+    min-width: 2rem;
+    padding: 0.3rem 0.8rem;
+    border: none;
+    background: var(--white);
+    color: var(--brightBlue);
+    border-radius: 0.5rem;
+    border: 1px solid var(--brightBlue);
+    transition: 0.15s;
+    cursor: pointer;
+}
+
+.filter-container button.active {
+    background: var(--darkBlue);
+    color: white;
+}
+

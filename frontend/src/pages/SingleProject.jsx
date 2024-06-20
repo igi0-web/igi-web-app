@@ -34,30 +34,31 @@ export const SingleProject = () => {
 
 
       <section id="projects" class="container">
-
-        <div class="row text-center mt-5">
-          <div class="">
-            <h2 class="section-p font-weight-bold mb-2">{project.title}</h2>
+        <div style={{ width: "70%", marginLeft: "15%", marginTop: "1%" }}>
+          <div class="row text-center mt-5">
+            <div class="">
+              <h2 class="section-p font-weight-bold mb-2">{project.title}</h2>
+            </div>
           </div>
         </div>
         <div class="row mx-auto">
           <div class="ratio ratio-21x9 mt-3 col-12">
-            <img src={`${project.imageUrl}`} class="img-fluid object-fit-cover rounded" alt="" />
+            <img src={`${project.imageUrl}`} class="img-fluid object-fit-contain rounded" alt="" />
           </div>
         </div>
+        <div style={{ width: "70%", marginLeft: "15%", marginTop: "1%" }}>
+          <h6 className='section-p mt-2 font-weight-bold ms-2'>{formatDate(project.createdAt)} - {project.country}</h6>
 
-        <h6 className='section-p mt-2 font-weight-bold ms-2'>{formatDate(project.createdAt)} - {project.country}</h6>
+          <p className='section-p ms-2'>
+            {project.desc}
+          </p>
+          <div class="row mt-3">
+            <div class="col-12">
+              <a href="/projects" class=" btn desiredBtn w-100">Other Projects</a>
+            </div>
 
-        <p className='section-p ms-2'>
-          {project.desc}
-        </p>
-        <div class="row mt-3">
-          <div class="col-12">
-            <a href="/projects" class=" btn desiredBtn w-100">Other Projects</a>
           </div>
-
         </div>
-
       </section>
 
     </>

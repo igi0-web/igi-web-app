@@ -104,4 +104,8 @@ body {
     overflow: hidden; 
 }
 
+.bor{
+    border: 0.5px solid black;
+}
+
 

@@ -12,8 +12,8 @@ const productCategorySchema = new mongoose.Schema({
 export const Category = new mongoose.model("Category", productCategorySchema);
 
 const productSchema = new mongoose.Schema({
-    imagesUrls: {
-        type: [String],
+    imageUrl: {
+        type: String,
         required: true
     },
     name: {

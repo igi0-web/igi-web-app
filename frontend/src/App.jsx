@@ -13,6 +13,7 @@ import { News } from './pages/News';
 import { Footer } from './components/Footer';
 import { SingleNews } from './pages/SingleNews';
 import { SingleProject } from './pages/SingleProject';
+import { SingleProduct } from './pages/SingleProduct';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />}></Route>
         <Route path='/products' element={<Products />}></Route>
+        <Route path='/products/:id' element={<SingleProduct />}></Route>
         <Route path='/projects' element={<Projects />}></Route>
         <Route path='/projects/:id' element={<SingleProject />}></Route>
         <Route path='/certificates' element={<Certificates />}></Route>
