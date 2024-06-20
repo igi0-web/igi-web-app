@@ -33,7 +33,7 @@ export const SingleNews = () => {
         <>
             
 
-            <section id="projects" class="container">
+            <section id="news" class="container">
 
         <div class="row text-center mt-5">
             <div class="">
