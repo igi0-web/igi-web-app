@@ -1,0 +1,138 @@
+import errorHandler from "../utils/custom.error.handler.js";
+import { Product, Category } from "../models/product.model.js";
+import mongoose from 'mongoose';
+// Product Category Controller =============================================
+
+export const createCategory = async (req, res, next) => {
+
+    try {
+        const cat = await Category.create(req.body);
+        return res.status(201).json(cat);
+    } catch (error) {
+        next(error);
+    }
+
+}
+
+export const deleteCategory = async (req, res, next) => {
+    try {
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        const cat = await Category.findById(req.params.id);
+
+        if (!cat) {
+            await session.abortTransaction();
+            session.endSession();
+            return next(errorHandler(404, "Category not found!"));
+        }
+
+        await Product.deleteMany({ category: req.params.id });
+        await Category.findByIdAndDelete(req.params.id);
+        await session.commitTransaction();
+        session.endSession();
+        res.status(200).json("Category has been deleted!");
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        next(error);
+    }
+};
+
+
+export const getCategories = async (req, res, next) => {
+    try {
+        const cat = await Category.find({});
+        if (!cat) {
+            return next(errorHandler(404, "No categories found!"));
+        }
+        res.status(200).json(cat);
+    } catch (error) {
+        next(error);
+    }
+
+}
+
+
+
+// Products Controller ==========================================================
+
+
+export const getProducts = async (req, res, next) => {
+    try {
+        const products = await Product.find({}).populate('category', 'name');
+        if (!products) {
+            return next(errorHandler(404, "No products found!"));
+        }
+        res.status(200).json(products);
+    } catch (error) {
+        next(error);
+    }
+
+}
+
+
+export const getProductById = async (req, res, next) => {
+    try {
+        const product = await Product.findById(req.params.id).populate('category', 'name');
+        if (!product) {
+            return next(errorHandler(404, "Product not found!"));
+        }
+
+        res.status(200).json(product);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const createProduct = async (req, res, next) => {
+    try {
+        const categoryExists = await Category.findById(req.body.category);
+        if (!categoryExists) {
+            return next(errorHandler(400, "Invalid Category ID!"));
+        }
+        const product = await Product.create(req.body);
+        return res.status(201).json(product);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const editProduct = async (req, res, next) => {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+        return next(errorHandler(404, "Product not found!"));
+    }
+    try {
+        let {category} = req.body;
+        category = new mongoose.Types.ObjectId(category);
+        const categoryExists = await Category.findById(category);
+        if (!categoryExists) {
+            return next(errorHandler(400, "Invalid Category ID!"));
+        }
+        req.body.category = category;
+        const updatedProduct = await Product.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        res.status(200).json(updatedProduct);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const deleteProduct = async (req, res, next) => {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+        return next(errorHandler(404, "Product not found!"));
+    }
+    try {
+        await Product.findByIdAndDelete(req.params.id);
+        res.status(200).json("Product has been deleted!");
+    } catch (error) {
+        next(error);
+    }
+};
