@@ -126,3 +126,17 @@ body {
    width: 100% !important;
 }
 
+.icon{
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.icon:hover{
+    opacity: 0.8;
+}
+
+.icon:active{
+    opacity: 0.6;
+}
+
+

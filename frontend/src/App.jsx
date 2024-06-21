@@ -15,6 +15,7 @@ import { SingleNews } from './pages/SingleNews';
 import { SingleProject } from './pages/SingleProject';
 import { SingleProduct } from './pages/SingleProduct';
 import { Search } from './pages/Search';
+import { LogIn } from './pages/admin/LogIn';
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
         <Route path='/news/:id' element={<SingleNews />}></Route>
         <Route path='/about-us' element={<AboutUs />}></Route>
         <Route path='/contact-us' element={<ContactUs />}></Route>
+        <Route path='/admin/login' element={<LogIn />}></Route>
         
       </Routes>
       <Footer />
