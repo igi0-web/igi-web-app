@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import backImage from '../assets/pages/news/1.jpg'
 import { NewsCard } from '../components/NewsCard';
 import { Row, Col } from "react-bootstrap"
+import Loader from '../components/Loader';
 export const News = () => {
   const [news, setNews] = useState([]);
 
@@ -25,7 +26,13 @@ export const News = () => {
     fetchAllNews();
   });
 
-
+  if (news.length === 0) {
+    return (
+      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <>

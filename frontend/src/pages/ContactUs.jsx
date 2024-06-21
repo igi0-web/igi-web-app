@@ -3,6 +3,7 @@ import { ContactCard } from '../components/ContactCard';
 import { faPhone, faMapMarkerAlt, faEnvelope, faClock } from '@fortawesome/free-solid-svg-icons';
 import backImage from '../assets/pages/contactus/1.jpg'
 import { useEffect, useState } from 'react';
+import Loader from '../components/Loader';
 export const ContactUs = () => {
   const [cprofile, setCprofile] = useState({});
 
@@ -11,17 +12,17 @@ export const ContactUs = () => {
       const res = await fetch("/api/cprofile");
       const profile = await res.json();
       if (profile.success == false) {
-      
+
         return;
       }
       setCprofile(profile);
     } catch (error) {
-      
+
       console.log(error.message);
     }
   }
   useEffect(() => {
-    
+
     fetchProfile();
 
   }, []);
@@ -31,7 +32,7 @@ export const ContactUs = () => {
     subject: '',
     message: ''
   });
- 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -44,14 +45,25 @@ export const ContactUs = () => {
     const emailBody = encodeURIComponent(formData.message);
     const mailtoLink = `mailto:${cprofile.email}?subject=${emailSubject}&body=Name: ${formData.name}%0A%0ADescription: ${emailBody}`;
 
-    
+
     window.open(mailtoLink, '_blank');
     console.log('Form submitted:', formData);
-    
+
     setFormData({ name: '', subject: '', message: '' });
   };
 
 
+
+
+
+
+  if (Object.values(cprofile).length === 0) {
+    return (
+      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+        <Loader />
+      </div>
+    );
+  }
   return (
     <>
       <div className='d-flex align-items-center justify-content-center text-light' style={{

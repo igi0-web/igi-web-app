@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
+import Loader from '../components/Loader';
 
 export const SingleProject = () => {
   const formatDate = (isoString) => {
@@ -28,7 +29,13 @@ export const SingleProject = () => {
     };
     fetchSingleProject();
   }, [params.id]);
-
+  if (Object.values(project).length === 0) {
+    return (
+      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+        <Loader />
+      </div>
+    );
+  }
   return (
     <>
 

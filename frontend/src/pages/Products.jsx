@@ -5,6 +5,7 @@ import { ProductCard } from "../components/ProductCard"
 import { Filter } from "../components/Filter"
 import { motion, AnimatePresence } from "framer-motion"
 import { useNavigate } from "react-router-dom"
+import Loader from "../components/Loader"
 export const Products = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -65,6 +66,15 @@ export const Products = () => {
     }
     console.log("FORM SUBMITTED");
   }
+
+  if (products.length === 0 || cats.length === 0) {
+    return (
+      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className='d-flex flex-column align-items-center justify-content-center text-light' style={{

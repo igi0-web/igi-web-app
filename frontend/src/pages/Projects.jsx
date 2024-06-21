@@ -2,6 +2,7 @@ import backImage from "../assets/pages/projects/background.jpeg"
 import React, { useEffect, useState } from 'react'
 import { Row, Col } from "react-bootstrap"
 import { ProjectCard } from "../components/ProjectCard"
+import Loader from "../components/Loader"
 export const Projects = () => {
   const [projects, setProjects] = useState([]);
 
@@ -24,6 +25,15 @@ export const Projects = () => {
     }
     fetchAllProjects();
   });
+
+  if (projects.length === 0) {
+    return (
+      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <>
 

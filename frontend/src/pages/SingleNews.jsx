@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
+import Loader from '../components/Loader';
 
 export const SingleNews = () => {
     const formatDate = (isoString) => {
@@ -29,6 +30,15 @@ export const SingleNews = () => {
         fetchSingleEvent();
     }, [params.id]);
 
+
+
+    if (Object.values(event).length === 0) {
+        return (
+          <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+            <Loader />
+          </div>
+        );
+      }
     return (
         <>
 

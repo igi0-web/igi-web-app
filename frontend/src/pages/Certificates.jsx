@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import backImage from "../assets/pages/certificates/background.png"
 import { Row, Col } from "react-bootstrap"
 import { CertificateCard } from "../components/CertificateCard"
+import Loader from "../components/Loader"
+
 export const Certificates = () => {
   const [certificates, setCertificates] = useState([]);
 
@@ -23,6 +25,14 @@ export const Certificates = () => {
     }
     fetchAllCertificates();
   });
+
+  if (certificates.length == 0) {
+    return (
+      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+        <Loader />
+      </div>
+    );
+  }
   return (
     <>
       <div className='d-flex align-items-center justify-content-center text-light' style={{

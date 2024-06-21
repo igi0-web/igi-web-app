@@ -58,6 +58,11 @@ body {
     color: var(--brightBlue);
 }
 
+.spinner{
+  
+    color: var(--brightBlue) !important;
+}
+
 
 
 .desiredH2 {

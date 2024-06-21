@@ -13,6 +13,7 @@ SwiperCore.use([Pagination, Autoplay]);
 import { ProductCard } from '../components/ProductCard';
 import { AboutUsLeft } from '../components/AboutUsLeft';
 import certImage from "../assets/pages/home/certificate.jpg"
+import Loader from '../components/Loader';
 export const Home = () => {
   const [projects, setProjects] = useState([]);
   const [products, setProducts] = useState([]);
@@ -52,6 +53,13 @@ export const Home = () => {
     fetch3Projects();
   }, [])
 
+  if (products.length === 0 || projects.length === 0) {
+    return (
+      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+        <Loader />
+      </div>
+    );
+  }
 
 
   return (
@@ -151,11 +159,11 @@ export const Home = () => {
                         name in
                         the industry, committed to delivering top - quality products and unparalleled customer service." title="We Are Certified" imgSrc={certImage} />
         <div class="row mt-3">
-                    <div class="col-12">
-                        <a href="/certificates" class=" btn desiredBtn w-100">Check Certificates</a>
-                    </div>
+          <div class="col-12">
+            <a href="/certificates" class=" btn desiredBtn w-100">Check Certificates</a>
+          </div>
 
-                </div>
+        </div>
       </section>
 
 

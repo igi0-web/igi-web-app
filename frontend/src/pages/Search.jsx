@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { ProductCard } from "../components/ProductCard";
 
 import { Row, Col } from "react-bootstrap"
+import Loader from "../components/Loader";
 
 
 
@@ -11,6 +12,7 @@ export const Search = () => {
 
     const [query, setQuery] = useState("");
     const [products, setProducts] = useState([]);
+    const [flag, setFlag] = useState(0);
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const searchTermFromUrl = urlParams.get('queryTerm');
@@ -24,15 +26,24 @@ export const Search = () => {
                     return;
                 }
                 setProducts(data);
-
+                setFlag(1);
             } catch (error) {
                 console.log(error.message);
             }
         }
         fetchProducts();
     }, [window.location.search])
-    console.log(products);
-    console.log(query);
+    
+
+    if (flag == 0) {
+        return (
+          <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+            <Loader />
+          </div>
+        );
+      }
+
+
     return (
         <>
             <div className='d-flex flex-column align-items-center justify-content-center text-light' style={{

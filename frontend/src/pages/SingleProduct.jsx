@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
+import Loader from '../components/Loader';
 
 export const SingleProduct = () => {
 
     let catName;
     const params = useParams();
-    const [product, setProduct] = useState(null);
-    if (product != null) {
+    const [product, setProduct] = useState({});
+    if (Object.values(product).length != 0) {
         catName = product.category.name;
         
         console.log(catName);
@@ -34,9 +35,13 @@ export const SingleProduct = () => {
         fetchSingleProduct();
 
     }, [params.id]);
-    if (!product) {
-        return <div>Loading...</div>; // Display a loading message while fetching data
-    }
+    if (Object.values(product).length === 0) {
+        return (
+          <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+            <Loader />
+          </div>
+        );
+      }
     return (
         <>
             <section id="news" class="container">
