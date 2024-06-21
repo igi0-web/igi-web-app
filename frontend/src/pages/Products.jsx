@@ -85,7 +85,7 @@ export const Products = () => {
 
 
         <Form onSubmit={handleSubmit} className="d-flex flex-wrap  justify-content-center gap-2">
-          <Form.Control onChange={handleChange} value={searchQuery} style={{ width: "75%" }} autocomplete='off' type="text" name="search" placeholder="Search Products By CODE..." className=" py-2 " ></Form.Control>
+          <Form.Control onChange={handleChange} value={searchQuery} style={{ width: "75%" }} autocomplete='off' type="text" name="search" placeholder="Search products by CODE..." className=" py-2 " ></Form.Control>
           <Button type="submit" variant="light" className="px-3 py-1 section-p ">Search</Button>
         </Form>
 

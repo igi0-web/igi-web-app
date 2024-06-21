@@ -14,7 +14,27 @@ import { ProductCard } from '../components/ProductCard';
 import { AboutUsLeft } from '../components/AboutUsLeft';
 import certImage from "../assets/pages/home/certificate.jpg"
 import Loader from '../components/Loader';
+import { motion } from 'framer-motion';
+
 export const Home = () => {
+
+
+  // State to track the current index
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Animation variants
+  const animationVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1 } },
+    exit: { opacity: 0, y: -50, transition: { duration: 1 } }
+  };
+
+  // Function to handle slide change
+  const handleSlideChange = (selectedIndex) => {
+    setCurrentSlide(selectedIndex);
+  };
+
+
   const [projects, setProjects] = useState([]);
   const [products, setProducts] = useState([]);
   console.log(products);
@@ -65,31 +85,41 @@ export const Home = () => {
   return (
     <>
       <section id='carousel-section'>
-        <Carousel touch={true} controls={false} pause={false} className="mb-4 container-fluid d-flex align-items-center justify-content-center p-0"  >
-          {projects.map((project) => {
-            return (
-              <Carousel.Item key={project._id} interval={3000} >
-                <Link to={`/projects/${project._id}`} className='text-decoration-none'>
-                  <div className='d-flex flex-column align-items-center justify-content-center text-light' style={{
-                    backgroundImage: `url(${project.imageUrl})`, backgroundSize: 'cover',
-                    backgroundPosition: 'top', backgroundRepeat: 'no-repeat', height: "100vh", width: "100%"
-                  }}>
-
-                    <Carousel.Caption className="carousel-caption">
-                      <h2>{project.title}</h2>
-
-                    </Carousel.Caption>
-                  </div>
-
-
-                </Link>
-              </Carousel.Item>
-            )
-
-          })}
-        </Carousel>
-
-      </section>
+      <Carousel 
+        touch={true} 
+        controls={false} 
+        pause={false} 
+        className="mb-4 container-fluid d-flex align-items-center justify-content-center p-0" 
+        onSelect={handleSlideChange}  // Hook to detect slide change
+      >
+        {projects.map((project, index) => (
+          <Carousel.Item key={project._id} interval={3000}>
+            <Link to={`/projects/${project._id}`} className='text-decoration-none'>
+              <div className='d-flex flex-column align-items-center justify-content-center text-light' style={{
+                backgroundImage: `url(${project.imageUrl})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'top',
+                backgroundRepeat: 'no-repeat',
+                height: "100vh",
+                width: "100%"
+              }}>
+                <Carousel.Caption className="carousel-caption">
+                  <motion.h1
+                    initial="hidden"
+                    animate={index === currentSlide ? "visible" : "hidden"}  // Only animate the current slide
+                    exit="exit"
+                    variants={animationVariants}
+                    key={project._id}  // Unique key to trigger re-render
+                  >
+                    {project.title}
+                  </motion.h1>
+                </Carousel.Caption>
+              </div>
+            </Link>
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    </section>
 
 
       <section class="container px-3 p-lg-3 whiteBackground my-5" id="aboutUsSection">
