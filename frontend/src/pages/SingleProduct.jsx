@@ -3,10 +3,15 @@ import { useParams } from 'react-router-dom';
 
 export const SingleProduct = () => {
 
-
+    let catName;
     const params = useParams();
-    const [product, setProduct] = useState({});
-
+    const [product, setProduct] = useState(null);
+    if (product != null) {
+        catName = product.category.name;
+        
+        console.log(catName);
+    }
+    
 
 
     useEffect(() => {
@@ -29,7 +34,9 @@ export const SingleProduct = () => {
         fetchSingleProduct();
 
     }, [params.id]);
-
+    if (!product) {
+        return <div>Loading...</div>; // Display a loading message while fetching data
+    }
     return (
         <>
             <section id="news" class="container">
@@ -61,12 +68,12 @@ export const SingleProduct = () => {
                             <h2 class="accordion-header">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    <strong>Code</strong>
+                                    <strong>Code & Category</strong>
                                 </button>
                             </h2>
                             <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    <strong>{product.code}</strong>
+                                    <strong>{product.code} - {catName}</strong>
                                 </div>
                             </div>
                         </div>

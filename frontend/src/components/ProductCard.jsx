@@ -1,14 +1,14 @@
 import "../index.css"
 import { Link } from 'react-router-dom';
-import {motion} from "framer-motion"
+import { motion } from "framer-motion"
 
 export const ProductCard = ({ _id, name, code, imageUrl, description, category }) => {
-    
+
 
     return (
         <motion.div transition={{duration: 0.5}} animate={{opacity: 1}} initial={{opacity: 0}} exit={{opacity: 0}} className='rounded'>
             <Link to={`/products/${_id}`} className='text-decoration-none'>
-                <section className="shadow p-3 d-flex flex-column gap-2 contentsec position-relative rounded">
+                <section className="shadow p-3 d-flex flex-column gap-2 mx-auto contentsec position-relative rounded">
                     
                     <div className="ratio ratio-4x3 ">
                         <img src={imageUrl} className="img-fluid object-fit-contain rounded" alt="product image" />
@@ -21,6 +21,9 @@ export const ProductCard = ({ _id, name, code, imageUrl, description, category }
                 </section>
             </Link>
         </motion.div>
+
+
+
 
 
 

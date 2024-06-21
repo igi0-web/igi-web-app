@@ -3,6 +3,7 @@ import { createProject, deleteProject, editProject, getProjects, getProjectById 
 const router = express.Router();
 
 router.get("/", getProjects);
+router.get("/three", getProjects);
 router.post("/create", createProject);
 router.get("/:id", getProjectById);
 router.put("/edit/:id", editProject);

@@ -158,3 +158,20 @@ export const deleteProduct = async (req, res, next) => {
         next(error);
     }
 };
+
+
+export const get6Products = async (req, res, next) => {
+    try {
+      const products = await Product.find({})
+        .sort({ createdAt: -1 })
+        .limit(6);
+  
+      if (!products || products.length === 0) {
+        return next(errorHandler(404, "No products found!"));
+      }
+  
+      res.status(200).json(products);
+    } catch (error) {
+      next(error);
+    }
+  }

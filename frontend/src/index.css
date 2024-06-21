@@ -108,4 +108,16 @@ body {
     border: 0.5px solid black;
 }
 
+.aboutUs-section-p
+{
+    opacity: 0.8;
+    color: var(--darkBlue) !important;
+    line-height: 1.5;
+}
+
+.cer-img
+{
+   height: 100% !important;
+   width: 100% !important;
+}
 

@@ -7,7 +7,7 @@ import "./styles/components.css";
 export const Header = () => {
   return (
     <header>
-      <Navbar expand='lg' className="shadow sticky">
+      <Navbar expand='lg' className="shadow">
         <Container fluid>
           <Navbar.Brand href="/"><img src={logo} className='img-fluid' width="180px" alt="" /></Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-xl`} />
