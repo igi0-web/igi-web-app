@@ -108,6 +108,9 @@ export const getProductById = async (req, res, next) => {
 
 export const createProduct = async (req, res, next) => {
     try {
+        if (req.admin && req.admin.id != req.params.adminId) {
+            return next(errorHandler(401, "You can only create products from your own account!"));
+        }
         const categoryExists = await Category.findById(req.body.category);
         if (!categoryExists) {
             return next(errorHandler(400, "Invalid Category ID!"));
@@ -122,6 +125,9 @@ export const createProduct = async (req, res, next) => {
 
 export const editProduct = async (req, res, next) => {
     const product = await Product.findById(req.params.id);
+    if (req.admin && req.admin.id != req.params.adminId) {
+        return next(errorHandler(401, "You can only create products from your own account!"));
+    }
     if (!product) {
         return next(errorHandler(404, "Product not found!"));
     }
@@ -146,6 +152,9 @@ export const editProduct = async (req, res, next) => {
 
 
 export const deleteProduct = async (req, res, next) => {
+    if (req.admin && req.admin.id != req.params.adminId) {
+        return next(errorHandler(401, "You can only delete products from your own account!"));
+    }
     const product = await Product.findById(req.params.id);
 
     if (!product) {
@@ -162,16 +171,16 @@ export const deleteProduct = async (req, res, next) => {
 
 export const get6Products = async (req, res, next) => {
     try {
-      const products = await Product.find({})
-        .sort({ createdAt: -1 })
-        .limit(6);
-  
-      if (!products || products.length === 0) {
-        return next(errorHandler(404, "No products found!"));
-      }
-  
-      res.status(200).json(products);
+        const products = await Product.find({})
+            .sort({ createdAt: -1 })
+            .limit(6);
+
+        if (!products || products.length === 0) {
+            return next(errorHandler(404, "No products found!"));
+        }
+
+        res.status(200).json(products);
     } catch (error) {
-      next(error);
+        next(error);
     }
-  }
+}

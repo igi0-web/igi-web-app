@@ -69,6 +69,7 @@ export const Header = () => {
                 <Nav className="justify-content-end flex-grow-1 pe-3 navLink">
                   <Nav.Link className='navLink' href="/">WEBSITE</Nav.Link>
                   <Nav.Link className='navLink' href="/admin/dashboard">Dashboard</Nav.Link>
+                  <Nav.Link className='navLink' href="/admin/products">Products</Nav.Link>
                   <button onClick={handleLogOut} className='desiredBtn ms-2'>Logout</button>
                   
 

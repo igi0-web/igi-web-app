@@ -18,6 +18,9 @@ import { Search } from './pages/Search';
 import { LogIn } from './pages/admin/LogIn';
 import { Dashboard } from './pages/admin/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
+import { ProductsList } from './pages/admin/products/ProductsList';
+import { CreateProduct } from './pages/admin/products/CreateProduct';
+import { EditProduct } from './pages/admin/products/EditProduct';
 
 function App() {
 
@@ -43,7 +46,9 @@ function App() {
 
         <Route element={<PrivateRoute />} >
             <Route path="/admin/dashboard" element={<Dashboard />} />
-            
+            <Route path="/admin/products" element={<ProductsList />} />
+            <Route path="/admin/products/create" element={<CreateProduct />} />
+            <Route path="/admin/products/edit/:id" element={<EditProduct />} />
           </Route>
 
       </Routes>

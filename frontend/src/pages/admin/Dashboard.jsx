@@ -102,38 +102,38 @@ export const Dashboard = () => {
   return (
     <>
       <section className='container my-5' >
-        <h1 className='text-center section-p mb-3'>Welcome {currentAdmin.name}!</h1>
+        <h1 className='text-center section-p mb-3'>Welcome Admin {currentAdmin.name}!</h1>
         <h1 className='text-center section-p'>Dashboard - Company Profile</h1>
         <Form onSubmit={handleSubmit} className='section-p' >
           <Form.Group controlId="phoneNumber" className="my-2">
             <Form.Label>Phone Number</Form.Label>
-            <Form.Control name='phoneNumber' type="text" placeholder="Enter phone number" onChange={handleChange} value={formData.phoneNumber}></Form.Control>
+            <Form.Control required name='phoneNumber' type="text" placeholder="Enter phone number" onChange={handleChange} value={formData.phoneNumber}></Form.Control>
           </Form.Group>
           <Form.Group controlId="email" className="my-2">
             <Form.Label>Email</Form.Label>
-            <Form.Control name='email' value={formData.email} type="email" onChange={handleChange} placeholder="Enter email" ></Form.Control>
+            <Form.Control required name='email' value={formData.email} type="email" onChange={handleChange} placeholder="Enter email" ></Form.Control>
           </Form.Group>
           <Form.Group controlId="location" className="my-2">
             <Form.Label>Location</Form.Label>
-            <Form.Control name='location' value={formData.location} type="text" onChange={handleChange} placeholder="Enter location" ></Form.Control>
+            <Form.Control required name='location' value={formData.location} type="text" onChange={handleChange} placeholder="Enter location" ></Form.Control>
           </Form.Group>
           <Form.Group controlId="address" className="my-2">
             <Form.Label>Address</Form.Label>
-            <Form.Control name='Address' value={formData.Address} type="text" onChange={handleChange} placeholder="Enter address" ></Form.Control>
+            <Form.Control required name='Address' value={formData.Address} type="text" onChange={handleChange} placeholder="Enter address" ></Form.Control>
           </Form.Group>
           <Form.Group controlId="facebook" className="my-2">
             <Form.Label>Facebook</Form.Label>
-            <Form.Control name='facebook' value={formData.facebook} type="text" onChange={handleChange} placeholder="Enter Facebook profile url" ></Form.Control>
+            <Form.Control required name='facebook' value={formData.facebook} type="text" onChange={handleChange} placeholder="Enter Facebook profile url" ></Form.Control>
           </Form.Group>
           <Form.Group controlId="instagram" className="my-2">
             <Form.Label>Instagram</Form.Label>
-            <Form.Control name='instagram' value={formData.instagram} type="text" onChange={handleChange} placeholder="Enter Instagram profile url" ></Form.Control>
+            <Form.Control required name='instagram' value={formData.instagram} type="text" onChange={handleChange} placeholder="Enter Instagram profile url" ></Form.Control>
           </Form.Group>
           <Form.Group controlId="linkedin" className="my-2">
             <Form.Label>Linkedin</Form.Label>
-            <Form.Control name='linkedin' value={formData.linkedin} type="text" onChange={handleChange} placeholder="Enter Linkedin profile url" ></Form.Control>
+            <Form.Control required name='linkedin' value={formData.linkedin} type="text" onChange={handleChange} placeholder="Enter Linkedin profile url" ></Form.Control>
           </Form.Group>
-          <Button disabled={loading ? true : false} type="submit" className="my-2 desiredBtn">{loading ? "Updating" : "Update"}</Button>
+          <Button disabled={loading ? true : false} type="submit" className="my-2 desiredBtn">{loading ? "UPDATING" : "UPDATE"}</Button>
         </Form>
         {error && <p className="text-danger text-center">{error}</p>}
         {serverMsg && <p className="text-success text-center">{serverMsg}</p>}
