@@ -16,6 +16,8 @@ import { SingleProject } from './pages/SingleProject';
 import { SingleProduct } from './pages/SingleProduct';
 import { Search } from './pages/Search';
 import { LogIn } from './pages/admin/LogIn';
+import { Dashboard } from './pages/admin/Dashboard';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
 
@@ -35,8 +37,15 @@ function App() {
         <Route path='/news/:id' element={<SingleNews />}></Route>
         <Route path='/about-us' element={<AboutUs />}></Route>
         <Route path='/contact-us' element={<ContactUs />}></Route>
-        <Route path='/admin/login' element={<LogIn />}></Route>
+        <Route path='/login' element={<LogIn />}></Route>
         
+        
+
+        <Route element={<PrivateRoute />} >
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+            
+          </Route>
+
       </Routes>
       <Footer />
     </BrowserRouter>

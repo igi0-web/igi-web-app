@@ -62,7 +62,7 @@ export const Footer = () => {
                                 Us</a></li>
                             <li className="mb-2 footer-p-white"><a href="/contact-us"
                                 className="linkFix p-0 ">Contact Us</a></li>
-                            <li className="mb-2 footer-p-white"><a href="/admin/login"
+                            <li className="mb-2 footer-p-white"><a href="/login"
                                 className="linkFix p-0 ">Admin</a></li>
                         </ul>
                     </div>
