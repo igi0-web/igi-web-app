@@ -8,11 +8,14 @@ export const getCompanyProfile = async (req, res) => {
     } catch (error) {
         next(errorHandler(404, "Resource Not Found!"));
     }
-    
+
 }
 
 export const editCompanyProfile = async (req, res, next) => {
     try {
+        if (req.admin && req.admin.id != req.params.adminId) {
+            return next(errorHandler(401, "You can only update the company profile from your own account!"));
+        }
         const { phoneNumber, email, location, Address, facebook, linkedin, instagram } = req.body;
         const cprofile = await CProfile.findOne({});
         if (cprofile) {
@@ -24,7 +27,7 @@ export const editCompanyProfile = async (req, res, next) => {
             cprofile.linkedin = linkedin;
             cprofile.instagram = instagram;
             const updatedCprofile = await cprofile.save();
-            res.json(updatedCprofile);
+            res.status(200).json("Updated Successfully!");
         }
     } catch (error) {
         next(errorHandler(404, "Resource Not Found!"));

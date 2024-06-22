@@ -2,23 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { Form, Button, Row, Col, FormControl } from "react-bootstrap";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { signInStart, signInFailure, signInSuccess } from '../../state/admin/auth.admin.slice';
+import { signInStart, signInFailure, signInSuccess } from '../../state/admin/admin.slice';
 
 export const LogIn = () => {
     const navigate = useNavigate();
-    const {currentAdmin} = useSelector((state) => {
-        return state.admin
-    })
-    useEffect(() => {
-        if (currentAdmin != null) {
-            navigate("/admin/dashboard")
-        }
-    })
-    const [formData, setFormData] = useState({email: "", password: ""});
-    const {loading, error} = useSelector((state) => state.admin);
     
+   
+    const [formData, setFormData] = useState({ email: "", password: "" });
+    const { loading, error } = useSelector((state) => state.admin);
+
     const dispatch = useDispatch();
-    
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -30,32 +24,32 @@ export const LogIn = () => {
         e.preventDefault();
         dispatch(signInStart());
         try {
-          const res = await fetch("/api/auth/sign-in", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          });
-    
-          const data = await res.json();
-          if (data.success === false) {
-            dispatch(signInFailure(data.message));
-            return;
-          }
-          dispatch(signInSuccess(data));
-          navigate('/admin/dashboard');
-          
+            const res = await fetch("/api/auth/sign-in", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await res.json();
+            if (data.success === false) {
+                dispatch(signInFailure(data.message));
+                return;
+            }
+            dispatch(signInSuccess(data));
+            navigate('/admin/dashboard');
+
         } catch (err) {
-          dispatch(signInFailure(err.message));
+            dispatch(signInFailure(err.message));
         }
-      };
+    };
 
     return (
         <>
             <section className='container my-5'>
-                <h1>Welcome Admin! Sign In</h1>
-                <Form autoComplete="off" onSubmit={handleSubmit}>
+                <h1 className='section-p'>Welcome Admin! Sign In</h1>
+                <Form className='section-p' autoComplete="off" onSubmit={handleSubmit}>
                     <Form.Group controlId="email" className="my-3">
                         <Form.Label>Email Address</Form.Label>
                         <FormControl value={formData.email} name='email' onChange={handleChange} type="email" placeholder="Enter email"></FormControl>
@@ -69,10 +63,10 @@ export const LogIn = () => {
                 </Form>
                 <Row className="py-3">
                     <Col>
-
+                        {error && <p className="text-danger">{error}</p>}
                     </Col>
                 </Row>
-                {error && <p className="text-danger">{error}</p>}
+
             </section>
         </>
     )

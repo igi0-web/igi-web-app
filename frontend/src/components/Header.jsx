@@ -6,7 +6,7 @@ import logo from '../assets/logo/logo.png';
 import "./styles/components.css";
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { signOutFailure, signOutStart, signOutSuccess } from '../state/admin/auth.admin.slice';
+import { signOutFailure, signOutStart, signOutSuccess } from '../state/admin/admin.slice';
 export const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -68,7 +68,8 @@ export const Header = () => {
 
                 <Nav className="justify-content-end flex-grow-1 pe-3 navLink">
                   <Nav.Link className='navLink' href="/">WEBSITE</Nav.Link>
-                  <button onClick={handleLogOut} className='desiredBtn'>Logout</button>
+                  <Nav.Link className='navLink' href="/admin/dashboard">Dashboard</Nav.Link>
+                  <button onClick={handleLogOut} className='desiredBtn ms-2'>Logout</button>
                   
 
                 </Nav>

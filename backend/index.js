@@ -7,8 +7,10 @@ import projectsRouter from "./routes/projects.route.js"
 import productsRouter from "./routes/products.route.js"
 import authRouter from "./routes/auth.route.js"
 import { errorMiddleware } from './middlewares/error.middleware.js';
+import cookieParser from 'cookie-parser';
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 dbConnect();
 
 app.use("/api/cprofile", cprofileRouter);
