@@ -5,28 +5,29 @@ import Loader from '../../../components/Loader'
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
-export const ProductsList = () => {
+export const CategoriesList = () => {
     const { currentAdmin } = useSelector((state) => {
 
         return state.admin
     })
-    const [statusCode, setStatusCode] = useState("");
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const [serverMsg, setServerMsg] = useState("");
     const [loading, setLoading] = useState(false);
-    let [products, setProducts] = useState([]);
-    const fetchAllProducts = async () => {
+    let [cats, setCats] = useState([]);
+    const [statusCode, setStatusCode] = useState("");
+    const fetchAllCats = async () => {
         try {
 
-            const res = await fetch(`/api/products/`);
+            const res = await fetch(`/api/products/categories/`);
             const data = await res.json();
             if (data.success === false) {
-                console.log(data.message);
+                console.log(data.statusCode);
                 setStatusCode(data.statusCode);
+                console.log(data.message);
                 return;
             }
-            setProducts(data);
+            setCats(data);
 
         } catch (error) {
             console.log(error.message);
@@ -38,14 +39,14 @@ export const ProductsList = () => {
             navigate("/login")
         }
 
-        fetchAllProducts();
+        fetchAllCats();
     }, [])
 
-    const deleteProduct = async (id) => {
+    const deleteCat = async (id) => {
 
         try {
 
-            const res = await fetch(`/api/products/delete/${id}/${currentAdmin._id}`, {
+            const res = await fetch(`/api/products/categories/delete/${id}/${currentAdmin._id}`, {
                 method: "DELETE"
             });
             const data = await res.json();
@@ -68,16 +69,17 @@ export const ProductsList = () => {
     }
 
     const deleteHandler = async (id) => {
-        if (window.confirm("Are you sure that you want to delete this product?")) {
+        if (window.confirm("Are you sure that you want to delete this category? All associated products will be deleted!")) {
             try {
                 console.log(id);
-                await deleteProduct(id);
-                products = [];
+                await deleteCat(id);
+                cats = [];
                 setLoading(true)
-                fetchAllProducts();
+                fetchAllCats();
+                
                 setLoading(false);
-                setServerMsg("Successfully deleted the product!")
-                console.log("Product Deleted!");
+                setServerMsg("Successfully deleted the category and associated products!")
+                console.log("Category Deleted!");
             } catch (err) {
                 setLoading(false);
                 setError(err.message)
@@ -85,7 +87,8 @@ export const ProductsList = () => {
             }
         }
     }
-    if ((products.length === 0 || loading == true) && statusCode != 404) {
+    console.log(statusCode);
+    if ((cats.length === 0 || loading == true) && statusCode != 404) {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center vh-100">
                 <Loader />
@@ -100,12 +103,12 @@ export const ProductsList = () => {
                 {serverMsg && <p className="text-success text-center">{serverMsg}</p>}
                 <Row className="align-items-center">
                     <Col>
-                        <h1 className='section-p'>Products</h1>
+                        <h1 className='section-p'>Categories</h1>
                     </Col>
                     <Col className="text-end">
-                        <Link to={"/admin/products/create"}>
+                        <Link to={"/admin/categories/create"}>
                             <Button className="btn-sm my-3 desiredBtn">
-                                <FontAwesomeIcon icon={faPlus} className='me-2' /> Create New Product
+                                <FontAwesomeIcon icon={faPlus} className='me-2' /> Create New Category
                             </Button>
                         </Link>
                     </Col>
@@ -119,32 +122,23 @@ export const ProductsList = () => {
                         <tr >
                             <th>ID</th>
                             <th>NAME</th>
-                            <th>CODE</th>
-                            <th>DESCRIPTION</th>
-                            <th>FEATURES</th>
-                            <th>CATEGORY</th>
-                            <th>IMAGE</th>
                             <th>OPERATIONS</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((prod) => {
+                        {cats.map((cat) => {
 
 
                             return (
-                                <tr key={prod._id}>
-                                    <td>{prod._id}</td>
-                                    <td>{prod.name}</td>
-                                    <td>{prod.code}</td>
-                                    <td>{prod.description}</td>
-                                    <td>{prod.features}</td>
-                                    <td>{prod.category.name}</td>
-                                    <td style={{ width: "10%" }}><img src={prod.imageUrl} className='img-fluid' style={{ width: "100%" }}></img></td>
+                                <tr key={cat._id}>
+                                    <td>{cat._id}</td>
+                                    <td>{cat.name}</td>
+                                    
                                     <td>
-                                        <Link to={`/admin/products/edit/${prod._id}`}>
+                                        <Link to={`/admin/categories/edit/${cat._id}`}>
                                             <Button style={{ color: "white" }} variant='dark' type="button" className="btn-sm my-2 me-2"><FontAwesomeIcon icon={faEdit} size='2x' className='mx-auto icon' /></Button>
                                         </Link>
-                                        <Button style={{ color: "white" }} variant="danger" onClick={() => deleteHandler(prod._id)} type="button" className="btn-sm my-2"><FontAwesomeIcon icon={faTrash} size='2x' className='mx-auto icon ' /></Button>
+                                        <Button style={{ color: "white" }} variant="danger" onClick={() => deleteHandler(cat._id)} type="button" className="btn-sm my-2"><FontAwesomeIcon icon={faTrash} size='2x' className='mx-auto icon ' /></Button>
 
                                     </td>
                                 </tr>

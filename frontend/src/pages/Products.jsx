@@ -13,6 +13,7 @@ export const Products = () => {
   const [cats, setCats] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [activeCat, setActiveCat] = useState(0);
+  const [statusCode, setStatusCode] = useState("");
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
@@ -21,6 +22,7 @@ export const Products = () => {
         const data = await res.json();
         if (data.success === false) {
           console.log(data.message);
+          setStatusCode(data.statusCode)
           return;
         }
         setProducts(data);
@@ -35,6 +37,7 @@ export const Products = () => {
         const res = await fetch(`/api/products/categories/`);
         const data = await res.json();
         if (data.success === false) {
+          setStatusCode(data.statusCode)
           console.log(data.message);
           return;
         }
@@ -67,7 +70,7 @@ export const Products = () => {
     console.log("FORM SUBMITTED");
   }
 
-  if (products.length === 0 || cats.length === 0) {
+  if ((products.length === 0 || cats.length === 0) && statusCode != 404) {
     return (
       <div className="d-flex flex-column justify-content-center align-items-center vh-100">
         <Loader />

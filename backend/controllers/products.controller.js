@@ -6,6 +6,9 @@ import mongoose from 'mongoose';
 export const createCategory = async (req, res, next) => {
 
     try {
+        if (req.admin && req.admin.id != req.params.adminId) {
+            return next(errorHandler(401, "You can only create categories from your own account!"));
+        }
         const cat = await Category.create(req.body);
         return res.status(201).json(cat);
     } catch (error) {
@@ -14,8 +17,33 @@ export const createCategory = async (req, res, next) => {
 
 }
 
+export const editCategory = async (req, res, next) => {
+    const cat = await Category.findById(req.params.id);
+    if (req.admin && req.admin.id != req.params.adminId) {
+        return next(errorHandler(401, "You can only edit categories from your own account!"));
+    }
+    if (!cat) {
+        return next(errorHandler(404, "Category not found!"));
+    }
+    try {
+        
+        
+        const updatedCat = await Category.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        res.status(200).json(updatedCat);
+    } catch (error) {
+        next(error);
+    }
+};
+
 export const deleteCategory = async (req, res, next) => {
     try {
+        if (req.admin && req.admin.id != req.params.adminId) {
+            return next(errorHandler(401, "You can only delete categories from your own account!"));
+        }
         const session = await mongoose.startSession();
         session.startTransaction();
         const cat = await Category.findById(req.params.id);
@@ -42,7 +70,8 @@ export const deleteCategory = async (req, res, next) => {
 export const getCategories = async (req, res, next) => {
     try {
         const cat = await Category.find({});
-        if (!cat) {
+        console.log(cat);
+        if (cat.length == 0) {
             return next(errorHandler(404, "No categories found!"));
         }
         res.status(200).json(cat);
@@ -51,6 +80,19 @@ export const getCategories = async (req, res, next) => {
     }
 
 }
+
+export const getCategoryById = async (req, res, next) => {
+    try {
+        const cat = await Category.findById(req.params.id);
+        if (!cat) {
+            return next(errorHandler(404, "Category not found!"));
+        }
+
+        res.status(200).json(cat);
+    } catch (error) {
+        next(error);
+    }
+};
 
 
 
@@ -68,7 +110,7 @@ export const searchProducts = async (req, res, next) => {
                     $options: "i"
                 }
             }).populate('category', 'name');
-            if (!products) {
+            if (products.length == 0) {
                 return next(errorHandler(404, "No products found!"));
             }
             res.status(200).json(products);
@@ -82,7 +124,7 @@ export const searchProducts = async (req, res, next) => {
 export const getProducts = async (req, res, next) => {
     try {
         const products = await Product.find({}).populate('category', 'name');
-        if (!products) {
+        if (products.length == 0) {
             return next(errorHandler(404, "No products found!"));
         }
         res.status(200).json(products);

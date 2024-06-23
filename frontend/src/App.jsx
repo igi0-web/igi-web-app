@@ -21,6 +21,9 @@ import PrivateRoute from './components/PrivateRoute';
 import { ProductsList } from './pages/admin/products/ProductsList';
 import { CreateProduct } from './pages/admin/products/CreateProduct';
 import { EditProduct } from './pages/admin/products/EditProduct';
+import { CategoriesList } from './pages/admin/categories/CategoriesList';
+import { CreateCategory } from './pages/admin/categories/CreateCategory';
+import { EditCategory } from './pages/admin/categories/EditCategory';
 
 function App() {
 
@@ -49,6 +52,9 @@ function App() {
             <Route path="/admin/products" element={<ProductsList />} />
             <Route path="/admin/products/create" element={<CreateProduct />} />
             <Route path="/admin/products/edit/:id" element={<EditProduct />} />
+            <Route path="/admin/categories/" element={<CategoriesList />} />
+            <Route path="/admin/categories/create" element={<CreateCategory />} />
+            <Route path="/admin/categories/edit/:id" element={<EditCategory />} />
           </Route>
 
       </Routes>
