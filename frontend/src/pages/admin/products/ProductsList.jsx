@@ -136,8 +136,8 @@ export const ProductsList = () => {
                                     <td>{prod._id}</td>
                                     <td>{prod.name}</td>
                                     <td>{prod.code}</td>
-                                    <td>{prod.description}</td>
-                                    <td>{prod.features}</td>
+                                    <td ><p className='truncate'>{prod.description}</p></td>
+                                    <td><p className='truncate'>{prod.features}</p></td>
                                     <td>{prod.category.name}</td>
                                     <td style={{ width: "10%" }}><img src={prod.imageUrl} className='img-fluid' style={{ width: "100%" }}></img></td>
                                     <td>

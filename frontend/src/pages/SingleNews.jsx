@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import Loader from '../components/Loader';
-
+import { Col, Container, Row } from 'react-bootstrap';
 export const SingleNews = () => {
     const formatDate = (isoString) => {
         const date = new Date(isoString);
@@ -34,42 +34,40 @@ export const SingleNews = () => {
 
     if (Object.values(event).length === 0) {
         return (
-          <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-            <Loader />
-          </div>
+            <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+                <Loader />
+            </div>
         );
-      }
+    }
     return (
         <>
+            <Container className="p-4 section-p my-5">
+                <Row className="align-items-center">
+                    <Col xs={12} md={6} className="text-center mb-4 mb-md-0">
+                        <img
+                            src={`${event.imageUrl}`}
+                            alt={event.title}
+                            fluid
+                            style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                            className="project-image"
+                        />
+                    </Col>
+                    <Col xs={12} md={6}>
+                        <h1>{event.title}</h1>
 
-
-            <section id="news" class="container">
-                <div style={{ width: "70%", marginLeft: "15%", marginTop: "1%" }}>
-                    <div class="row text-center mt-5">
-                        <div class="">
-                            <h2 class="section-p font-weight-bold mb-2">{event.title}</h2>
-                        </div>
+                        <p>{event.desc}</p>
+                        <h5>{formatDate(event.createdAt)}</h5>
+                    </Col>
+                </Row>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <a href="/news" class=" btn desiredBtn w-100">Other Events</a>
                     </div>
-                </div>
-                <div class="row mx-auto">
-                    <div class="ratio ratio-21x9 mt-3 col-12">
-                        <img src={`${event.imageUrl}`} class="img-fluid object-fit-contain rounded" alt="" />
-                    </div>
-                </div>
-                <div style={{ width: "70%", marginLeft: "15%", marginTop: "1%" }}>
-                    <h6 className='section-p mt-2 font-weight-bold'>This event was held on: {formatDate(event.createdAt)}</h6>
 
-                    <p className='section-p'>
-                        {event.desc}
-                    </p>
-                    <div class="row mt-3">
-                        <div class="col-12">
-                            <a href="/news" class=" btn desiredBtn w-100">Other Events</a>
-                        </div>
-
-                    </div>
                 </div>
-            </section>
+            </Container>
+
+            
 
         </>
 

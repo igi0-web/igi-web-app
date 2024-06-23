@@ -10,7 +10,7 @@ export const ProductCard = ({ _id, name, code, imageUrl, description, category }
             <Link to={`/products/${_id}`} className='text-decoration-none'>
                 <section className="shadow p-3 d-flex flex-column gap-2 mx-auto contentsec position-relative rounded">
                     
-                    <div className="ratio ratio-4x3 ">
+                    <div className="ratio ratio-4x3 rounded">
                         <img src={imageUrl} className="img-fluid object-fit-contain rounded" alt="product image" />
                     </div>
                     <p className="section-p text-decoration-none my-2">{category.name}</p>

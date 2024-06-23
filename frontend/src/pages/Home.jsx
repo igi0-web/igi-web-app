@@ -15,7 +15,9 @@ import { AboutUsLeft } from '../components/AboutUsLeft';
 import certImage from "../assets/pages/home/certificate.jpg"
 import Loader from '../components/Loader';
 import { motion } from 'framer-motion';
-
+import slider1 from "../assets/pages/home/slider1.jpeg"
+import slider2 from "../assets/pages/home/slider2.jpg"
+import slider3 from "../assets/pages/home/slider3.jpg"
 export const Home = () => {
 
   const [statusCode, setStatusCode] = useState("");
@@ -35,8 +37,24 @@ export const Home = () => {
   };
 
 
-  const [projects, setProjects] = useState([]);
+  
   const [products, setProducts] = useState([]);
+
+  let projects = [
+    {
+      imageUrl: slider1,
+      title: "American University Medical Center"
+    },
+    {
+      imageUrl: slider2,
+      title: "Beirut International Airport"
+    },
+    {
+      imageUrl: slider3,
+      title: "Four Season Hotel"
+    }
+  ]
+  console.log(projects);
   console.log(products);
   useEffect(() => {
     const fetch6Products = async () => {
@@ -56,28 +74,13 @@ export const Home = () => {
     }
 
 
-    const fetch3Projects = async () => {
-      try {
-
-        const res = await fetch(`/api/projects/three`);
-        const data = await res.json();
-        if (data.success === false) {
-          setStatusCode(data.statusCode);
-          console.log(data.message);
-          return;
-        }
-        setProjects(data);
-        fetch6Products();
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
-    fetch3Projects();
+    
+    fetch6Products();
   }, [])
 
  
 
-  if ((products.length === 0 || projects.length === 0 || loading == true) && statusCode != 404) {
+  if ((products.length === 0) && statusCode != 404) {
     return (
         <div className="d-flex flex-column justify-content-center align-items-center vh-100">
             <Loader />
@@ -97,8 +100,8 @@ export const Home = () => {
         onSelect={handleSlideChange}  // Hook to detect slide change
       >
         {projects.map((project, index) => (
-          <Carousel.Item key={project._id} interval={3000}>
-            <Link to={`/projects/${project._id}`} className='text-decoration-none'>
+          <Carousel.Item key={index} interval={3000}>
+            <Link to={`/projects`} className='text-decoration-none'>
               <div className='d-flex flex-column align-items-center justify-content-center text-light' style={{
                 backgroundImage: `url(${project.imageUrl})`,
                 backgroundSize: 'cover',
@@ -113,10 +116,17 @@ export const Home = () => {
                     animate={index === currentSlide ? "visible" : "hidden"}  // Only animate the current slide
                     exit="exit"
                     variants={animationVariants}
-                    key={project._id}  // Unique key to trigger re-render
+                    key={index} 
                   >
                     {project.title}
                   </motion.h1>
+                  <motion.button className='desiredBtn' initial="hidden"
+                    animate={index === currentSlide ? "visible" : "hidden"}  // Only animate the current slide
+                    exit="exit"
+                    variants={animationVariants}
+                    key={index} >
+                      Read More
+                  </motion.button>
                 </Carousel.Caption>
               </div>
             </Link>
@@ -147,7 +157,7 @@ export const Home = () => {
 
       <section className='container '>
         <h2 class="section-heading text-center">Featured Products</h2>
-        <Swiper className='pt-1 pb-5' autoplay={{
+        <Swiper className='pt-1 pb-5 px-3' autoplay={{
           delay: 2000,
           disableOnInteraction: false,
         }}

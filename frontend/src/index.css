@@ -139,4 +139,18 @@ body {
     opacity: 0.6;
 }
 
+.project-image {
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+            line-clamp: 2;
+    -webkit-box-orient: vertical;
+ }
 

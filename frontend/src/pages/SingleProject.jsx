@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import Loader from '../components/Loader';
+import { Col, Container, Row } from 'react-bootstrap';
 
 export const SingleProject = () => {
   const formatDate = (isoString) => {
@@ -38,35 +39,33 @@ export const SingleProject = () => {
   }
   return (
     <>
+      <Container className="p-4 section-p my-5">
+        <Row className="align-items-center">
+          <Col xs={12} md={6} className="text-center mb-4 mb-md-0">
+            <img
+              src={`${project.imageUrl}`}
+              alt={project.title}
+              fluid
+              style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+              className="project-image"
+            />
+          </Col>
+          <Col xs={12} md={6}>
+            <h1>{project.title}</h1>
 
-
-      <section id="projects" class="container">
-        <div style={{ width: "70%", marginLeft: "15%", marginTop: "1%" }}>
-          <div class="row text-center mt-5">
-            <div class="">
-              <h2 class="section-p font-weight-bold mb-2">{project.title}</h2>
-            </div>
+            <p>{project.desc}</p>
+            <h5>{formatDate(project.createdAt)} - {project.country}</h5>
+          </Col>
+        </Row>
+        <div class="row mt-3">
+          <div class="col-12">
+            <a href="/projects" class=" btn desiredBtn w-100">Other Projects</a>
           </div>
-        </div>
-        <div class="row mx-auto">
-          <div class="ratio ratio-21x9 mt-3 col-12">
-            <img src={`${project.imageUrl}`} class="img-fluid object-fit-contain rounded" alt="" />
-          </div>
-        </div>
-        <div style={{ width: "70%", marginLeft: "15%", marginTop: "1%" }}>
-          <h6 className='section-p mt-2 font-weight-bold ms-2'>{formatDate(project.createdAt)} - {project.country}</h6>
 
-          <p className='section-p ms-2'>
-            {project.desc}
-          </p>
-          <div class="row mt-3">
-            <div class="col-12">
-              <a href="/projects" class=" btn desiredBtn w-100">Other Projects</a>
-            </div>
-
-          </div>
         </div>
-      </section>
+      </Container>
+
+
 
     </>
 

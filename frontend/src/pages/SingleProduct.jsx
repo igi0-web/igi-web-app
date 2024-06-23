@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import Loader from '../components/Loader';
-
+import { Accordion, Card, Col, Container, Row } from 'react-bootstrap';
 export const SingleProduct = () => {
 
     let catName;
@@ -9,10 +9,10 @@ export const SingleProduct = () => {
     const [product, setProduct] = useState({});
     if (Object.values(product).length != 0) {
         catName = product.category.name;
-        
+
         console.log(catName);
     }
-    
+
 
 
     useEffect(() => {
@@ -37,86 +37,65 @@ export const SingleProduct = () => {
     }, [params.id]);
     if (Object.values(product).length === 0) {
         return (
-          <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-            <Loader />
-          </div>
+            <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+                <Loader />
+            </div>
         );
-      }
+    }
     return (
         <>
-            <section id="news" class="container">
-                <div style={{ width: "70%", marginLeft: "15%", marginTop: "1%" }}>
-                    <div class="row text-center mt-5">
-                        <div class="">
-                            <h2 class="section-p font-weight-bold mb-2">{product.name}</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mx-auto">
-                    <div class="ratio ratio-21x9 mt-3 col-12">
-                        <img src={`${product.imageUrl}`} class="img-fluid object-fit-contain rounded" alt="" />
-                    </div>
-                </div>
 
+            <Container  className="p-4 section-p my-5">
+                <Row className="align-items-center">
+                    <Col xs={12} md={6} className="text-center mb-4 mb-md-0">
+                        
+                        <img
+                            src={`${product.imageUrl}`}
+                            alt={product.name}
+                            fluid
+                            style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                            className="product-image rounded"
+                        />
+                    </Col>
+                    <Col xs={12} md={6}>
+                        <Accordion alwaysOpen={"true"} defaultActiveKey="0" >
+                            <Accordion.Item eventKey="0">
+                                <Accordion.Header >{product.name}</Accordion.Header>
+                                <Accordion.Body>
 
-                <h6 className='section-p mt-2 font-weight-bold'></h6>
-
-                <p className='section-p'>
-                    {product.desc}
-                </p>
-
-
-
-                <div class="row mt-4 ">
-                    <div class="accordion col-12" id="accordionExample">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    <strong>Code & Category</strong>
-                                </button>
-                            </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <strong>{product.code} - {catName}</strong>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    <strong>Description</strong>
-                                </button>
-                            </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <strong>{product.description}</strong>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    <strong>Features</strong>
-                                </button>
-                            </h2>
-                            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <strong>{product.features}</strong>.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                    <Card.Subtitle  as="h6" className="mb-2 text-muted">
+                                        Code: {product.code}
+                                    </Card.Subtitle>
+                                    <Card.Subtitle as="h6" className="mb-2 text-muted">
+                                        Category: {catName}
+                                    </Card.Subtitle>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="1">
+                                <Accordion.Header>Description</Accordion.Header>
+                                <Accordion.Body>
+                                    <Card.Text>{product.description}</Card.Text>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="2">
+                                <Accordion.Header>Features</Accordion.Header>
+                                <Accordion.Body>
+                                    <Card.Text>{product.features}</Card.Text>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
+                    </Col>
+                </Row>
                 <div class="row mt-3">
                     <div class="col-12">
                         <a href="/products" class=" btn desiredBtn w-100">Other Products</a>
                     </div>
 
                 </div>
-            </section >
+            </Container>
+            
+                
+          
 
         </>
     )
