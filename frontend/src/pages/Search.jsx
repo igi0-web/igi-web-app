@@ -23,6 +23,7 @@ export const Search = () => {
                 const data = await res.json();
                 if (data.success === false) {
                     console.log(data.message);
+                    setFlag(1);
                     return;
                 }
                 setProducts(data);
