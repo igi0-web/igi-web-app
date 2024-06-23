@@ -27,6 +27,8 @@ import { EditCategory } from './pages/admin/categories/EditCategory';
 import { ProjectsList } from './pages/admin/projects/ProjectsList';
 import { CreateProject } from './pages/admin/projects/CreateProject';
 import { EditProject } from './pages/admin/projects/EditProject';
+import { CertificatesList } from './pages/admin/certificates/CertificatesList';
+import { CreateCertificate } from './pages/admin/certificates/CreateCertificate';
 
 function App() {
 
@@ -61,6 +63,8 @@ function App() {
             <Route path="/admin/projects/" element={<ProjectsList />} />
             <Route path="/admin/projects/create" element={<CreateProject />} />
             <Route path="/admin/projects/edit/:id" element={<EditProject />} />
+            <Route path="/admin/certificates/" element={<CertificatesList />} />
+            <Route path="/admin/certificates/create" element={<CreateCertificate />} />
           </Route>
 
       </Routes>

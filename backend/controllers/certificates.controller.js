@@ -4,6 +4,9 @@ import Certificate from "../models/certificate.model.js";
 export const createCertificate = async (req, res, next) => {
 
     try {
+        if (req.admin && req.admin.id != req.params.adminId) {
+            return next(errorHandler(401, "You can only create projects from your own account!"));
+          }
         const certificate = await Certificate.create(req.body);
         return res.status(201).json(certificate);
     } catch (error) {
@@ -13,6 +16,9 @@ export const createCertificate = async (req, res, next) => {
 }
 
 export const deleteCertificate = async (req, res, next) => {
+    if (req.admin && req.admin.id != req.params.adminId) {
+        return next(errorHandler(401, "You can only create projects from your own account!"));
+      }
     const certificate = await Certificate.findById(req.params.id);
 
     if (!certificate) {
