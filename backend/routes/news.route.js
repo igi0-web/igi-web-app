@@ -3,8 +3,8 @@ import { createNews, deleteNews, editNews, getNews, getNewsById } from '../contr
 const router = express.Router();
 
 router.get("/", getNews);
-router.post("/create", createNews);
+router.post("/create/:adminId", createNews);
 router.get("/:id", getNewsById);
-router.put("/edit/:id", editNews);
-router.delete("/delete/:id", deleteNews);
+router.patch("/edit/:id/:adminId", editNews);
+router.delete("/delete/:id/:adminId", deleteNews);
 export default router;

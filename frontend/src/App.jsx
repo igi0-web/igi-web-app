@@ -29,6 +29,9 @@ import { CreateProject } from './pages/admin/projects/CreateProject';
 import { EditProject } from './pages/admin/projects/EditProject';
 import { CertificatesList } from './pages/admin/certificates/CertificatesList';
 import { CreateCertificate } from './pages/admin/certificates/CreateCertificate';
+import { CreateEvent } from './pages/admin/events/CreateEvent';
+import { EventsList } from './pages/admin/events/EventsList';
+import { EditEvent } from './pages/admin/events/EditEvent';
 
 function App() {
 
@@ -65,6 +68,9 @@ function App() {
             <Route path="/admin/projects/edit/:id" element={<EditProject />} />
             <Route path="/admin/certificates/" element={<CertificatesList />} />
             <Route path="/admin/certificates/create" element={<CreateCertificate />} />
+            <Route path="/admin/events/" element={<EventsList />} />
+            <Route path="/admin/events/create" element={<CreateEvent />} />
+            <Route path="/admin/events/edit/:id" element={<EditEvent />} />
           </Route>
 
       </Routes>

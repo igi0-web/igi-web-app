@@ -67,12 +67,13 @@ export const Header = () => {
               </Nav> :
 
                 <Nav className="justify-content-end flex-grow-1 pe-3 navLink">
-                  <Nav.Link className='navLink' href="/">WEBSITE</Nav.Link>
+                  
                   <Nav.Link className='navLink' href="/admin/dashboard">Dashboard</Nav.Link>
                   <Nav.Link className='navLink' href="/admin/products">Products</Nav.Link>
                   <Nav.Link className='navLink' href="/admin/categories">Categories</Nav.Link>
                   <Nav.Link className='navLink' href="/admin/projects">Projects</Nav.Link>
                   <Nav.Link className='navLink' href="/admin/certificates">Certificates</Nav.Link>
+                  <Nav.Link className='navLink' href="/admin/events">News & Events</Nav.Link>
                   <button onClick={handleLogOut} className='desiredBtn ms-2'>Logout</button>
                   
 
