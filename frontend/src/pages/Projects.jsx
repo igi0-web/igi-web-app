@@ -5,35 +5,39 @@ import { ProjectCard } from "../components/ProjectCard"
 import Loader from "../components/Loader"
 export const Projects = () => {
   const [projects, setProjects] = useState([]);
-
-
+  const [statusCode, setStatusCode] = useState("");
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     const fetchAllProjects = async () => {
       try {
-
+        
         const res = await fetch(`/api/projects/`);
         const data = await res.json();
         if (data.success === false) {
+          setStatusCode(data.statusCode)
+          console.log(data.statusCode);
           console.log(data.message);
+          
           return;
         }
         setProjects(data);
-
+        
       } catch (error) {
+        
         console.log(error.message);
       }
     }
     fetchAllProjects();
-  });
-
-  if (projects.length === 0) {
+  }, []);
+  console.log(statusCode);
+  if (projects.length === 0 && statusCode != 404) {
+    console.log(statusCode);
     return (
-      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-        <Loader />
-      </div>
+        <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+            <Loader />
+        </div>
     );
-  }
-
+}
   return (
     <>
 

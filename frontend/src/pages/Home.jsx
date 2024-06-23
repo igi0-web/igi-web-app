@@ -18,7 +18,7 @@ import { motion } from 'framer-motion';
 
 export const Home = () => {
 
-
+  const [statusCode, setStatusCode] = useState("");
   // State to track the current index
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -44,6 +44,7 @@ export const Home = () => {
         const res = await fetch(`/api/products/six`);
         const data = await res.json();
         if (data.success === false) {
+          setStatusCode(data.statusCode);
           console.log(data.message);
           return;
         }
@@ -61,6 +62,7 @@ export const Home = () => {
         const res = await fetch(`/api/projects/three`);
         const data = await res.json();
         if (data.success === false) {
+          setStatusCode(data.statusCode);
           console.log(data.message);
           return;
         }
@@ -73,13 +75,15 @@ export const Home = () => {
     fetch3Projects();
   }, [])
 
-  if (products.length === 0 || projects.length === 0) {
+ 
+
+  if ((products.length === 0 || projects.length === 0 || loading == true) && statusCode != 404) {
     return (
-      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-        <Loader />
-      </div>
+        <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+            <Loader />
+        </div>
     );
-  }
+}
 
 
   return (

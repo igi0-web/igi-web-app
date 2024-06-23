@@ -18,7 +18,7 @@ export const ProjectsList = () => {
     let [projects, setProjects] = useState([]);
     const fetchAllProjects = async () => {
         try {
-
+            
             const res = await fetch(`/api/projects/`);
             const data = await res.json();
             if (data.success === false) {

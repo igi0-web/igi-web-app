@@ -4,7 +4,7 @@ import Project from "../models/project.model.js";
 export const getProjects = async (req, res, next) => {
   try {
     const projects = await Project.find({});
-    if (!projects) {
+    if (projects.length == 0) {
       return next(errorHandler(404, "No projects found!"));
     }
     res.status(200).json(projects);

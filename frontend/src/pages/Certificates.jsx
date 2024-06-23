@@ -6,7 +6,7 @@ import Loader from "../components/Loader"
 
 export const Certificates = () => {
   const [certificates, setCertificates] = useState([]);
-
+  const [statusCode, setStatusCode] = useState("");
   useEffect(() => {
     const fetchAllCertificates = async () => {
       try {
@@ -14,6 +14,7 @@ export const Certificates = () => {
         const res = await fetch(`/api/certificates/`);
         const data = await res.json();
         if (data.success === false) {
+          setStatusCode(data.statusCode);
           console.log(data.message);
           return;
         }
@@ -24,9 +25,9 @@ export const Certificates = () => {
       }
     }
     fetchAllCertificates();
-  });
+  }, []);
 
-  if (certificates.length == 0) {
+  if (certificates.length == 0 && statusCode != 404) {
     return (
       <div className="d-flex flex-column justify-content-center align-items-center vh-100">
         <Loader />

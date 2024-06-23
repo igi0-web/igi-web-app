@@ -5,34 +5,39 @@ import { Row, Col } from "react-bootstrap"
 import Loader from '../components/Loader';
 export const News = () => {
   const [news, setNews] = useState([]);
-
-
+  const [statusCode, setStatusCode] = useState("");
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchAllNews = async () => {
       try {
-
+        setLoading(true)
         const res = await fetch(`/api/news/`);
         const data = await res.json();
         if (data.success === false) {
+          setStatusCode(data.statusCode);
           console.log(data.message);
+          setLoading(false)
           return;
         }
         setNews(data);
-
+        setLoading(false)
       } catch (error) {
+        setLoading(false)
         console.log(error.message);
       }
     }
     fetchAllNews();
-  });
+  },[]);
 
-  if (news.length === 0) {
+  
+
+  if ((news.length === 0 || loading == true) && statusCode != 404) {
     return (
-      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-        <Loader />
-      </div>
+        <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+            <Loader />
+        </div>
     );
-  }
+}
 
   return (
     <>
