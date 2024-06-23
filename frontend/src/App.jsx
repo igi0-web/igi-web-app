@@ -24,6 +24,9 @@ import { EditProduct } from './pages/admin/products/EditProduct';
 import { CategoriesList } from './pages/admin/categories/CategoriesList';
 import { CreateCategory } from './pages/admin/categories/CreateCategory';
 import { EditCategory } from './pages/admin/categories/EditCategory';
+import { ProjectsList } from './pages/admin/projects/ProjectsList';
+import { CreateProject } from './pages/admin/projects/CreateProject';
+import { EditProject } from './pages/admin/projects/EditProject';
 
 function App() {
 
@@ -55,6 +58,9 @@ function App() {
             <Route path="/admin/categories/" element={<CategoriesList />} />
             <Route path="/admin/categories/create" element={<CreateCategory />} />
             <Route path="/admin/categories/edit/:id" element={<EditCategory />} />
+            <Route path="/admin/projects/" element={<ProjectsList />} />
+            <Route path="/admin/projects/create" element={<CreateProject />} />
+            <Route path="/admin/projects/edit/:id" element={<EditProject />} />
           </Route>
 
       </Routes>

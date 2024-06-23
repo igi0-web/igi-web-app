@@ -30,6 +30,9 @@ export const getProjectById = async (req, res, next) => {
 
 export const createProject = async (req, res, next) => {
   try {
+    if (req.admin && req.admin.id != req.params.adminId) {
+      return next(errorHandler(401, "You can only create projects from your own account!"));
+    }
     const project = await Project.create(req.body);
     return res.status(201).json(project);
   } catch (error) {
@@ -39,6 +42,9 @@ export const createProject = async (req, res, next) => {
 
 
 export const editProject = async (req, res, next) => {
+  if (req.admin && req.admin.id != req.params.adminId) {
+    return next(errorHandler(401, "You can only create projects from your own account!"));
+  }
   const project = await Project.findById(req.params.id);
   if (!project) {
     return next(errorHandler(404, "Project not found!"));
@@ -57,6 +63,9 @@ export const editProject = async (req, res, next) => {
 
 
 export const deleteProject = async (req, res, next) => {
+  if (req.admin && req.admin.id != req.params.adminId) {
+    return next(errorHandler(401, "You can only delete projects from your own account!"));
+  }
   const proj = await Project.findById(req.params.id);
 
   if (!proj) {

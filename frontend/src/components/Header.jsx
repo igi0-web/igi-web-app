@@ -71,6 +71,7 @@ export const Header = () => {
                   <Nav.Link className='navLink' href="/admin/dashboard">Dashboard</Nav.Link>
                   <Nav.Link className='navLink' href="/admin/products">Products</Nav.Link>
                   <Nav.Link className='navLink' href="/admin/categories">Categories</Nav.Link>
+                  <Nav.Link className='navLink' href="/admin/projects">Projects</Nav.Link>
                   <button onClick={handleLogOut} className='desiredBtn ms-2'>Logout</button>
                   
 

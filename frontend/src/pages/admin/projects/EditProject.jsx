@@ -6,14 +6,14 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../../../components/Loader';
 
-export const EditProduct = () => {
+export const EditProject = () => {
     const { currentAdmin } = useSelector((state) => {
         return state.admin
     })
     const params = useParams();
     const navigate = useNavigate()
-  
-    const [cats, setCats] = useState([])
+
+
     const [image, setImage] = useState(undefined);
     const [uploadPerc, setUploadPerc] = useState(0);
     const [uploadError, setUploadError] = useState(false)
@@ -21,11 +21,9 @@ export const EditProduct = () => {
     const [error, setError] = useState("")
     const [formData, setFormData] = useState({
         imageUrl: "",
-        name: "",
-        code: "",
-        description: "",
-        features: "",
-        category: ""
+        title: "",
+        desc: "",
+        country: ""
     })
     useEffect(() => {
         if (image) {
@@ -34,34 +32,17 @@ export const EditProduct = () => {
             setLoading(false);
         }
 
-        const fetchAllCats = async () => {
-            try {
-                setLoading(true);
-                const res = await fetch(`/api/products/categories/`);
-                const data = await res.json();
-                if (data.success === false) {
-                    console.log(data.message);
-                    return;
-                }
-                setCats(data);
-                setLoading(false);
-            } catch (error) {
-                setLoading(false);
-                setError(error.message)
-                console.log(error.message);
-            }
-        }
 
-        const fetchSingleProduct = async () => {
+        const fetchSingleProject = async () => {
             try {
 
-                const res = await fetch(`/api/products/${params.id}`);
+                const res = await fetch(`/api/projects/${params.id}`);
                 const data = await res.json();
                 if (data.success === false) {
 
                     return;
                 }
-                
+
                 setFormData(data)
                 console.log(data);
 
@@ -69,9 +50,7 @@ export const EditProduct = () => {
                 console.log(error.message);
             }
         };
-        fetchSingleProduct();
-
-        fetchAllCats();
+        fetchSingleProject();
     }, [image, params.id])
 
     const handleChange = (e) => {
@@ -85,7 +64,7 @@ export const EditProduct = () => {
         setLoading(true);
         const storage = getStorage(app);
         const imageName = new Date().getTime() + image.name;
-        const storageRef = ref(storage, `/products/${imageName}`);
+        const storageRef = ref(storage, `/projects/${imageName}`);
         const uploadTask = uploadBytesResumable(storageRef, image);
         uploadTask.on('state_changed', (snapshot) => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -117,7 +96,7 @@ export const EditProduct = () => {
         }
         setLoading(true)
         try {
-            const res = await fetch(`/api/products/edit/${params.id}/${currentAdmin._id}`, {
+            const res = await fetch(`/api/projects/edit/${params.id}/${currentAdmin._id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -137,7 +116,7 @@ export const EditProduct = () => {
             }
             setLoading(false)
 
-            navigate('/admin/products');
+            navigate('/admin/projects');
 
         } catch (err) {
             setError(err.message)
@@ -147,21 +126,22 @@ export const EditProduct = () => {
 
     if (Object.values(formData).every(value => value === '')) {
         return (
-          <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-            <Loader />
-          </div>
+            <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+                <Loader />
+            </div>
         );
-      }
+    }
+    console.log(formData);
     return (
         <>
 
             <section className='container my-5' >
 
-                <h1 className='text-center section-p'>Edit Product: {formData.name} - {formData.category.name}</h1>
+                <h1 className='text-center section-p'>Edit Project: {formData.title}</h1>
                 <Form onSubmit={handleSubmit} className='section-p' >
                     <Form.Group controlId="image" className="my-2">
                         <Form.Label>Upload Image</Form.Label>
-                        <Form.Control  disabled={loading == true ? true : false} onChange={(e) => setImage(e.target.files[0])} name='image' type="file" placeholder="Upload product image" ></Form.Control>
+                        <Form.Control disabled={loading == true ? true : false} onChange={(e) => setImage(e.target.files[0])} name='image' type="file" placeholder="Upload product image" ></Form.Control>
                     </Form.Group>
                     <p className="text-center">
                         {uploadError ? (
@@ -178,39 +158,20 @@ export const EditProduct = () => {
                             ""
                         )}
                     </p>
-                    <Form.Group controlId="name" className="my-2">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.name} name='name' type="text" placeholder="Enter product name" ></Form.Control>
+                    <Form.Group controlId="title" className="my-2">
+                        <Form.Label>Title</Form.Label>
+                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.title} name='title' type="text" placeholder="Enter project title" ></Form.Control>
                     </Form.Group>
-                    <Form.Group controlId="code" className="my-2">
-                        <Form.Label>Code</Form.Label>
-                        <Form.Control disabled={loading == true ? true : false} onChange={handleChange} value={formData.code} name='code' type="text" placeholder="Enter product code" ></Form.Control>
-                    </Form.Group>
-                    <Form.Group controlId="description" className="my-2">
+                    <Form.Group controlId="desc" className="my-2">
                         <Form.Label>Description</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.description} name='description' type="text" placeholder="Enter product description" ></Form.Control>
+                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.desc} name='desc' type="text" placeholder="Enter project description" ></Form.Control>
                     </Form.Group>
-                    <Form.Group controlId="features" className="my-2">
-                        <Form.Label>Features</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.features} name='features' type="text" placeholder="Enter product features" ></Form.Control>
+                    <Form.Group controlId="country" className="my-2">
+                        <Form.Label>Country</Form.Label>
+                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.country} name='country' type="text" placeholder="Enter project country" ></Form.Control>
                     </Form.Group>
 
-                    <Form.Group controlId="category" className="my-2">
-                        <Form.Label>Category</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false}
-                            as="select"
-                            onChange={handleChange}
-                            value={formData.category}
-                            name="category"
-                        >
-                            <option value="">Select a category</option>
-                            {cats.map((category) => (
-                                <option key={category._id} value={category._id}>
-                                    {category.name}
-                                </option>
-                            ))}
-                        </Form.Control>
-                    </Form.Group>
+
 
 
                     <Button disabled={loading == true ? true : false} type="submit" className="my-2 desiredBtn">{loading ? "PLEASE WAIT" : "UPDATE"}</Button>
