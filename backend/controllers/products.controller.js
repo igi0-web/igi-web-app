@@ -69,7 +69,7 @@ export const deleteCategory = async (req, res, next) => {
 
 export const getCategories = async (req, res, next) => {
     try {
-        const cat = await Category.find({});
+        const cat = await Category.find({}).sort({ createdAt: -1 });
         console.log(cat);
         if (cat.length == 0) {
             return next(errorHandler(404, "No categories found!"));
@@ -123,7 +123,7 @@ export const searchProducts = async (req, res, next) => {
 
 export const getProducts = async (req, res, next) => {
     try {
-        const products = await Product.find({}).populate('category', 'name');
+        const products = await Product.find({}).populate('category', 'name').sort({ createdAt: -1 });
         if (products.length == 0) {
             return next(errorHandler(404, "No products found!"));
         }
@@ -216,7 +216,7 @@ export const get6Products = async (req, res, next) => {
         const products = await Product.find({})
             .sort({ createdAt: -1 })
             .limit(6);
-
+        console.log(products);
         if (!products || products.length === 0) {
             return next(errorHandler(404, "No products found!"));
         }

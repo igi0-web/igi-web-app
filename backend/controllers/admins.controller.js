@@ -50,7 +50,7 @@ export const getAdmins = async (req, res, next) => {
         if (req.admin && req.admin.id != req.params.adminId) {
             return next(errorHandler(401, "You can only update your own account!"));
         }
-        const admins = await Admin.find({});
+        const admins = await Admin.find({}).sort({ createdAt: -1 });;
         if (admins.length == 0) {
             return next(errorHandler(404, "No admins found!"));
         }

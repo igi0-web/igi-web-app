@@ -132,7 +132,7 @@ export const EventsList = () => {
                                 <tr key={ev._id}>
                                     <td>{ev._id}</td>
                                     <td>{ev.title}</td>
-                                    <td>{ev.desc}</td>
+                                    <td><p className='truncate'>{ev.desc}</p></td>
                                     <td style={{ width: "10%" }}><img src={ev.imageUrl} className='img-fluid' style={{ width: "100%" }}></img></td>
                                     <td>
                                         <Link to={`/admin/events/edit/${ev._id}`}>

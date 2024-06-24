@@ -35,7 +35,7 @@ export const deleteCertificate = async (req, res, next) => {
 
 export const getCertificates = async (req, res, next) => {
     try {
-        const certificates = await Certificate.find({});
+        const certificates = await Certificate.find({}).sort({ createdAt: -1 });;
         if (certificates.length == 0) {
             return next(errorHandler(404, "No certificates found!"));
         }

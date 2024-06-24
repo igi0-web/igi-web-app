@@ -3,7 +3,7 @@ import Project from "../models/project.model.js";
 
 export const getProjects = async (req, res, next) => {
   try {
-    const projects = await Project.find({});
+    const projects = await Project.find({}).sort({ createdAt: -1 });
     if (projects.length == 0) {
       return next(errorHandler(404, "No projects found!"));
     }
@@ -80,18 +80,3 @@ export const deleteProject = async (req, res, next) => {
 };
 
 
-export const get3Projects = async (req, res, next) => {
-  try {
-    const projects = await Project.find({})
-      .sort({ createdAt: -1 })
-      .limit(3);
-
-    if (!projects || projects.length === 0) {
-      return next(errorHandler(404, "No projects found!"));
-    }
-
-    res.status(200).json(projects);
-  } catch (error) {
-    next(error);
-  }
-}

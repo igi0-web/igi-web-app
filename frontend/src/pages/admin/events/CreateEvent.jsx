@@ -134,7 +134,7 @@ export const CreateEvent = () => {
                     
                     <Form.Group controlId="desc" className="my-2">
                         <Form.Label>Description</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.desc} name='desc' type="text" placeholder="Enter event description" ></Form.Control>
+                        <Form.Control as={"textarea"} required disabled={loading == true ? true : false} onChange={handleChange} value={formData.desc} name='desc' type="text" placeholder="Enter event description" ></Form.Control>
                     </Form.Group>
                     
 

@@ -188,11 +188,11 @@ export const EditProduct = () => {
                     </Form.Group>
                     <Form.Group controlId="description" className="my-2">
                         <Form.Label>Description</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.description} name='description' type="text" placeholder="Enter product description" ></Form.Control>
+                        <Form.Control as={"textarea"} required disabled={loading == true ? true : false} onChange={handleChange} value={formData.description} name='description' type="text" placeholder="Enter product description" ></Form.Control>
                     </Form.Group>
                     <Form.Group controlId="features" className="my-2">
                         <Form.Label>Features</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.features} name='features' type="text" placeholder="Enter product features" ></Form.Control>
+                        <Form.Control as={"textarea"} required disabled={loading == true ? true : false} onChange={handleChange} value={formData.features} name='features' type="text" placeholder="Enter product features" ></Form.Control>
                     </Form.Group>
 
                     <Form.Group controlId="category" className="my-2">

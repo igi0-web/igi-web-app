@@ -3,7 +3,7 @@ import News from "../models/news.model.js";
 
 export const getNews = async (req, res, next) => {
     try {
-        const news = await News.find({});
+        const news = await News.find({}).sort({ createdAt: -1 });;
         if (news.length == 0) {
             return next(errorHandler(404, "No news found!"));
         }

@@ -133,7 +133,7 @@ export const ProjectsList = () => {
                                 <tr key={proj._id}>
                                     <td>{proj._id}</td>
                                     <td>{proj.title}</td>
-                                    <td>{proj.desc}</td>
+                                    <td><p className='truncate'>{proj.desc}</p></td>
                                     <td>{proj.country}</td>
                                     <td style={{ width: "10%" }}><img src={proj.imageUrl} className='img-fluid' style={{ width: "100%" }}></img></td>
                                     <td>
