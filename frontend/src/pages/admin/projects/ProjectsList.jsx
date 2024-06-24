@@ -5,6 +5,7 @@ import Loader from '../../../components/Loader'
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
+import { deleteImageFromFirebase } from '../adminUtils/aUtils';
 export const ProjectsList = () => {
     const { currentAdmin } = useSelector((state) => {
 
@@ -16,17 +17,27 @@ export const ProjectsList = () => {
     const [serverMsg, setServerMsg] = useState("");
     const [loading, setLoading] = useState(false);
     let [projects, setProjects] = useState([]);
+    const [showMore, setShowMore] = useState(false);
     const fetchAllProjects = async () => {
         try {
             
-            const res = await fetch(`/api/projects/`);
+            const res = await fetch(`/api/projects?limit=7`);
             const data = await res.json();
             if (data.success === false) {
                 console.log(data.message);
                 setStatusCode(data.statusCode);
                 return;
             }
-            setProjects(data);
+            if (data.length > 6) {
+
+                const firstSixElements = data.slice(0, 6);
+                setProjects(firstSixElements);
+                setShowMore(true);
+            } else {
+                setProjects(data);
+                setShowMore(false);
+            }
+           
 
         } catch (error) {
             console.log(error.message);
@@ -40,6 +51,18 @@ export const ProjectsList = () => {
 
         fetchAllProjects();
     }, [])
+
+
+    const fetchProjectDetails = async (id) => {
+        try {
+            const res = await fetch(`/api/projects/${id}`);
+            const project = await res.json();
+            return project.imageUrl; 
+        } catch (error) {
+            console.error("Error fetching project details:", error);
+            throw error;
+        }
+    };
 
     const deleteProject = async (id) => {
 
@@ -71,6 +94,8 @@ export const ProjectsList = () => {
         if (window.confirm("Are you sure that you want to delete this project?")) {
             try {
                 console.log(id);
+                const imageUrl = await fetchProjectDetails(id);
+                await deleteImageFromFirebase(imageUrl)
                 await deleteProject(id);
                 projects = [];
                 setLoading(true)
@@ -85,13 +110,38 @@ export const ProjectsList = () => {
             }
         }
     }
-    if ((projects.length === 0 || loading == true) && statusCode != 404) {
+    if (projects.length === 0  && statusCode != 404) {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center vh-100">
                 <Loader />
             </div>
         );
     }
+
+    const onShowMoreClick = async () => {
+        try {
+            setLoading(true)
+            const numberOfProjects = projects.length;
+            const startIndex = numberOfProjects;
+            const res = await fetch(`/api/projects/?startIndex=${startIndex}&limit=7`);
+            const data = await res.json();
+
+            if (data.length > 6) {
+                const firstSixElements = data.slice(0, 6);
+                setProjects(prevProjects => [...prevProjects, ...firstSixElements]);
+                setShowMore(true);
+                setLoading(false)
+            } else {
+                setProjects(prevProjects => [...prevProjects, ...data]);
+                setShowMore(false);
+                setLoading(false)
+            }
+        } catch (error) {
+            console.error("Failed to fetch more projects:", error);
+            setError("Failed to fetch more projects.");
+            setLoading(false)
+        }
+    };
     return (
         <>
 
@@ -148,7 +198,20 @@ export const ProjectsList = () => {
                         })}
                     </tbody>
                 </Table>
-
+                {
+                    loading == true ? <Loader /> : (
+                        <div className='d-flex align-items-center justify-content-center'>
+                            {showMore && loading == false &&(
+                                <button
+                                    onClick={onShowMoreClick}
+                                    className="desiredBtn"
+                                >
+                                    Load More
+                                </button>
+                            )}
+                        </div>
+                    )
+                }
 
             </section>
         </>

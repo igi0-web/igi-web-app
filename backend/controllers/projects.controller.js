@@ -3,7 +3,10 @@ import Project from "../models/project.model.js";
 
 export const getProjects = async (req, res, next) => {
   try {
-    const projects = await Project.find({}).sort({ createdAt: -1 });
+    const limit = parseInt(req.query.limit) || null;
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const projects = await Project.find({}).sort({ createdAt: -1 }).limit(limit)
+    .skip(startIndex);
     if (projects.length == 0) {
       return next(errorHandler(404, "No projects found!"));
     }

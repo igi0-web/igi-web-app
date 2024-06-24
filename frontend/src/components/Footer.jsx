@@ -3,6 +3,7 @@ import { faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from "react";
+import ReturnToTop from "./ReturnToTop";
 export const Footer = () => {
     const [cprofile, setCprofile] = useState({});
     const fetchProfile = async () => {
@@ -77,7 +78,7 @@ export const Footer = () => {
                         </div>
 
                     </div>
-
+                    <ReturnToTop />
                 </div>
 
                 <hr className="text-light" />

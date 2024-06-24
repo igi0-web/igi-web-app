@@ -7,18 +7,31 @@ import Loader from "../components/Loader"
 export const Certificates = () => {
   const [certificates, setCertificates] = useState([]);
   const [statusCode, setStatusCode] = useState("");
+  const [showMore, setShowMore] = useState(false);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchAllCertificates = async () => {
       try {
 
-        const res = await fetch(`/api/certificates/`);
+        const res = await fetch(`/api/certificates?limit=10`);
         const data = await res.json();
         if (data.success === false) {
           setStatusCode(data.statusCode);
           console.log(data.message);
           return;
         }
-        setCertificates(data);
+        if (data.length > 9) {
+
+          const firstNineElements = data.slice(0, 9);
+          setCertificates(firstNineElements);
+          setShowMore(true);
+          setLoading(false)
+        } else {
+          setCertificates(data);
+          setShowMore(false);
+          setLoading(false)
+        }
+
 
       } catch (error) {
         console.log(error.message);
@@ -34,6 +47,31 @@ export const Certificates = () => {
       </div>
     );
   }
+
+  const onShowMoreClick = async () => {
+    try {
+      setLoading(true)
+      const numberOfCertificates = certificates.length;
+      const startIndex = numberOfCertificates;
+      const res = await fetch(`/api/certificates/?startIndex=${startIndex}&limit=10`);
+      const data = await res.json();
+
+      if (data.length > 9) {
+        const firstNineElements = data.slice(0, 9);
+        setCertificates(prevCertificates => [...prevCertificates, ...firstNineElements]);
+        setShowMore(true);
+        setLoading(false)
+      } else {
+        setCertificates(prevCertificates => [...prevCertificates, ...data]);
+        setShowMore(false);
+        setLoading(false)
+      }
+    } catch (error) {
+      console.error("Failed to fetch more certificates:", error);
+
+      setLoading(false)
+    }
+  };
   return (
     <>
       <div className='d-flex align-items-center justify-content-center text-light' style={{
@@ -62,6 +100,20 @@ export const Certificates = () => {
           }
 
         </Row>
+        {
+          loading == true ? <Loader /> : (
+            <div className='d-flex align-items-center justify-content-center'>
+              {showMore && loading == false && (
+                <button
+                  onClick={onShowMoreClick}
+                  className="desiredBtn"
+                >
+                  Load More
+                </button>
+              )}
+            </div>
+          )
+        }
       </section>
     </>
 

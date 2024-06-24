@@ -6,7 +6,7 @@ export const createCertificate = async (req, res, next) => {
     try {
         if (req.admin && req.admin.id != req.params.adminId) {
             return next(errorHandler(401, "You can only create projects from your own account!"));
-          }
+        }
         const certificate = await Certificate.create(req.body);
         return res.status(201).json(certificate);
     } catch (error) {
@@ -18,7 +18,7 @@ export const createCertificate = async (req, res, next) => {
 export const deleteCertificate = async (req, res, next) => {
     if (req.admin && req.admin.id != req.params.adminId) {
         return next(errorHandler(401, "You can only create projects from your own account!"));
-      }
+    }
     const certificate = await Certificate.findById(req.params.id);
 
     if (!certificate) {
@@ -35,7 +35,10 @@ export const deleteCertificate = async (req, res, next) => {
 
 export const getCertificates = async (req, res, next) => {
     try {
-        const certificates = await Certificate.find({}).sort({ createdAt: -1 });;
+        const limit = parseInt(req.query.limit) || null;
+        const startIndex = parseInt(req.query.startIndex) || 0;
+        const certificates = await Certificate.find({}).sort({ createdAt: -1 }).limit(limit)
+        .skip(startIndex);
         if (certificates.length == 0) {
             return next(errorHandler(404, "No certificates found!"));
         }
@@ -45,3 +48,17 @@ export const getCertificates = async (req, res, next) => {
     }
 
 }
+
+
+export const getCertificateById = async (req, res, next) => {
+    try {
+      const cer = await Certificate.findById(req.params.id);
+      if (!cer) {
+        return next(errorHandler(404, "Certificate not found!"));
+      }
+  
+      res.status(200).json(cer);
+    } catch (error) {
+      next(error);
+    }
+  };

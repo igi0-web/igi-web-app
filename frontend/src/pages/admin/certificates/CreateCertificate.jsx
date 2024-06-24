@@ -104,7 +104,7 @@ export const CreateCertificate = () => {
 
             <section className='container my-5' >
 
-                <h1 className='text-center section-p'>Create Project</h1>
+                <h1 className='text-center section-p'>Create Certificate</h1>
                 <Form onSubmit={handleSubmit} className='section-p' >
                     <Form.Group controlId="image" className="my-2">
                         <Form.Label>Upload Image</Form.Label>

@@ -5,6 +5,7 @@ import Loader from '../../../components/Loader'
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
+import { deleteImageFromFirebase } from '../adminUtils/aUtils';
 export const ProductsList = () => {
     const { currentAdmin } = useSelector((state) => {
 
@@ -79,11 +80,24 @@ export const ProductsList = () => {
         }
 
     }
+    const fetchProductDetails = async (id) => {
+        try {
+            const res = await fetch(`/api/products/${id}`); // Adjust endpoint to fetch product details
+            const product = await res.json();
+            return product.imageUrl; // Ensure the API returns the image URL
+        } catch (error) {
+            console.error("Error fetching product details:", error);
+            throw error;
+        }
+    };
 
+    
     const deleteHandler = async (id) => {
         if (window.confirm("Are you sure that you want to delete this product?")) {
             try {
                 console.log(id);
+                const imageUrl = await fetchProductDetails(id);
+                await deleteImageFromFirebase(imageUrl)
                 await deleteProduct(id);
                 products = [];
                 setLoading(true)

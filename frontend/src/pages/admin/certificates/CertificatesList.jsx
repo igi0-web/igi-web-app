@@ -5,6 +5,7 @@ import Loader from '../../../components/Loader'
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
+import { deleteImageFromFirebase } from '../adminUtils/aUtils';
 export const CertificatesList = () => {
     const { currentAdmin } = useSelector((state) => {
 
@@ -16,17 +17,27 @@ export const CertificatesList = () => {
     const [serverMsg, setServerMsg] = useState("");
     const [loading, setLoading] = useState(false);
     let [certificates, setCertificates] = useState([]);
+    const [showMore, setShowMore] = useState(false);
     const fetchAllCertificates = async () => {
         try {
 
-            const res = await fetch(`/api/certificates/`);
+            const res = await fetch(`/api/certificates?limit=7`);
             const data = await res.json();
             if (data.success === false) {
                 console.log(data.message);
                 setStatusCode(data.statusCode);
                 return;
             }
-            setCertificates(data);
+            if (data.length > 6) {
+
+                const firstSixElements = data.slice(0, 6);
+                setCertificates(firstSixElements);
+                setShowMore(true);
+            } else {
+                setCertificates(data);
+                setShowMore(false);
+            }
+
 
         } catch (error) {
             console.log(error.message);
@@ -66,11 +77,22 @@ export const CertificatesList = () => {
         }
 
     }
-
+    const fetchCertificateDetails = async (id) => {
+        try {
+            const res = await fetch(`/api/certificates/${id}`);
+            const cer = await res.json();
+            return cer.imageUrl; 
+        } catch (error) {
+            console.error("Error fetching certificate details:", error);
+            throw error;
+        }
+    };
     const deleteHandler = async (id) => {
         if (window.confirm("Are you sure that you want to delete this certificate?")) {
             try {
                 console.log(id);
+                const imageUrl = await fetchCertificateDetails(id);
+                await deleteImageFromFirebase(imageUrl)
                 await deleteCertificate(id);
                 certificates = [];
                 setLoading(true)
@@ -85,13 +107,39 @@ export const CertificatesList = () => {
             }
         }
     }
-    if ((certificates.length === 0 || loading == true) && statusCode != 404) {
+    if (certificates.length === 0 && statusCode != 404) {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center vh-100">
                 <Loader />
             </div>
         );
     }
+
+
+    const onShowMoreClick = async () => {
+        try {
+            setLoading(true)
+            const numberOfCertificates = certificates.length;
+            const startIndex = numberOfCertificates;
+            const res = await fetch(`/api/certificates/?startIndex=${startIndex}&limit=7`);
+            const data = await res.json();
+
+            if (data.length > 6) {
+                const firstSixElements = data.slice(0, 6);
+                setCertificates(prevCertificates => [...prevCertificates, ...firstSixElements]);
+                setShowMore(true);
+                setLoading(false)
+            } else {
+                setCertificates(prevCertificates => [...prevCertificates, ...data]);
+                setShowMore(false);
+                setLoading(false)
+            }
+        } catch (error) {
+            console.error("Failed to fetch more certificates:", error);
+            setError("Failed to fetch more certificates.");
+            setLoading(false)
+        }
+    };
     return (
         <>
 
@@ -133,7 +181,7 @@ export const CertificatesList = () => {
                                     <td>{cer.title}</td>
                                     <td style={{ width: "10%" }}><img src={cer.imageUrl} className='img-fluid' style={{ width: "100%" }}></img></td>
                                     <td>
-                                        
+
                                         <Button style={{ color: "white" }} variant="danger" onClick={() => deleteHandler(cer._id)} type="button" className="btn-sm my-2"><FontAwesomeIcon icon={faTrash} size='2x' className='mx-auto icon ' /></Button>
 
                                     </td>
@@ -142,7 +190,20 @@ export const CertificatesList = () => {
                         })}
                     </tbody>
                 </Table>
-
+                {
+                    loading == true ? <Loader /> : (
+                        <div className='d-flex align-items-center justify-content-center'>
+                            {showMore && loading == false && (
+                                <button
+                                    onClick={onShowMoreClick}
+                                    className="desiredBtn"
+                                >
+                                    Load More
+                                </button>
+                            )}
+                        </div>
+                    )
+                }
 
             </section>
         </>

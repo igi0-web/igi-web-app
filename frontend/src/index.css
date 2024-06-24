@@ -4,6 +4,7 @@
     --darkBlue: rgb(20, 66, 114);
     --pText: #8f8f8f;
 }
+
 body {
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
@@ -17,13 +18,11 @@ body {
     width: 5px;
 }
 
-::-webkit-scrollbar-track
-    {
+::-webkit-scrollbar-track {
     background: var(--white);
 }
 
-::-webkit-scrollbar-thumb
-    {
+::-webkit-scrollbar-thumb {
     background-color: var(--brightBlue);
     border-radius: 10px;
 }
@@ -53,20 +52,20 @@ body {
     font-weight: bold;
 }
 
-.section-p{
-    
+.section-p {
+
     color: var(--brightBlue);
 }
 
-.spinner{
-  
+.spinner {
+
     color: var(--brightBlue) !important;
 }
 
 
 
 .desiredH2 {
-    
+
     margin-top: 15px;
     font-size: 1.2rem;
     color: var(--brightBlue);
@@ -74,13 +73,13 @@ body {
 }
 
 .desiredH5 {
-    
+
     margin-top: 15px;
     font-size: 1.2rem;
     color: var(--brightBlue) !important;
 }
 
-.contentsec{
+.contentsec {
     height: 100% !important;
 }
 
@@ -96,46 +95,44 @@ body {
     padding: 0;
     word-break: break-word;
     white-space: normal;
-  }
+}
 
 .top-focused {
-    object-fit: cover; 
-    object-position: top; 
-    width: 100%; 
+    object-fit: cover;
+    object-position: top;
+    width: 100%;
     height: 500px;
 }
 
 .image-container {
-    overflow: hidden; 
+    overflow: hidden;
 }
 
-.bor{
+.bor {
     border: 0.5px solid black;
 }
 
-.aboutUs-section-p
-{
+.aboutUs-section-p {
     opacity: 0.8;
     color: var(--darkBlue) !important;
     line-height: 1.5;
 }
 
-.cer-img
-{
-   height: 100% !important;
-   width: 100% !important;
+.cer-img {
+    height: 100% !important;
+    width: 100% !important;
 }
 
-.icon{
+.icon {
     cursor: pointer;
     transition: all 0.15s;
 }
 
-.icon:hover{
+.icon:hover {
     opacity: 0.8;
 }
 
-.icon:active{
+.icon:active {
     opacity: 0.6;
 }
 
@@ -143,14 +140,36 @@ body {
     max-height: 400px;
     object-fit: cover;
     border-radius: 8px;
-  }
+}
 
-  .truncate {
+.truncate {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* number of lines to show */
-            line-clamp: 2;
+    -webkit-line-clamp: 2;
+    /* number of lines to show */
+    line-clamp: 2;
     -webkit-box-orient: vertical;
- }
+}
 
+
+.return-to-top {
+    color: var(--brightBlue);
+    background-color: var(--white);
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease-in-out;
+    font-size: 24px;
+}
+
+.return-to-top svg {
+    margin-right: 5px;
+}

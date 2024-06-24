@@ -5,6 +5,7 @@ import Loader from '../../../components/Loader'
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
+import { deleteImageFromFirebase } from '../adminUtils/aUtils';
 export const EventsList = () => {
     const { currentAdmin } = useSelector((state) => {
 
@@ -16,17 +17,27 @@ export const EventsList = () => {
     const [serverMsg, setServerMsg] = useState("");
     const [loading, setLoading] = useState(false);
     let [events, setEvents] = useState([]);
+    const [showMore, setShowMore] = useState(false);
     const fetchAllEvents = async () => {
         try {
 
-            const res = await fetch(`/api/news/`);
+            const res = await fetch(`/api/news?limit=7`);
             const data = await res.json();
             if (data.success === false) {
                 console.log(data.message);
                 setStatusCode(data.statusCode);
                 return;
             }
-            setEvents(data);
+            if (data.length > 6) {
+
+                const firstSixElements = data.slice(0, 6);
+                setEvents(firstSixElements);
+                setShowMore(true);
+            } else {
+                setEvents(data);
+                setShowMore(false);
+            }
+
 
         } catch (error) {
             console.log(error.message);
@@ -67,10 +78,22 @@ export const EventsList = () => {
 
     }
 
+    const fetchEventDetails = async (id) => {
+        try {
+            const res = await fetch(`/api/news/${id}`);
+            const event = await res.json();
+            return event.imageUrl; 
+        } catch (error) {
+            console.error("Error fetching event details:", error);
+            throw error;
+        }
+    };
     const deleteHandler = async (id) => {
         if (window.confirm("Are you sure that you want to delete this event?")) {
             try {
                 console.log(id);
+                const imageUrl = await fetchEventDetails(id);
+                await deleteImageFromFirebase(imageUrl)
                 await deleteEvent(id);
                 events = [];
                 setLoading(true)
@@ -85,13 +108,39 @@ export const EventsList = () => {
             }
         }
     }
-    if ((events.length === 0 || loading == true) && statusCode != 404) {
+    if (events.length === 0 && statusCode != 404) {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center vh-100">
                 <Loader />
             </div>
         );
     }
+
+
+    const onShowMoreClick = async () => {
+        try {
+            setLoading(true)
+            const numberOfEvents = events.length;
+            const startIndex = numberOfEvents;
+            const res = await fetch(`/api/news/?startIndex=${startIndex}&limit=7`);
+            const data = await res.json();
+
+            if (data.length > 6) {
+                const firstSixElements = data.slice(0, 6);
+                setEvents(prevEvents => [...prevEvents, ...firstSixElements]);
+                setShowMore(true);
+                setLoading(false)
+            } else {
+                setEvents(prevEvents => [...prevEvents, ...data]);
+                setShowMore(false);
+                setLoading(false)
+            }
+        } catch (error) {
+            console.error("Failed to fetch more events:", error);
+            setError("Failed to fetch more events.");
+            setLoading(false)
+        }
+    };
     return (
         <>
 
@@ -146,7 +195,20 @@ export const EventsList = () => {
                         })}
                     </tbody>
                 </Table>
-
+                {
+                    loading == true ? <Loader /> : (
+                        <div className='d-flex align-items-center justify-content-center'>
+                            {showMore && loading == false && (
+                                <button
+                                    onClick={onShowMoreClick}
+                                    className="desiredBtn"
+                                >
+                                    Load More
+                                </button>
+                            )}
+                        </div>
+                    )
+                }
 
             </section>
         </>
