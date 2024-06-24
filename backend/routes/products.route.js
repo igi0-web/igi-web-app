@@ -1,5 +1,5 @@
 import express from 'express';
-import { createCategory, createProduct, deleteCategory, deleteProduct, editCategory, editProduct, get6Products, getCategories, getCategoryById, getProductById, getProducts, searchProducts } from '../controllers/products.controller.js';
+import { createCategory, createProduct, deleteCategory, deleteProduct, editCategory, editProduct, get6Products, getCategories, getCategoryById, getProductById, getProducts,  searchProducts } from '../controllers/products.controller.js';
 import { verifyToken } from '../utils/verifyToken.js';
 const router = express.Router();
 
@@ -10,6 +10,7 @@ router.post("/categories/create/:adminId", verifyToken, createCategory);
 router.delete("/categories/delete/:id/:adminId", verifyToken, deleteCategory);
 
 router.get("/", getProducts);
+// router.get("/pag", getProductsPag);
 router.get("/six", get6Products);
 router.get("/search", searchProducts);
 router.get("/:id", getProductById);

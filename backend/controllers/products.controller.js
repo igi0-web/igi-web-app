@@ -26,8 +26,8 @@ export const editCategory = async (req, res, next) => {
         return next(errorHandler(404, "Category not found!"));
     }
     try {
-        
-        
+
+
         const updatedCat = await Category.findByIdAndUpdate(
             req.params.id,
             req.body,
@@ -123,16 +123,37 @@ export const searchProducts = async (req, res, next) => {
 
 export const getProducts = async (req, res, next) => {
     try {
-        const products = await Product.find({}).populate('category', 'name').sort({ createdAt: -1 });
-        if (products.length == 0) {
+        const limit = parseInt(req.query.limit) || null;
+        const startIndex = parseInt(req.query.startIndex) || 0;
+        const products = await Product.find({})
+            .populate('category', 'name')
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .skip(startIndex);
+
+        if (products.length === 0) {
             return next(errorHandler(404, "No products found!"));
         }
+        
         res.status(200).json(products);
     } catch (error) {
         next(error);
     }
-
 }
+
+// export const getProductsPag = async (req, res, next) => {
+//     try {
+        
+//         const products = await Product.find({}).populate('category', 'name').sort({ createdAt: -1 })
+//         if (products.length == 0) {
+//             return next(errorHandler(404, "No products found!"));
+//         }
+//         res.status(200).json(products);
+//     } catch (error) {
+//         next(error);
+//     }
+
+// }
 
 
 export const getProductById = async (req, res, next) => {

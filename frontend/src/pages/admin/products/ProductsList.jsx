@@ -16,20 +16,33 @@ export const ProductsList = () => {
     const [serverMsg, setServerMsg] = useState("");
     const [loading, setLoading] = useState(false);
     let [products, setProducts] = useState([]);
+    const [showMore, setShowMore] = useState(false);
     const fetchAllProducts = async () => {
         try {
-
-            const res = await fetch(`/api/products/`);
+            setShowMore(false);
+            const res = await fetch(`/api/products?limit=7`);
             const data = await res.json();
             if (data.success === false) {
                 console.log(data.message);
+                setError(data.message)
                 setStatusCode(data.statusCode);
                 return;
             }
-            setProducts(data);
+
+            if (data.length > 6) {
+
+                const firstSixElements = data.slice(0, 6);
+                setProducts(firstSixElements);
+                setShowMore(true);
+            } else {
+                setProducts(data);
+                setShowMore(false);
+            }
+
 
         } catch (error) {
-            console.log(error.message);
+            console.error("Failed to fetch products:", error);
+            setError("Failed to fetch products.");
         }
     }
 
@@ -85,7 +98,39 @@ export const ProductsList = () => {
             }
         }
     }
-    if ((products.length === 0 || loading == true) && statusCode != 404) {
+
+
+    const onShowMoreClick = async () => {
+        try {
+            setLoading(true)
+            const numberOfProducts = products.length;
+            const startIndex = numberOfProducts;
+            const res = await fetch(`/api/products/?startIndex=${startIndex}&limit=7`);
+            const data = await res.json();
+
+            if (data.length > 6) {
+                const firstSixElements = data.slice(0, 6);
+                setProducts(prevProducts => [...prevProducts, ...firstSixElements]);
+                setShowMore(true);
+                setLoading(false)
+            } else {
+                setProducts(prevProducts => [...prevProducts, ...data]);
+                setShowMore(false);
+                setLoading(false)
+            }
+        } catch (error) {
+            console.error("Failed to fetch more products:", error);
+            setError("Failed to fetch more products.");
+            setLoading(false)
+        }
+    };
+
+
+
+
+
+
+    if (products.length === 0 && statusCode != 404) {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center vh-100">
                 <Loader />
@@ -152,6 +197,21 @@ export const ProductsList = () => {
                         })}
                     </tbody>
                 </Table>
+                {
+                    loading == true ? <Loader /> : (
+                        <div className='d-flex align-items-center justify-content-center'>
+                            {showMore && loading == false &&(
+                                <button
+                                    onClick={onShowMoreClick}
+                                    className="desiredBtn"
+                                >
+                                    Load More
+                                </button>
+                            )}
+                        </div>
+                    )
+                }
+
 
 
             </section>
