@@ -118,3 +118,24 @@ export const editAdmin = async (req, res, next) => {
         next(error);
     }
 };
+
+
+export const getAdminById = async (req, res, next) => {
+    try {
+        if (req.admin && req.admin.id != req.params.adminId) {
+            return next(errorHandler(401, "You can only update your own account!"));
+        }
+        const a = await Admin.findById(req.params.adminId);
+        if (!a) {
+            return next(errorHandler(404, "Admin not found!"));
+        }
+
+        res.status(200).json({
+            name: a.name,
+            email: a.email,
+            phone: a.phone
+        });
+    } catch (error) {
+        next(error);
+    }
+};

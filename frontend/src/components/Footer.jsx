@@ -62,8 +62,7 @@ export const Footer = () => {
                                 Us</a></li>
                             <li className="mb-2 footer-p-white"><a href="/contact-us"
                                 className="linkFix p-0 ">Contact Us</a></li>
-                            <li className="mb-2 footer-p-white"><a href="/login"
-                                className="linkFix p-0 ">Admin</a></li>
+                            <li className="mb-2 footer-p-white"></li>
                         </ul>
                     </div>
                     <div className="col-12 col-md-12 col-lg-4 mb-3">
@@ -84,7 +83,13 @@ export const Footer = () => {
                 <hr className="text-light" />
 
                 <div>
-                    <p className="footer-p-white">Copyright © IGI. All Rights Reserved.</p>
+                    <p className="footer-p-white">Copyright © IGI. All Rights Reserved. </p>
+                    <div className="text-end">
+                        <a href="/login"
+                            className="p-0 text-end">Admin</a>
+                    </div>
+
+
                 </div>
 
             </footer>

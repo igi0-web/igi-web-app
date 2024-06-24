@@ -7,15 +7,18 @@ import "./styles/components.css";
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { signOutFailure, signOutStart, signOutSuccess } from '../state/admin/admin.slice';
+import { Button, Dropdown } from 'react-bootstrap';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentAdmin } = useSelector((state) => {
- 
+
     return state.admin
   })
   const location = useLocation();
-  
+
 
   const isAdminRoute = location.pathname.startsWith('/admin') && currentAdmin != null;
 
@@ -67,15 +70,31 @@ export const Header = () => {
               </Nav> :
 
                 <Nav className="justify-content-end flex-grow-1 pe-3 navLink">
-                  
+
                   <Nav.Link className='navLink' href="/admin/dashboard">Dashboard</Nav.Link>
                   <Nav.Link className='navLink' href="/admin/products">Products</Nav.Link>
                   <Nav.Link className='navLink' href="/admin/categories">Categories</Nav.Link>
                   <Nav.Link className='navLink' href="/admin/projects">Projects</Nav.Link>
                   <Nav.Link className='navLink' href="/admin/certificates">Certificates</Nav.Link>
                   <Nav.Link className='navLink' href="/admin/events">News & Events</Nav.Link>
-                  <button onClick={handleLogOut} className='desiredBtn ms-2'>Logout</button>
+                  <Dropdown>
+                    <Dropdown.Toggle className='desiredBtn' variant="dark" id="dropdown-basic">
+                      Profile
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                    <Dropdown.Item href="/admin/edit-my-profile">
+                                <FontAwesomeIcon icon={faEdit} className='me-2 section-p' /> <span className='section-p'>My Profile</span>
+                            </Dropdown.Item>
+                      <Dropdown.Item href=""><a onClick={handleLogOut} className='btn navLink text-decoration-none'>Logout</a></Dropdown.Item>
+                      
+                      
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <Nav.Link className='navLink' href="/admin/admins">Admins</Nav.Link>
                   
+                  
+
 
                 </Nav>
 

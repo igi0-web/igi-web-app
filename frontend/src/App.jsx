@@ -32,6 +32,9 @@ import { CreateCertificate } from './pages/admin/certificates/CreateCertificate'
 import { CreateEvent } from './pages/admin/events/CreateEvent';
 import { EventsList } from './pages/admin/events/EventsList';
 import { EditEvent } from './pages/admin/events/EditEvent';
+import { AdminsList } from './pages/admin/admins/AdminsList';
+import { CreateAdmin } from './pages/admin/admins/CreateAdmin';
+import { EditAdmin } from './pages/admin/admins/EditAdmin';
 
 function App() {
 
@@ -71,6 +74,10 @@ function App() {
             <Route path="/admin/events/" element={<EventsList />} />
             <Route path="/admin/events/create" element={<CreateEvent />} />
             <Route path="/admin/events/edit/:id" element={<EditEvent />} />
+            <Route path="/admin/admins/" element={<AdminsList />} />
+            <Route path="/admin/admins/create" element={<CreateAdmin />} />
+            <Route path="/admin/edit-my-profile" element={<EditAdmin />} />
+
           </Route>
 
       </Routes>
