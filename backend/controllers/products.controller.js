@@ -1,6 +1,10 @@
 import errorHandler from "../utils/custom.error.handler.js";
 import { Product, Category } from "../models/product.model.js";
 import mongoose from 'mongoose';
+
+import { deleteImageFromFirebase } from "../utils/firebaseFunctions.js";
+
+
 // Product Category Controller =============================================
 
 export const createCategory = async (req, res, next) => {
@@ -39,13 +43,46 @@ export const editCategory = async (req, res, next) => {
     }
 };
 
+// export const deleteCategory = async (req, res, next) => {
+//     try {
+//         if (req.admin && req.admin.id != req.params.adminId) {
+//             return next(errorHandler(401, "You can only delete categories from your own account!"));
+//         }
+//         const session = await mongoose.startSession();
+//         session.startTransaction();
+//         const cat = await Category.findById(req.params.id);
+
+//         if (!cat) {
+//             await session.abortTransaction();
+//             session.endSession();
+//             return next(errorHandler(404, "Category not found!"));
+//         }
+
+//         await Product.deleteMany({ category: req.params.id });
+//         await Category.findByIdAndDelete(req.params.id);
+//         await session.commitTransaction();
+//         session.endSession();
+//         res.status(200).json("Category has been deleted!");
+//     } catch (error) {
+//         await session.abortTransaction();
+//         session.endSession();
+//         next(error);
+//     }
+// };
+
+
 export const deleteCategory = async (req, res, next) => {
+    let session;
     try {
-        if (req.admin && req.admin.id != req.params.adminId) {
+        session = await mongoose.startSession();
+        session.startTransaction();
+
+       
+        if (req.admin && req.admin.id !== req.params.adminId) {
             return next(errorHandler(401, "You can only delete categories from your own account!"));
         }
-        const session = await mongoose.startSession();
-        session.startTransaction();
+
+        
         const cat = await Category.findById(req.params.id);
 
         if (!cat) {
@@ -54,14 +91,28 @@ export const deleteCategory = async (req, res, next) => {
             return next(errorHandler(404, "Category not found!"));
         }
 
+       
+        const products = await Product.find({ category: req.params.id });
+       
+
+        for (let i =0 ; i < products.length; i++) {
+            if (products[i].imageUrl) {
+                
+                await deleteImageFromFirebase(products[i].imageUrl); 
+            }
+            
+        }
         await Product.deleteMany({ category: req.params.id });
         await Category.findByIdAndDelete(req.params.id);
         await session.commitTransaction();
         session.endSession();
-        res.status(200).json("Category has been deleted!");
+
+        res.status(200).json("Category and its products have been deleted!");
     } catch (error) {
-        await session.abortTransaction();
-        session.endSession();
+        if (session) {
+            await session.abortTransaction();
+            session.endSession();
+        }
         next(error);
     }
 };
