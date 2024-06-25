@@ -67,7 +67,7 @@ export const Home = () => {
         return;
       }
       setProducts(data);
-
+      setLoading(false)
     } catch (error) {
       setLoading(false)
       setError("Failed to fetch products!" + error.message);

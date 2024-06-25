@@ -32,6 +32,7 @@ export const Products = () => {
       }
       setProducts(data);
       setFiltered(data);
+      setLoading(false)
     } catch (error) {
       setLoading(false)
       setError("Failed to fetch products!" + error.message);
@@ -52,7 +53,7 @@ export const Products = () => {
         return;
       }
       setCats(data);
-
+      setLoading(false)
     } catch (error) {
       setLoading(false)
       setError("Failed to fetch categories!" + error.message);
