@@ -5,32 +5,35 @@ import Loader from '../../../components/Loader'
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
-export const CategoriesList = () => {
-    const { currentAdmin } = useSelector((state) => {
 
+export const CategoriesList = () => {
+
+    const { currentAdmin } = useSelector((state) => {
         return state.admin
     })
+
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const [serverMsg, setServerMsg] = useState("");
     const [loading, setLoading] = useState(false);
     let [cats, setCats] = useState([]);
     const [statusCode, setStatusCode] = useState("");
+
+
     const fetchAllCats = async () => {
         try {
 
             const res = await fetch(`/api/products/categories/`);
             const data = await res.json();
             if (data.success === false) {
-                console.log(data.statusCode);
+                setError(data.message)
                 setStatusCode(data.statusCode);
-                console.log(data.message);
                 return;
             }
             setCats(data);
 
         } catch (error) {
-            console.log(error.message);
+            setError("Failed to fetch categories.");
         }
     }
 
@@ -52,17 +55,16 @@ export const CategoriesList = () => {
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);
-                if (data.statusCode != 200) {
+                setStatusCode(data.statusCode)
+                if (data.statusCode == 401) {
                     navigate("/login")
                 }
-                console.log(data.message);
                 return;
             }
 
-
+            setServerMsg("Successfully deleted the category and associated products!")
 
         } catch (error) {
-            console.log(error.message);
             setError(error.message);
         }
 
@@ -71,30 +73,29 @@ export const CategoriesList = () => {
     const deleteHandler = async (id) => {
         if (window.confirm("Are you sure that you want to delete this category? All associated products will be deleted!")) {
             try {
-                console.log(id);
-                await deleteCat(id);
-                cats = [];
                 setLoading(true)
-                fetchAllCats();
                 
+                await deleteCat(id);
+                setCats([]);
+                await fetchAllCats();
                 setLoading(false);
-                setServerMsg("Successfully deleted the category and associated products!")
-                console.log("Category Deleted!");
             } catch (err) {
                 setLoading(false);
                 setError(err.message)
-                console.log(err.message);
             }
         }
     }
-    console.log(statusCode);
-    if ((cats.length === 0 || loading == true) && statusCode != 404) {
+    
+
+    if (cats.length === 0 && statusCode != 404) {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center vh-100">
                 <Loader />
             </div>
         );
     }
+
+
     return (
         <>
 
@@ -133,7 +134,7 @@ export const CategoriesList = () => {
                                 <tr key={cat._id}>
                                     <td>{cat._id}</td>
                                     <td>{cat.name}</td>
-                                    
+
                                     <td>
                                         <Link to={`/admin/categories/edit/${cat._id}`}>
                                             <Button style={{ color: "white" }} variant='dark' type="button" className="btn-sm my-2 me-2"><FontAwesomeIcon icon={faEdit} size='2x' className='mx-auto icon' /></Button>

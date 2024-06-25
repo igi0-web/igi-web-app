@@ -7,38 +7,50 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../../../components/Loader';
 
 export const EditAdmin = () => {
+
     const { currentAdmin } = useSelector((state) => {
         return state.admin
     })
+
     const params = useParams();
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("")
+    const [serverMsg, setServerMsg] = useState("");
     const [formData, setFormData] = useState({
         name: "",
         phone: "",
         email: "",
         password: ""
     })
-    useEffect(() => {
-        const fetchSingleAdmin = async () => {
-            try {
 
-                const res = await fetch(`/api/admins/profile/${currentAdmin._id}`);
-                const data = await res.json();
-                if (data.success === false) {
-                    setError(data.message)
-                    return;
+    const fetchSingleAdmin = async () => {
+        try {
+
+            const res = await fetch(`/api/admins/profile/${currentAdmin._id}`);
+            const data = await res.json();
+            if (data.success === false) {
+                setError(data.message);
+                setStatusCode(data.statusCode)
+                if (data.statusCode == 401) {
+                    navigate("/login")
                 }
-                
-                setFormData(data)
-                console.log(data);
-
-            } catch (error) {
-                setError(data.message)
-                console.log(error.message);
+                return;
             }
-        };
+
+            setFormData(data)
+
+
+        } catch (error) {
+            setError(error.message)
+
+        }
+    };
+
+    useEffect(() => {
+        if (currentAdmin == null) {
+            navigate("/login")
+        }
         fetchSingleAdmin();
 
 
@@ -70,19 +82,19 @@ export const EditAdmin = () => {
 
             const data = await res.json();
             if (data.success === false) {
-                
-                    setLoading(false)
-                    setError(data.message)
-                
-               
-
+                setError(data.message);
+                setStatusCode(data.statusCode)
+                if (data.statusCode == 401) {
+                    navigate("/login")
+                }
                 return;
             }
             setLoading(false)
-
+            setServerMsg("Profile Updated Successfully");
             navigate('/admin/dashboard');
 
         } catch (err) {
+            setLoading(false)
             setError(err.message)
         }
 
@@ -95,7 +107,8 @@ export const EditAdmin = () => {
             </div>
         );
     }
-    console.log(formData);
+
+
     return (
         <>
 
@@ -131,7 +144,8 @@ export const EditAdmin = () => {
 
                     <Button disabled={loading == true ? true : false} type="submit" className="my-2 desiredBtn">{loading ? "PLEASE WAIT" : "UPDATE"}</Button>
                 </Form>
-                <p className='text-danger'>{error}</p>
+                {error && <p className="text-danger text-center">{error}</p>}
+                {serverMsg && <p className="text-success text-center">{serverMsg}</p>}
             </section></>
     )
 }

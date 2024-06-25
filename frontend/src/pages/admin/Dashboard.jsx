@@ -3,16 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button } from "react-bootstrap";
 import Loader from '../../components/Loader';
-
 import { editCompanyProfileFailure, editCompanyProfileStart, editCompanyProfileSuccess } from '../../state/admin/admin.slice';
+
+
 export const Dashboard = () => {
 
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { currentAdmin, loading, error } = useSelector((state) => {
     return state.admin
   })
+  const [localError, setLocalError] = useState("");
   const [serverMsg, setServerMsg] = useState("");
   const [formData, setFormData] = useState({
     _id: "",
@@ -24,6 +27,7 @@ export const Dashboard = () => {
     facebook: "",
     instagram: ""
   });
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -31,38 +35,45 @@ export const Dashboard = () => {
     })
   }
  
-  
+  const fetchCProfile = async () => {
+    try {
+
+      const res = await fetch(`/api/cprofile`);
+      const data = await res.json();
+      if (data.success === false) {
+        setLocalError(data.message)
+        setStatusCode(data.statusCode);
+        return;
+    }
+
+      setFormData(data)
+
+    } catch (error) {
+      setLocalError("Failed to fetch the company profile.");
+    }
+  }
+
   useEffect(() => {
+
     if (currentAdmin == null) {
       navigate("/login")
     }
-    const fetchCProfile = async () => {
-      try {
 
-        const res = await fetch(`/api/cprofile`);
-        const data = await res.json();
-        if (data.success === false) {
-          
-          console.log(data.message);
-          return;
-        }
-
-        setFormData(data)
-
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
     fetchCProfile();
   }, []);
-  console.log(formData._id);
+
+  
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     if (currentAdmin == null) {
       navigate("/login")
     }
+
     dispatch(editCompanyProfileStart());
+
     try {
+
       const res = await fetch(`/api/cprofile/edit/${currentAdmin._id}`, {
         method: "PUT",
         headers: {
@@ -73,24 +84,28 @@ export const Dashboard = () => {
 
       const data = await res.json();
       if (data.success === false) {
-        if (data.statusCode != 200) {
-          
-          navigate("/login")
-        }
+        setLocalError(data.message);
+        setStatusCode(data.statusCode)
         dispatch(editCompanyProfileFailure(data.message));
+        if (data.statusCode == 401) {
+            navigate("/login")
+        }
         return;
-      }
+    }
+
       dispatch(editCompanyProfileSuccess(data));
       setServerMsg(data);
       navigate('/admin/dashboard');
 
     } catch (err) {
+
       dispatch(editCompanyProfileFailure(err.message));
+
     }
 
   }
 
-  console.log(formData);
+  
   if (Object.values(formData).every(value => value === '')) {
     return (
       <div className="d-flex flex-column justify-content-center align-items-center vh-100">
@@ -135,6 +150,7 @@ export const Dashboard = () => {
           </Form.Group>
           <Button disabled={loading ? true : false} type="submit" className="my-2 desiredBtn">{loading ? "UPDATING" : "UPDATE"}</Button>
         </Form>
+        {localError && <p className="text-danger text-center">{localError}</p>}
         {error && <p className="text-danger text-center">{error}</p>}
         {serverMsg && <p className="text-success text-center">{serverMsg}</p>}
       </section>

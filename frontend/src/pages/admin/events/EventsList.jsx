@@ -6,11 +6,15 @@ import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import { deleteImageFromFirebase } from '../adminUtils/aUtils';
-export const EventsList = () => {
-    const { currentAdmin } = useSelector((state) => {
 
+export const EventsList = () => {
+
+
+    const { currentAdmin } = useSelector((state) => {
         return state.admin
     })
+
+
     const [statusCode, setStatusCode] = useState("");
     const navigate = useNavigate();
     const [error, setError] = useState("");
@@ -18,13 +22,15 @@ export const EventsList = () => {
     const [loading, setLoading] = useState(false);
     let [events, setEvents] = useState([]);
     const [showMore, setShowMore] = useState(false);
+
+
     const fetchAllEvents = async () => {
         try {
-
+            setShowMore(false);
             const res = await fetch(`/api/news?limit=7`);
             const data = await res.json();
             if (data.success === false) {
-                console.log(data.message);
+                setError(data.message)
                 setStatusCode(data.statusCode);
                 return;
             }
@@ -40,7 +46,7 @@ export const EventsList = () => {
 
 
         } catch (error) {
-            console.log(error.message);
+            setError("Failed to fetch events.");
         }
     }
 
@@ -62,17 +68,17 @@ export const EventsList = () => {
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);
-                if (data.statusCode != 200) {
+                setStatusCode(data.statusCode)
+                if (data.statusCode == 401) {
                     navigate("/login")
                 }
-                console.log(data.message);
                 return;
             }
 
-
+            setServerMsg("Successfully deleted the event!")
 
         } catch (error) {
-            console.log(error.message);
+
             setError(error.message);
         }
 
@@ -82,7 +88,12 @@ export const EventsList = () => {
         try {
             const res = await fetch(`/api/news/${id}`);
             const event = await res.json();
-            return event.imageUrl; 
+            if (event.success === false) {
+                setStatusCode(event.statusCode)
+                setError(event.message);
+                return;
+            }
+            return event.imageUrl;
         } catch (error) {
             console.error("Error fetching event details:", error);
             throw error;
@@ -91,23 +102,22 @@ export const EventsList = () => {
     const deleteHandler = async (id) => {
         if (window.confirm("Are you sure that you want to delete this event?")) {
             try {
-                console.log(id);
+                setLoading(true)
                 const imageUrl = await fetchEventDetails(id);
                 await deleteImageFromFirebase(imageUrl)
                 await deleteEvent(id);
-                events = [];
-                setLoading(true)
-                fetchAllEvents();
+                setEvents([]);
+                await fetchAllEvents();
                 setLoading(false);
-                setServerMsg("Successfully deleted the event!")
-                console.log("Event Deleted!");
+
             } catch (err) {
                 setLoading(false);
                 setError(err.message)
-                console.log(err.message);
+
             }
         }
     }
+
     if (events.length === 0 && statusCode != 404) {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center vh-100">
@@ -124,7 +134,11 @@ export const EventsList = () => {
             const startIndex = numberOfEvents;
             const res = await fetch(`/api/news/?startIndex=${startIndex}&limit=7`);
             const data = await res.json();
-
+            if (data.success === false) {
+                setError(data.message);
+                setStatusCode(data.statusCode)
+                return;
+            }
             if (data.length > 6) {
                 const firstSixElements = data.slice(0, 6);
                 setEvents(prevEvents => [...prevEvents, ...firstSixElements]);
@@ -196,7 +210,7 @@ export const EventsList = () => {
                     </tbody>
                 </Table>
                 {
-                    loading == true ? <Loader /> : (
+                    loading == true ? <Loader className="mt-2" /> : (
                         <div className='d-flex align-items-center justify-content-center'>
                             {showMore && loading == false && (
                                 <button

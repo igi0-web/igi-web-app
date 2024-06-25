@@ -6,11 +6,14 @@ import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import { deleteImageFromFirebase } from '../adminUtils/aUtils';
-export const ProjectsList = () => {
-    const { currentAdmin } = useSelector((state) => {
 
+
+export const ProjectsList = () => {
+
+    const { currentAdmin } = useSelector((state) => {
         return state.admin
     })
+
     const [statusCode, setStatusCode] = useState("");
     const navigate = useNavigate();
     const [error, setError] = useState("");
@@ -18,13 +21,16 @@ export const ProjectsList = () => {
     const [loading, setLoading] = useState(false);
     let [projects, setProjects] = useState([]);
     const [showMore, setShowMore] = useState(false);
+
     const fetchAllProjects = async () => {
+
         try {
-            
+
+            setShowMore(false);
             const res = await fetch(`/api/projects?limit=7`);
             const data = await res.json();
             if (data.success === false) {
-                console.log(data.message);
+                setError(data.message)
                 setStatusCode(data.statusCode);
                 return;
             }
@@ -40,7 +46,7 @@ export const ProjectsList = () => {
            
 
         } catch (error) {
-            console.log(error.message);
+            setError("Failed to fetch projects.");
         }
     }
 
@@ -57,6 +63,11 @@ export const ProjectsList = () => {
         try {
             const res = await fetch(`/api/projects/${id}`);
             const project = await res.json();
+            if (project.success === false) {
+                setStatusCode(project.statusCode)
+                setError(project.message);
+                return;
+            }
             return project.imageUrl; 
         } catch (error) {
             console.error("Error fetching project details:", error);
@@ -74,17 +85,15 @@ export const ProjectsList = () => {
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);
-                if (data.statusCode != 200) {
+                setStatusCode(data.statusCode)
+                if (data.statusCode == 401) {
                     navigate("/login")
                 }
-                console.log(data.message);
                 return;
             }
-
-
-
+            setServerMsg("Successfully deleted the project!")
         } catch (error) {
-            console.log(error.message);
+           
             setError(error.message);
         }
 
@@ -93,23 +102,21 @@ export const ProjectsList = () => {
     const deleteHandler = async (id) => {
         if (window.confirm("Are you sure that you want to delete this project?")) {
             try {
-                console.log(id);
+                setLoading(true)
                 const imageUrl = await fetchProjectDetails(id);
                 await deleteImageFromFirebase(imageUrl)
                 await deleteProject(id);
-                projects = [];
-                setLoading(true)
-                fetchAllProjects();
+                setProjects([]);
+                await fetchAllProjects();
                 setLoading(false);
-                setServerMsg("Successfully deleted the project!")
-                console.log("Project Deleted!");
+                
             } catch (err) {
                 setLoading(false);
                 setError(err.message)
-                console.log(err.message);
             }
         }
     }
+
     if (projects.length === 0  && statusCode != 404) {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center vh-100">
@@ -125,7 +132,11 @@ export const ProjectsList = () => {
             const startIndex = numberOfProjects;
             const res = await fetch(`/api/projects/?startIndex=${startIndex}&limit=7`);
             const data = await res.json();
-
+            if (data.success === false) {
+                setError(data.message);
+                setStatusCode(data.statusCode)
+                return;
+            }
             if (data.length > 6) {
                 const firstSixElements = data.slice(0, 6);
                 setProjects(prevProjects => [...prevProjects, ...firstSixElements]);
@@ -199,9 +210,9 @@ export const ProjectsList = () => {
                     </tbody>
                 </Table>
                 {
-                    loading == true ? <Loader /> : (
+                    loading == true ? <Loader className="mt-2" /> : (
                         <div className='d-flex align-items-center justify-content-center'>
-                            {showMore && loading == false &&(
+                            {showMore && loading == false && (
                                 <button
                                     onClick={onShowMoreClick}
                                     className="desiredBtn"

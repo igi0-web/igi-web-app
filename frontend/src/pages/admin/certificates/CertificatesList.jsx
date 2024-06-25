@@ -6,11 +6,14 @@ import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import { deleteImageFromFirebase } from '../adminUtils/aUtils';
-export const CertificatesList = () => {
-    const { currentAdmin } = useSelector((state) => {
 
+
+export const CertificatesList = () => {
+
+    const { currentAdmin } = useSelector((state) => {
         return state.admin
     })
+
     const [statusCode, setStatusCode] = useState("");
     const navigate = useNavigate();
     const [error, setError] = useState("");
@@ -18,13 +21,14 @@ export const CertificatesList = () => {
     const [loading, setLoading] = useState(false);
     let [certificates, setCertificates] = useState([]);
     const [showMore, setShowMore] = useState(false);
+
     const fetchAllCertificates = async () => {
         try {
-
+            setShowMore(false);
             const res = await fetch(`/api/certificates?limit=7`);
             const data = await res.json();
             if (data.success === false) {
-                console.log(data.message);
+                setError(data.message)
                 setStatusCode(data.statusCode);
                 return;
             }
@@ -40,7 +44,7 @@ export const CertificatesList = () => {
 
 
         } catch (error) {
-            console.log(error.message);
+            setError("Failed to fetch certificates.");
         }
     }
 
@@ -62,17 +66,18 @@ export const CertificatesList = () => {
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);
-                if (data.statusCode != 200) {
+                setStatusCode(data.statusCode)
+                if (data.statusCode == 401) {
                     navigate("/login")
                 }
-                console.log(data.message);
                 return;
             }
+
+            setServerMsg("Successfully deleted the certificate!")
 
 
 
         } catch (error) {
-            console.log(error.message);
             setError(error.message);
         }
 
@@ -81,6 +86,11 @@ export const CertificatesList = () => {
         try {
             const res = await fetch(`/api/certificates/${id}`);
             const cer = await res.json();
+            if (cer.success === false) {
+                setStatusCode(cer.statusCode)
+                setError(cer.message);
+                return;
+            }
             return cer.imageUrl; 
         } catch (error) {
             console.error("Error fetching certificate details:", error);
@@ -90,20 +100,19 @@ export const CertificatesList = () => {
     const deleteHandler = async (id) => {
         if (window.confirm("Are you sure that you want to delete this certificate?")) {
             try {
-                console.log(id);
+                setLoading(true)
+               
                 const imageUrl = await fetchCertificateDetails(id);
                 await deleteImageFromFirebase(imageUrl)
                 await deleteCertificate(id);
-                certificates = [];
-                setLoading(true)
-                fetchAllCertificates();
+                setCertificates([]);
+                
+                await fetchAllCertificates();
                 setLoading(false);
-                setServerMsg("Successfully deleted the certificate!")
-                console.log("Certificate Deleted!");
+                
             } catch (err) {
                 setLoading(false);
                 setError(err.message)
-                console.log(err.message);
             }
         }
     }
@@ -123,7 +132,11 @@ export const CertificatesList = () => {
             const startIndex = numberOfCertificates;
             const res = await fetch(`/api/certificates/?startIndex=${startIndex}&limit=7`);
             const data = await res.json();
-
+            if (data.success === false) {
+                setError(data.message);
+                setStatusCode(data.statusCode)
+                return;
+            }
             if (data.length > 6) {
                 const firstSixElements = data.slice(0, 6);
                 setCertificates(prevCertificates => [...prevCertificates, ...firstSixElements]);
@@ -191,7 +204,7 @@ export const CertificatesList = () => {
                     </tbody>
                 </Table>
                 {
-                    loading == true ? <Loader /> : (
+                    loading == true ? <Loader className="mt-2" /> : (
                         <div className='d-flex align-items-center justify-content-center'>
                             {showMore && loading == false && (
                                 <button

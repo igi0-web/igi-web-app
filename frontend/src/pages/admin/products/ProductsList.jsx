@@ -6,11 +6,18 @@ import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import { deleteImageFromFirebase } from '../adminUtils/aUtils';
-export const ProductsList = () => {
-    const { currentAdmin } = useSelector((state) => {
 
+
+
+export const ProductsList = () => {
+
+
+    const { currentAdmin } = useSelector((state) => {
         return state.admin
     })
+
+
+
     const [statusCode, setStatusCode] = useState("");
     const navigate = useNavigate();
     const [error, setError] = useState("");
@@ -18,13 +25,17 @@ export const ProductsList = () => {
     const [loading, setLoading] = useState(false);
     let [products, setProducts] = useState([]);
     const [showMore, setShowMore] = useState(false);
+
+
+
     const fetchAllProducts = async () => {
         try {
+
             setShowMore(false);
+
             const res = await fetch(`/api/products?limit=7`);
             const data = await res.json();
             if (data.success === false) {
-                console.log(data.message);
                 setError(data.message)
                 setStatusCode(data.statusCode);
                 return;
@@ -35,14 +46,16 @@ export const ProductsList = () => {
                 const firstSixElements = data.slice(0, 6);
                 setProducts(firstSixElements);
                 setShowMore(true);
+
             } else {
+
                 setProducts(data);
                 setShowMore(false);
+
             }
 
 
         } catch (error) {
-            console.error("Failed to fetch products:", error);
             setError("Failed to fetch products.");
         }
     }
@@ -65,50 +78,51 @@ export const ProductsList = () => {
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);
-                if (data.statusCode != 200) {
+                setStatusCode(data.statusCode)
+                if (data.statusCode == 401) {
                     navigate("/login")
                 }
-                console.log(data.message);
                 return;
             }
-
-
-
+            setServerMsg("Successfully deleted the product!")
         } catch (error) {
-            console.log(error.message);
+
             setError(error.message);
         }
 
     }
+
     const fetchProductDetails = async (id) => {
         try {
-            const res = await fetch(`/api/products/${id}`); // Adjust endpoint to fetch product details
+            const res = await fetch(`/api/products/${id}`);
             const product = await res.json();
-            return product.imageUrl; // Ensure the API returns the image URL
+            if (product.success === false) {
+                setStatusCode(product.statusCode)
+                setError(product.message);
+                return;
+            }
+            return product.imageUrl;
         } catch (error) {
             console.error("Error fetching product details:", error);
             throw error;
         }
     };
 
-    
+
     const deleteHandler = async (id) => {
         if (window.confirm("Are you sure that you want to delete this product?")) {
             try {
-                console.log(id);
+                setLoading(true)
                 const imageUrl = await fetchProductDetails(id);
                 await deleteImageFromFirebase(imageUrl)
                 await deleteProduct(id);
-                products = [];
-                setLoading(true)
-                fetchAllProducts();
+                setProducts([]);
+                await fetchAllProducts();
                 setLoading(false);
-                setServerMsg("Successfully deleted the product!")
-                console.log("Product Deleted!");
+                
             } catch (err) {
                 setLoading(false);
                 setError(err.message)
-                console.log(err.message);
             }
         }
     }
@@ -121,7 +135,11 @@ export const ProductsList = () => {
             const startIndex = numberOfProducts;
             const res = await fetch(`/api/products/?startIndex=${startIndex}&limit=7`);
             const data = await res.json();
-
+            if (data.success === false) {
+                setError(data.message);
+                setStatusCode(data.statusCode)
+                return;
+            }
             if (data.length > 6) {
                 const firstSixElements = data.slice(0, 6);
                 setProducts(prevProducts => [...prevProducts, ...firstSixElements]);
@@ -133,16 +151,11 @@ export const ProductsList = () => {
                 setLoading(false)
             }
         } catch (error) {
-            console.error("Failed to fetch more products:", error);
+
             setError("Failed to fetch more products.");
             setLoading(false)
         }
     };
-
-
-
-
-
 
     if (products.length === 0 && statusCode != 404) {
         return (
@@ -151,6 +164,8 @@ export const ProductsList = () => {
             </div>
         );
     }
+
+
     return (
         <>
 
@@ -212,9 +227,9 @@ export const ProductsList = () => {
                     </tbody>
                 </Table>
                 {
-                    loading == true ? <Loader /> : (
+                    loading == true ? <Loader className="mt-2" /> : (
                         <div className='d-flex align-items-center justify-content-center'>
-                            {showMore && loading == false &&(
+                            {showMore && loading == false && (
                                 <button
                                     onClick={onShowMoreClick}
                                     className="desiredBtn"

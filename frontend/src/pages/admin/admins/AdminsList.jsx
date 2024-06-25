@@ -6,32 +6,34 @@ import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 export const AdminsList = () => {
+
     const { currentAdmin } = useSelector((state) => {
         return state.admin
     })
+
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const [serverMsg, setServerMsg] = useState("");
     const [loading, setLoading] = useState(false);
     let [admins, setAdmins] = useState([]);
     const [statusCode, setStatusCode] = useState("");
+
+
     const fetchAllAdmins = async () => {
         try {
-
             const res = await fetch(`/api/admins/${currentAdmin._id}`);
             const data = await res.json();
             if (data.success === false) {
-                console.log(data.statusCode);
-                setStatusCode(data.statusCode);
-                setError(data.message)
-                console.log(data.message);
+                setError(data.message);
+                setStatusCode(data.statusCode)
+                if (data.statusCode == 401) {
+                    navigate("/login")
+                }
                 return;
             }
             setAdmins(data);
-
         } catch (error) {
             setError(data.message)
-            console.log(error.message);
         }
     }
 
@@ -39,29 +41,26 @@ export const AdminsList = () => {
         if (currentAdmin == null) {
             navigate("/login")
         }
-
         fetchAllAdmins();
     }, [])
 
     const deleteAdmin = async (id) => {
 
         try {
-
             const res = await fetch(`/api/admins/delete/${id}/${currentAdmin._id}`, {
                 method: "DELETE"
             });
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);
-
-                console.log(data.message);
+                setStatusCode(data.statusCode)
+                if (data.statusCode == 401) {
+                    navigate("/login")
+                }
                 return;
             }
-
             setServerMsg(data);
-
         } catch (error) {
-            console.log(error.message);
             setError(error.message);
         }
 
@@ -70,23 +69,19 @@ export const AdminsList = () => {
     const deleteHandler = async (id) => {
         if (window.confirm("Are you sure that you want to delete this admin?")) {
             try {
-                console.log(id);
-                await deleteAdmin(id);
-                admins = [];
                 setLoading(true)
-                fetchAllAdmins();
-
+                await deleteAdmin(id);
+                setAdmins([]);
+                await fetchAllAdmins();
                 setLoading(false);
-
+                setServerMsg("Successfully deleted the admin!")
             } catch (err) {
                 setLoading(false);
                 setError(err.message)
-                console.log(err.message);
             }
         }
     }
-    console.log(statusCode);
-    if (admins.length == 0) {
+    if (admins.length == 0 && statusCode != 404) {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center vh-100">
                 <Loader />
@@ -114,10 +109,6 @@ export const AdminsList = () => {
                     </Col>
 
                 </Row>
-
-
-
-
                 <Table striped bordered hover responsive className="my-2 ">
                     <thead>
                         <tr>
@@ -144,16 +135,15 @@ export const AdminsList = () => {
                                     <td>
 
                                         <Button disabled={currentAdmin._id == a._id || a.super == true} style={{ color: "white" }} variant="danger" onClick={() => deleteHandler(a._id)} type="button" className="btn-sm my-2"><FontAwesomeIcon icon={faTrash} size='2x' className='mx-auto icon ' /></Button>
-
-
-
                                     </td>
                                 </tr>
                             )
                         })}
                     </tbody>
                 </Table>
-
+                {
+                    loading == true ? <Loader className="mt-2" /> : ""
+                }
 
             </section>
         </>
