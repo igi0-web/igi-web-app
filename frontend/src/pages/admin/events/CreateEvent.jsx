@@ -20,14 +20,7 @@ export const CreateEvent = () => {
         title: "",
         desc: "",
     })
-    useEffect(() => {
-        if (image) {
-            
-            setLoading(true);
-            handleImageUpload(image)
-            setLoading(false);
-        }
-    }, [image])
+    const [uploading, setUploading] = useState(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -37,7 +30,8 @@ export const CreateEvent = () => {
     }
 
     const handleImageUpload = (image) => {
-        setLoading(true);
+        setUploading(true);
+        setUploadError("")
         const storage = getStorage(app);
         const imageName = new Date().getTime() + image.name;
         const storageRef = ref(storage, `/events/${imageName}`);
@@ -46,10 +40,10 @@ export const CreateEvent = () => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log(progress);
             setUploadPerc(Math.round(progress));
-            setLoading(false);
+            
         }, (error) => {
-            setLoading(false);
-            setUploadError(true);
+            setUploading(false);
+            setUploadError(error.message);
         }, async () => {
             try {
                 const imageUrlFromFirebase = await getDownloadURL(uploadTask.snapshot.ref)
@@ -57,8 +51,10 @@ export const CreateEvent = () => {
                     ...formData,
                     imageUrl: imageUrlFromFirebase
                 })
-                setLoading(false);
+                setUploading(false);
             } catch (error) {
+                setUploading(false);
+                setUploadError(error.message);
                 console.log("Uploading the image completed but can't get the url!");
             }
         })
@@ -70,8 +66,10 @@ export const CreateEvent = () => {
         if (currentAdmin == null) {
           navigate("/login")
         }
-        setLoading(true)
+        
         try {
+            setLoading(true);
+            setError("");
           const res = await fetch(`/api/news/create/${currentAdmin._id}`, {
             method: "POST",
             headers: {
@@ -82,20 +80,20 @@ export const CreateEvent = () => {
     
           const data = await res.json();
           if (data.success === false) {
-            if (data.statusCode != 201) {
-              setLoading(false)
-              navigate("/login")
+            if (data.statusCode == 401) {
+                navigate("/login")
             }
             setLoading(false)
-           
+            setError(data.message);
             return;
-          }
+        }
           setLoading(false)
           
           navigate('/admin/events');
     
         } catch (err) {
-         setError(err.message)
+            setLoading(false)
+            setError("Can't create the event! " + err.message)
         }
     
       }
@@ -110,7 +108,15 @@ export const CreateEvent = () => {
                 <Form onSubmit={handleSubmit} className='section-p' >
                     <Form.Group controlId="image" className="my-2">
                         <Form.Label>Upload Image</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={(e) => setImage(e.target.files[0])} name='image' type="file" placeholder="Upload product image" ></Form.Control>
+                        <Form.Control required disabled={(loading == true || uploading == true) ? true : false} onChange={(e) => setImage(e.target.files[0])} name='image' type="file" placeholder="Upload product image" ></Form.Control>
+                        <Button
+                            type="button"
+                            onClick={(e) => handleImageUpload(image)}
+                            className="desiredBtn my-3"
+                            disabled={(loading == true || uploading == true) ? true : false}
+                        >
+                            {uploading ? "UPLOADING..." : "UPLOAD"}
+                        </Button>
                     </Form.Group>
                     <p className="text-center">
                         {uploadError ? (
@@ -129,21 +135,21 @@ export const CreateEvent = () => {
                     </p>
                     <Form.Group controlId="title" className="my-2">
                         <Form.Label>Title</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.title} name='title' type="text" placeholder="Enter event title" ></Form.Control>
+                        <Form.Control required disabled={(loading == true || uploading == true) ? true : false} onChange={handleChange} value={formData.title} name='title' type="text" placeholder="Enter event title" ></Form.Control>
                     </Form.Group>
                     
                     <Form.Group controlId="desc" className="my-2">
                         <Form.Label>Description</Form.Label>
-                        <Form.Control as={"textarea"} required disabled={loading == true ? true : false} onChange={handleChange} value={formData.desc} name='desc' type="text" placeholder="Enter event description" ></Form.Control>
+                        <Form.Control as={"textarea"} required disabled={(loading == true || uploading == true) ? true : false} onChange={handleChange} value={formData.desc} name='desc' type="text" placeholder="Enter event description" ></Form.Control>
                     </Form.Group>
                     
 
                     
                    
 
-                    <Button disabled={loading == true ? true : false} type="submit" className="my-2 desiredBtn">{loading ? "PLEASE WAIT" : "CREATE"}</Button>
+                    <Button disabled={(loading == true || uploading == true) ? true : false} type="submit" className="my-2 desiredBtn">{loading || uploading ? "PLEASE WAIT" : "CREATE"}</Button>
                 </Form>
-                
+                {error && <p className="text-danger text-center">{error}</p>}
             </section></>
     )
 }

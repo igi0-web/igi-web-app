@@ -3,53 +3,51 @@ import backImage from '../assets/pages/news/1.jpg'
 import { NewsCard } from '../components/NewsCard';
 import { Row, Col } from "react-bootstrap"
 import Loader from '../components/Loader';
+
 export const News = () => {
+
   const [news, setNews] = useState([]);
-  const [statusCode, setStatusCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState(false);
-  useEffect(() => {
-    const fetchAllNews = async () => {
-      try {
-        setLoading(true)
-        const res = await fetch(`/api/news?limit=10`);
-        const data = await res.json();
-        if (data.success === false) {
-          setStatusCode(data.statusCode);
-          console.log(data.message);
-          setLoading(false)
-          return;
-        }
-        if (data.length > 9) {
+  const [error, setError] = useState("");
 
-          const firstNineElements = data.slice(0, 9);
-          setNews(firstNineElements);
-          setShowMore(true);
-          setLoading(false)
-        } else {
-          setNews(data);
-          setShowMore(false);
-          setLoading(false)
-        }
+  const fetchAllNews = async () => {
 
-      } catch (error) {
+    try {
+
+      setLoading(true)
+      setError("")
+      const res = await fetch(`/api/news?limit=10`);
+      const data = await res.json();
+
+      if (data.success === false) {
+        setError(data.message)
         setLoading(false)
-
-        console.log(error.message);
+        return;
       }
+
+      if (data.length > 9) {
+
+        const firstNineElements = data.slice(0, 9);
+        setNews(firstNineElements);
+        setShowMore(true);
+        setLoading(false)
+      } else {
+        setNews(data);
+        setShowMore(false);
+        setLoading(false)
+      }
+
+    } catch (error) {
+      setLoading(false)
+      setError("Failed to fetch news!"+error.message);
+    
     }
+  }
+
+  useEffect(() => {
     fetchAllNews();
   }, []);
-
-
-
-  if (news.length === 0 && statusCode != 404) {
-    return (
-      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-        <Loader />
-      </div>
-    );
-  }
 
   const onShowMoreClick = async () => {
     try {
@@ -58,7 +56,11 @@ export const News = () => {
       const startIndex = numberOfEvents;
       const res = await fetch(`/api/news/?startIndex=${startIndex}&limit=10`);
       const data = await res.json();
-
+      if (data.success === false) {
+        setError(data.message)
+        setLoading(false)
+        return;
+      }
       if (data.length > 9) {
         const firstNineElements = data.slice(0, 9);
         setNews(prevNews => [...prevNews, ...firstNineElements]);
@@ -71,7 +73,7 @@ export const News = () => {
       }
     } catch (error) {
       console.error("Failed to fetch more events:", error);
-
+      setError("Failed to fetch more events:"+ error)
       setLoading(false)
     }
   };
@@ -86,10 +88,10 @@ export const News = () => {
         <h1 className='fw-bold'>NEWS & EVENTS</h1>
       </div>
 
-
+      
 
       <section className='container my-5'>
-
+      {error && <p className="text-danger text-center">{error}</p>}
         <Row>
 
           {

@@ -19,13 +19,8 @@ export const CreateCertificate = () => {
         imageUrl: "",
         title: "",
     })
-    useEffect(() => {
-        if (image) {
-            setLoading(true);
-            handleImageUpload(image)
-            setLoading(false);
-        }
-    }, [image])
+    const [uploading, setUploading] = useState(false);
+
 
     const handleChange = (e) => {
         setFormData({
@@ -35,7 +30,8 @@ export const CreateCertificate = () => {
     }
 
     const handleImageUpload = (image) => {
-        setLoading(true);
+        setUploading(true);
+        setUploadError("")
         const storage = getStorage(app);
         const imageName = new Date().getTime() + image.name;
         const storageRef = ref(storage, `/certificates/${imageName}`);
@@ -44,10 +40,10 @@ export const CreateCertificate = () => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log(progress);
             setUploadPerc(Math.round(progress));
-            setLoading(false);
+
         }, (error) => {
-            setLoading(false);
-            setUploadError(true);
+            setUploading(false);
+            setUploadError(error.message);
         }, async () => {
             try {
                 const imageUrlFromFirebase = await getDownloadURL(uploadTask.snapshot.ref)
@@ -55,8 +51,10 @@ export const CreateCertificate = () => {
                     ...formData,
                     imageUrl: imageUrlFromFirebase
                 })
-                setLoading(false);
+                setUploading(false);
             } catch (error) {
+                setUploading(false);
+                setUploadError(error.message);
                 console.log("Uploading the image completed but can't get the url!");
             }
         })
@@ -68,7 +66,8 @@ export const CreateCertificate = () => {
         if (currentAdmin == null) {
             navigate("/login")
         }
-        setLoading(true)
+        setLoading(true);
+        setError("");
         try {
             const res = await fetch(`/api/certificates/create/${currentAdmin._id}`, {
                 method: "POST",
@@ -80,12 +79,11 @@ export const CreateCertificate = () => {
 
             const data = await res.json();
             if (data.success === false) {
-                if (data.statusCode != 201) {
-                    setLoading(false)
+                if (data.statusCode == 401) {
                     navigate("/login")
                 }
                 setLoading(false)
-
+                setError(data.message);
                 return;
             }
             setLoading(false)
@@ -93,7 +91,8 @@ export const CreateCertificate = () => {
             navigate('/admin/certificates');
 
         } catch (err) {
-            setError(err.message)
+            setLoading(false)
+            setError("Can't create the certificate! " + err.message)
         }
 
     }
@@ -108,7 +107,15 @@ export const CreateCertificate = () => {
                 <Form onSubmit={handleSubmit} className='section-p' >
                     <Form.Group controlId="image" className="my-2">
                         <Form.Label>Upload Image</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={(e) => setImage(e.target.files[0])} name='image' type="file" placeholder="Upload product image" ></Form.Control>
+                        <Form.Control required disabled={(loading == true || uploading == true) ? true : false} onChange={(e) => setImage(e.target.files[0])} name='image' type="file" placeholder="Upload product image" ></Form.Control>
+                        <Button
+                            type="button"
+                            onClick={(e) => handleImageUpload(image)}
+                            className="desiredBtn my-3"
+                            disabled={(loading == true || uploading == true) ? true : false}
+                        >
+                            {uploading ? "UPLOADING..." : "UPLOAD"}
+                        </Button>
                     </Form.Group>
                     <p className="text-center">
                         {uploadError ? (
@@ -127,14 +134,14 @@ export const CreateCertificate = () => {
                     </p>
                     <Form.Group controlId="title" className="my-2">
                         <Form.Label>Title</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.title} name='title' type="text" placeholder="Enter certificate title" ></Form.Control>
+                        <Form.Control required disabled={(loading == true || uploading == true) ? true : false} onChange={handleChange} value={formData.title} name='title' type="text" placeholder="Enter certificate title" ></Form.Control>
                     </Form.Group>
-                    
 
 
-                    <Button disabled={loading == true ? true : false} type="submit" className="my-2 desiredBtn">{loading ? "PLEASE WAIT" : "CREATE"}</Button>
+
+                    <Button disabled={(loading == true || uploading == true) ? true : false} type="submit" className="my-2 desiredBtn">{loading || uploading ? "PLEASE WAIT" : "CREATE"}</Button>
                 </Form>
-
+                {error && <p className="text-danger text-center">{error}</p>}
             </section></>
     )
 }

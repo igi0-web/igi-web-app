@@ -5,6 +5,7 @@ import { app } from '../../../firebase';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../../../components/Loader';
+import { deleteImageFromFirebase } from '../adminUtils/aUtils';
 
 export const EditProduct = () => {
     const { currentAdmin } = useSelector((state) => {
@@ -12,13 +13,14 @@ export const EditProduct = () => {
     })
     const params = useParams();
     const navigate = useNavigate()
-  
+
     const [cats, setCats] = useState([])
     const [image, setImage] = useState(undefined);
     const [uploadPerc, setUploadPerc] = useState(0);
     const [uploadError, setUploadError] = useState(false)
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("")
+    const [uploading, setUploading] = useState(false);
     const [formData, setFormData] = useState({
         imageUrl: "",
         name: "",
@@ -27,46 +29,50 @@ export const EditProduct = () => {
         features: "",
         category: ""
     })
+    const [previousImage, setPreviousImage] = useState("")
     useEffect(() => {
-        if (image) {
-            setLoading(true);
-            handleImageUpload(image)
-            setLoading(false);
-        }
+        
 
         const fetchAllCats = async () => {
             try {
+    
                 setLoading(true);
+                setError("");
+    
                 const res = await fetch(`/api/products/categories/`);
                 const data = await res.json();
                 if (data.success === false) {
-                    console.log(data.message);
+                    setError(data.message)
+                    setLoading(false);
                     return;
                 }
                 setCats(data);
                 setLoading(false);
             } catch (error) {
                 setLoading(false);
-                setError(error.message)
-                console.log(error.message);
+                setError("Cant fetch categories... " + error.message)
+    
             }
         }
 
         const fetchSingleProduct = async () => {
             try {
-
+                setLoading(true);
+                setError("");
                 const res = await fetch(`/api/products/${params.id}`);
                 const data = await res.json();
                 if (data.success === false) {
-
+                    setError(data.message)
+                    setLoading(false);
                     return;
                 }
-                
+                setLoading(false);
                 setFormData(data)
-                console.log(data);
+                setPreviousImage(data.imageUrl);
 
             } catch (error) {
-                console.log(error.message);
+                setLoading(false);
+                setError("Cant fetch the product... " + error.message)
             }
         };
         fetchSingleProduct();
@@ -81,8 +87,10 @@ export const EditProduct = () => {
         })
     }
 
-    const handleImageUpload = (image) => {
-        setLoading(true);
+    const handleImageUpload = async (image) => {
+        setUploading(true);
+        setUploadError("")
+        await deleteImageFromFirebase(previousImage);
         const storage = getStorage(app);
         const imageName = new Date().getTime() + image.name;
         const storageRef = ref(storage, `/products/${imageName}`);
@@ -91,10 +99,10 @@ export const EditProduct = () => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log(progress);
             setUploadPerc(Math.round(progress));
-            setLoading(false);
+
         }, (error) => {
-            setLoading(false);
-            setUploadError(true);
+            setUploading(false);
+            setUploadError(error.message);
         }, async () => {
             try {
                 const imageUrlFromFirebase = await getDownloadURL(uploadTask.snapshot.ref)
@@ -102,8 +110,10 @@ export const EditProduct = () => {
                     ...formData,
                     imageUrl: imageUrlFromFirebase
                 })
-                setLoading(false);
+                setUploading(false);
             } catch (error) {
+                setUploading(false);
+                setUploadError(error.message);
                 console.log("Uploading the image completed but can't get the url!");
             }
         })
@@ -115,8 +125,10 @@ export const EditProduct = () => {
         if (currentAdmin == null) {
             navigate("/login")
         }
-        setLoading(true)
+
         try {
+            setLoading(true);
+            setError("");
             const res = await fetch(`/api/products/edit/${params.id}/${currentAdmin._id}`, {
                 method: "PATCH",
                 headers: {
@@ -127,12 +139,11 @@ export const EditProduct = () => {
 
             const data = await res.json();
             if (data.success === false) {
-                if (data.statusCode != 201) {
-                    setLoading(false)
+                if (data.statusCode == 401) {
                     navigate("/login")
                 }
                 setLoading(false)
-
+                setError(data.message);
                 return;
             }
             setLoading(false)
@@ -140,6 +151,7 @@ export const EditProduct = () => {
             navigate('/admin/products');
 
         } catch (err) {
+            setLoading(false)
             setError(err.message)
         }
 
@@ -147,11 +159,11 @@ export const EditProduct = () => {
 
     if (Object.values(formData).every(value => value === '')) {
         return (
-          <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-            <Loader />
-          </div>
+            <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+                <Loader />
+            </div>
         );
-      }
+    }
     return (
         <>
 
@@ -160,8 +172,16 @@ export const EditProduct = () => {
                 <h1 className='text-center section-p'>Edit Product: {formData.name} - {formData.category.name}</h1>
                 <Form onSubmit={handleSubmit} className='section-p' >
                     <Form.Group controlId="image" className="my-2">
-                        <Form.Label>Upload Image</Form.Label>
-                        <Form.Control  disabled={loading == true ? true : false} onChange={(e) => setImage(e.target.files[0])} name='image' type="file" placeholder="Upload product image" ></Form.Control>
+                        <Form.Label>Upload Image: Please upload an image first. The image should be less than 2MB!</Form.Label>
+                        <Form.Control disabled={(loading == true || uploading == true) ? true : false} onChange={(e) => setImage(e.target.files[0])} name='image' type="file" placeholder="Upload product image" ></Form.Control>
+                        <Button
+                            type="button"
+                            onClick={(e) => handleImageUpload(image)}
+                            className="desiredBtn my-3"
+                            disabled={(loading == true || uploading == true) ? true : false}
+                        >
+                            {uploading ? "UPLOADING..." : "UPLOAD"}
+                        </Button>
                     </Form.Group>
                     <p className="text-center">
                         {uploadError ? (
@@ -180,24 +200,24 @@ export const EditProduct = () => {
                     </p>
                     <Form.Group controlId="name" className="my-2">
                         <Form.Label>Name</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.name} name='name' type="text" placeholder="Enter product name" ></Form.Control>
+                        <Form.Control required disabled={(loading == true || uploading == true) ? true : false} onChange={handleChange} value={formData.name} name='name' type="text" placeholder="Enter product name" ></Form.Control>
                     </Form.Group>
                     <Form.Group controlId="code" className="my-2">
                         <Form.Label>Code</Form.Label>
-                        <Form.Control disabled={loading == true ? true : false} onChange={handleChange} value={formData.code} name='code' type="text" placeholder="Enter product code" ></Form.Control>
+                        <Form.Control disabled={(loading == true || uploading == true) ? true : false} onChange={handleChange} value={formData.code} name='code' type="text" placeholder="Enter product code" ></Form.Control>
                     </Form.Group>
                     <Form.Group controlId="description" className="my-2">
                         <Form.Label>Description</Form.Label>
-                        <Form.Control as={"textarea"} required disabled={loading == true ? true : false} onChange={handleChange} value={formData.description} name='description' type="text" placeholder="Enter product description" ></Form.Control>
+                        <Form.Control as={"textarea"} required disabled={(loading == true || uploading == true) ? true : false} onChange={handleChange} value={formData.description} name='description' type="text" placeholder="Enter product description" ></Form.Control>
                     </Form.Group>
                     <Form.Group controlId="features" className="my-2">
                         <Form.Label>Features</Form.Label>
-                        <Form.Control as={"textarea"} required disabled={loading == true ? true : false} onChange={handleChange} value={formData.features} name='features' type="text" placeholder="Enter product features" ></Form.Control>
+                        <Form.Control as={"textarea"} required disabled={(loading == true || uploading == true) ? true : false} onChange={handleChange} value={formData.features} name='features' type="text" placeholder="Enter product features" ></Form.Control>
                     </Form.Group>
 
                     <Form.Group controlId="category" className="my-2">
                         <Form.Label>Category</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false}
+                        <Form.Control required disabled={(loading == true || uploading == true) ? true : false}
                             as="select"
                             onChange={handleChange}
                             value={formData.category}
@@ -213,9 +233,9 @@ export const EditProduct = () => {
                     </Form.Group>
 
 
-                    <Button disabled={loading == true ? true : false} type="submit" className="my-2 desiredBtn">{loading ? "PLEASE WAIT" : "UPDATE"}</Button>
+                    <Button disabled={(loading == true || uploading == true) ? true : false} type="submit" className="my-2 desiredBtn">{loading || uploading ? "PLEASE WAIT" : "UPDATE"}</Button>
                 </Form>
-
+                {error && <p className="text-danger text-center">{error}</p>}
             </section></>
     )
 }

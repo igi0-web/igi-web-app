@@ -6,47 +6,47 @@ import Loader from "../components/Loader"
 
 export const Certificates = () => {
   const [certificates, setCertificates] = useState([]);
-  const [statusCode, setStatusCode] = useState("");
+  const [error, setError] = useState("");
   const [showMore, setShowMore] = useState(false);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const fetchAllCertificates = async () => {
-      try {
 
-        const res = await fetch(`/api/certificates?limit=10`);
-        const data = await res.json();
-        if (data.success === false) {
-          setStatusCode(data.statusCode);
-          console.log(data.message);
-          return;
-        }
-        if (data.length > 9) {
-
-          const firstNineElements = data.slice(0, 9);
-          setCertificates(firstNineElements);
-          setShowMore(true);
-          setLoading(false)
-        } else {
-          setCertificates(data);
-          setShowMore(false);
-          setLoading(false)
-        }
-
-
-      } catch (error) {
-        console.log(error.message);
+  const fetchAllCertificates = async () => {
+    try {
+      setLoading(true)
+      setError("")
+      const res = await fetch(`/api/certificates?limit=10`);
+      const data = await res.json();
+      if (data.success === false) {
+        setError(data.message)
+        setLoading(false)
+        return;
       }
+      if (data.length > 9) {
+
+        const firstNineElements = data.slice(0, 9);
+        setCertificates(firstNineElements);
+        setShowMore(true);
+        setLoading(false)
+      } else {
+        setCertificates(data);
+        setShowMore(false);
+        setLoading(false)
+      }
+
+
+    } catch (error) {
+      setLoading(false)
+      setError("Failed to fetch certificates!" + error.message);
     }
+  }
+
+
+  useEffect(() => {
+    
     fetchAllCertificates();
   }, []);
 
-  if (certificates.length == 0 && statusCode != 404) {
-    return (
-      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-        <Loader />
-      </div>
-    );
-  }
+  
 
   const onShowMoreClick = async () => {
     try {
@@ -55,7 +55,11 @@ export const Certificates = () => {
       const startIndex = numberOfCertificates;
       const res = await fetch(`/api/certificates/?startIndex=${startIndex}&limit=10`);
       const data = await res.json();
-
+      if (data.success === false) {
+        setError(data.message)
+        setLoading(false)
+        return;
+      }
       if (data.length > 9) {
         const firstNineElements = data.slice(0, 9);
         setCertificates(prevCertificates => [...prevCertificates, ...firstNineElements]);
@@ -81,10 +85,10 @@ export const Certificates = () => {
         <h1 className="fw-bold">CERTIFICATES</h1>
       </div>
 
-
+      
 
       <section className='container my-5'>
-
+      {error && <p className="text-danger text-center">{error}</p>}
         <Row>
 
           {

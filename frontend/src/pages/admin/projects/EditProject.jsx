@@ -5,7 +5,7 @@ import { app } from '../../../firebase';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../../../components/Loader';
-
+import { deleteImageFromFirebase } from '../adminUtils/aUtils';
 export const EditProject = () => {
     const { currentAdmin } = useSelector((state) => {
         return state.admin
@@ -19,35 +19,37 @@ export const EditProject = () => {
     const [uploadError, setUploadError] = useState(false)
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("")
+    const [uploading, setUploading] = useState(false);
     const [formData, setFormData] = useState({
         imageUrl: "",
         title: "",
         desc: "",
         country: ""
     })
+    const [previousImage, setPreviousImage] = useState("")
     useEffect(() => {
-        if (image) {
-            setLoading(true);
-            handleImageUpload(image)
-            setLoading(false);
-        }
+        
 
 
         const fetchSingleProject = async () => {
             try {
-
+                setLoading(true);
+                setError("");
                 const res = await fetch(`/api/projects/${params.id}`);
                 const data = await res.json();
                 if (data.success === false) {
-
+                    setError(data.message)
+                    setLoading(false);
                     return;
                 }
 
+                setLoading(false);
                 setFormData(data)
-                console.log(data);
+                setPreviousImage(data.imageUrl);
 
             } catch (error) {
-                console.log(error.message);
+                setLoading(false);
+                setError("Cant fetch the project... " + error.message)
             }
         };
         fetchSingleProject();
@@ -60,8 +62,10 @@ export const EditProject = () => {
         })
     }
 
-    const handleImageUpload = (image) => {
-        setLoading(true);
+    const handleImageUpload = async (image) => {
+        setUploading(true);
+        setUploadError("")
+        await deleteImageFromFirebase(previousImage);
         const storage = getStorage(app);
         const imageName = new Date().getTime() + image.name;
         const storageRef = ref(storage, `/projects/${imageName}`);
@@ -70,10 +74,10 @@ export const EditProject = () => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log(progress);
             setUploadPerc(Math.round(progress));
-            setLoading(false);
+            
         }, (error) => {
-            setLoading(false);
-            setUploadError(true);
+            setUploading(false);
+            setUploadError(error.message);
         }, async () => {
             try {
                 const imageUrlFromFirebase = await getDownloadURL(uploadTask.snapshot.ref)
@@ -81,8 +85,10 @@ export const EditProject = () => {
                     ...formData,
                     imageUrl: imageUrlFromFirebase
                 })
-                setLoading(false);
+                setUploading(false);
             } catch (error) {
+                setUploading(false);
+                setUploadError(error.message);
                 console.log("Uploading the image completed but can't get the url!");
             }
         })
@@ -94,8 +100,10 @@ export const EditProject = () => {
         if (currentAdmin == null) {
             navigate("/login")
         }
-        setLoading(true)
+        
         try {
+            setLoading(true);
+            setError("");
             const res = await fetch(`/api/projects/edit/${params.id}/${currentAdmin._id}`, {
                 method: "PATCH",
                 headers: {
@@ -106,12 +114,11 @@ export const EditProject = () => {
 
             const data = await res.json();
             if (data.success === false) {
-                if (data.statusCode != 201) {
-                    setLoading(false)
+                if (data.statusCode == 401) {
                     navigate("/login")
                 }
                 setLoading(false)
-
+                setError(data.message);
                 return;
             }
             setLoading(false)
@@ -119,6 +126,7 @@ export const EditProject = () => {
             navigate('/admin/projects');
 
         } catch (err) {
+            setLoading(false)
             setError(err.message)
         }
 
@@ -141,7 +149,15 @@ export const EditProject = () => {
                 <Form onSubmit={handleSubmit} className='section-p' >
                     <Form.Group controlId="image" className="my-2">
                         <Form.Label>Upload Image</Form.Label>
-                        <Form.Control disabled={loading == true ? true : false} onChange={(e) => setImage(e.target.files[0])} name='image' type="file" placeholder="Upload product image" ></Form.Control>
+                        <Form.Control disabled={(loading == true || uploading == true) ? true : false} onChange={(e) => setImage(e.target.files[0])} name='image' type="file" placeholder="Upload product image" ></Form.Control>
+                        <Button
+                            type="button"
+                            onClick={(e) => handleImageUpload(image)}
+                            className="desiredBtn my-3"
+                            disabled={(loading == true || uploading == true) ? true : false}
+                        >
+                            {uploading ? "UPLOADING..." : "UPLOAD"}
+                        </Button>
                     </Form.Group>
                     <p className="text-center">
                         {uploadError ? (
@@ -160,23 +176,23 @@ export const EditProject = () => {
                     </p>
                     <Form.Group controlId="title" className="my-2">
                         <Form.Label>Title</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.title} name='title' type="text" placeholder="Enter project title" ></Form.Control>
+                        <Form.Control required disabled={(loading == true || uploading == true) ? true : false} onChange={handleChange} value={formData.title} name='title' type="text" placeholder="Enter project title" ></Form.Control>
                     </Form.Group>
                     <Form.Group controlId="desc" className="my-2">
                         <Form.Label>Description</Form.Label>
-                        <Form.Control as={"textarea"} required disabled={loading == true ? true : false} onChange={handleChange} value={formData.desc} name='desc' type="text" placeholder="Enter project description" ></Form.Control>
+                        <Form.Control as={"textarea"} required disabled={(loading == true || uploading == true) ? true : false} onChange={handleChange} value={formData.desc} name='desc' type="text" placeholder="Enter project description" ></Form.Control>
                     </Form.Group>
                     <Form.Group controlId="country" className="my-2">
                         <Form.Label>Country</Form.Label>
-                        <Form.Control required disabled={loading == true ? true : false} onChange={handleChange} value={formData.country} name='country' type="text" placeholder="Enter project country" ></Form.Control>
+                        <Form.Control required disabled={(loading == true || uploading == true) ? true : false} onChange={handleChange} value={formData.country} name='country' type="text" placeholder="Enter project country" ></Form.Control>
                     </Form.Group>
 
 
 
 
-                    <Button disabled={loading == true ? true : false} type="submit" className="my-2 desiredBtn">{loading ? "PLEASE WAIT" : "UPDATE"}</Button>
+                    <Button disabled={(loading == true || uploading == true) ? true : false} type="submit" className="my-2 desiredBtn">{loading || uploading ? "PLEASE WAIT" : "UPDATE"}</Button>
                 </Form>
-
+                {error && <p className="text-danger text-center">{error}</p>}
             </section></>
     )
 }

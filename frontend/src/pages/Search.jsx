@@ -12,37 +12,50 @@ export const Search = () => {
 
     const [query, setQuery] = useState("");
     const [products, setProducts] = useState([]);
-    const [flag, setFlag] = useState(0);
+    // const [flag, setFlag] = useState(0);
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false)
+
+
+
+
+
     useEffect(() => {
+
         const urlParams = new URLSearchParams(window.location.search);
         const searchTermFromUrl = urlParams.get('queryTerm');
         setQuery(searchTermFromUrl);
         const fetchProducts = async () => {
+
             try {
+                setLoading(true)
+                setError("")
                 const res = await fetch(`/api/products/search?queryTerm=${searchTermFromUrl}`);
                 const data = await res.json();
                 if (data.success === false) {
-                    console.log(data.message);
-                    setFlag(1);
+                    setError(data.message)
+                    setLoading(false)
                     return;
                 }
                 setProducts(data);
-                setFlag(1);
+                setLoading(false)
             } catch (error) {
-                console.log(error.message);
+                setLoading(false)
+                setError("Failed to fetch products!" + error.message);
             }
         }
+
         fetchProducts();
     }, [window.location.search])
-    
 
-    if (flag == 0) {
+
+    if (loading) {
         return (
-          <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-            <Loader />
-          </div>
+            <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+                <Loader />
+            </div>
         );
-      }
+    }
 
 
     return (
@@ -56,7 +69,7 @@ export const Search = () => {
             </div>
 
             <section className='container my-5'>
-
+                {error && <p className="text-danger text-center">{error}</p>}
                 <Row>
 
                     {
