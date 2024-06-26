@@ -1,7 +1,7 @@
 import errorHandler from "../utils/custom.error.handler.js";
 import { Product, Category } from "../models/product.model.js";
 import mongoose from 'mongoose';
-
+import {generateBlurHashFromImageUrl} from "../utils/imagesFunctions.js"
 import { deleteImageFromFirebase } from "../utils/firebaseFunctions.js";
 
 
@@ -229,7 +229,12 @@ export const createProduct = async (req, res, next) => {
         if (!categoryExists) {
             return next(errorHandler(400, "Invalid Category ID!"));
         }
-        const product = await Product.create(req.body);
+        const {imageUrl} = req.body;
+        const imageBlur = await generateBlurHashFromImageUrl(imageUrl);
+        const product = await Product.create({
+            ...req.body,
+            blurhash: imageBlur
+        });
         return res.status(201).json(product);
     } catch (error) {
         next(error);
