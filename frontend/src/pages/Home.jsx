@@ -42,15 +42,15 @@ export const Home = () => {
   let projects = [
     {
       imageUrl: slider1,
-      title: "American University Medical Center"
+      title: "AMERICAN UNIVERSITY MEDICAL CENTER"
     },
     {
       imageUrl: slider2,
-      title: "Beirut International Airport"
+      title: "BEIRUT INTERNATIONAL AIRPORT"
     },
     {
       imageUrl: slider3,
-      title: "Four Season Hotel"
+      title: "FOUR SEASON HOTEL"
     }
   ]
 
@@ -109,7 +109,7 @@ export const Home = () => {
                       variants={animationVariants}
                       key={index}
                     >
-                      {project.title}
+                      IGI WAS A SUPPLIER FOR THE {project.title}
                     </motion.h1>
                     <motion.button className='desiredBtn' initial="hidden"
                       animate={index === currentSlide ? "visible" : "hidden"}  // Only animate the current slide
