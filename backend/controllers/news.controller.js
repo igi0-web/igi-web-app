@@ -7,7 +7,7 @@ export const getNews = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || null;
     const startIndex = parseInt(req.query.startIndex) || 0;
     const news = await News.find({}).sort({ createdAt: -1 }).limit(limit)
-    .skip(startIndex);
+      .skip(startIndex);
     if (news.length == 0) {
       return next(errorHandler(404, "No news found!"));
     }
@@ -59,9 +59,14 @@ export const editNews = async (req, res, next) => {
     return next(errorHandler(404, "News not found!"));
   }
   try {
+    const { imageUrl } = req.body;
+    const imageBlur = await generateBlurHashFromImageUrl(imageUrl);
     const updatedNews = await News.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      {
+        ...req.body,
+        blurhash: imageBlur
+      },
       { new: true }
     );
     res.status(200).json(updatedNews);

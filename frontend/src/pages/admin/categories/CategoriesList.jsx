@@ -136,10 +136,11 @@ export const CategoriesList = () => {
                                     <td>{cat.name}</td>
 
                                     <td>
-                                        <Link to={`/admin/categories/edit/${cat._id}`}>
+                                        {!loading ? (<Link to={`/admin/categories/edit/${cat._id}`}>
                                             <Button style={{ color: "white" }} variant='dark' type="button" className="btn-sm my-2 me-2"><FontAwesomeIcon icon={faEdit} size='2x' className='mx-auto icon' /></Button>
-                                        </Link>
-                                        <Button style={{ color: "white" }} variant="danger" onClick={() => deleteHandler(cat._id)} type="button" className="btn-sm my-2"><FontAwesomeIcon icon={faTrash} size='2x' className='mx-auto icon ' /></Button>
+                                        </Link>) : ("PLEASE WAIT")}
+                                        
+                                        <Button disabled={loading} style={{ color: "white" }} variant="danger" onClick={() => deleteHandler(cat._id)} type="button" className="btn-sm my-2"><FontAwesomeIcon icon={faTrash} size='2x' className='mx-auto icon ' /></Button>
 
                                     </td>
                                 </tr>

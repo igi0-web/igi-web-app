@@ -60,9 +60,15 @@ export const editProject = async (req, res, next) => {
     return next(errorHandler(404, "Project not found!"));
   }
   try {
+    const { imageUrl } = req.body;
+    const imageBlur = await generateBlurHashFromImageUrl(imageUrl);
     const updatedproject = await Project.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      {
+        ...req.body,
+        blurhash: imageBlur
+  
+      },
       { new: true }
     );
     res.status(200).json(updatedproject);

@@ -1,7 +1,7 @@
 import errorHandler from "../utils/custom.error.handler.js";
 import { Product, Category } from "../models/product.model.js";
 import mongoose from 'mongoose';
-import {generateBlurHashFromImageUrl} from "../utils/imagesFunctions.js"
+import { generateBlurHashFromImageUrl } from "../utils/imagesFunctions.js"
 import { deleteImageFromFirebase } from "../utils/firebaseFunctions.js";
 
 
@@ -77,12 +77,12 @@ export const deleteCategory = async (req, res, next) => {
         session = await mongoose.startSession();
         session.startTransaction();
 
-       
+
         if (req.admin && req.admin.id !== req.params.adminId) {
             return next(errorHandler(401, "You can only delete categories from your own account!"));
         }
 
-        
+
         const cat = await Category.findById(req.params.id);
 
         if (!cat) {
@@ -91,16 +91,16 @@ export const deleteCategory = async (req, res, next) => {
             return next(errorHandler(404, "Category not found!"));
         }
 
-       
-        const products = await Product.find({ category: req.params.id });
-       
 
-        for (let i =0 ; i < products.length; i++) {
+        const products = await Product.find({ category: req.params.id });
+
+
+        for (let i = 0; i < products.length; i++) {
             if (products[i].imageUrl) {
-                
-                await deleteImageFromFirebase(products[i].imageUrl); 
+
+                await deleteImageFromFirebase(products[i].imageUrl);
             }
-            
+
         }
         await Product.deleteMany({ category: req.params.id });
         await Category.findByIdAndDelete(req.params.id);
@@ -185,7 +185,7 @@ export const getProducts = async (req, res, next) => {
         if (products.length === 0) {
             return next(errorHandler(404, "No products found!"));
         }
-        
+
         res.status(200).json(products);
     } catch (error) {
         next(error);
@@ -194,7 +194,7 @@ export const getProducts = async (req, res, next) => {
 
 // export const getProductsPag = async (req, res, next) => {
 //     try {
-        
+
 //         const products = await Product.find({}).populate('category', 'name').sort({ createdAt: -1 })
 //         if (products.length == 0) {
 //             return next(errorHandler(404, "No products found!"));
@@ -229,7 +229,7 @@ export const createProduct = async (req, res, next) => {
         if (!categoryExists) {
             return next(errorHandler(400, "Invalid Category ID!"));
         }
-        const {imageUrl} = req.body;
+        const { imageUrl } = req.body;
         const imageBlur = await generateBlurHashFromImageUrl(imageUrl);
         const product = await Product.create({
             ...req.body,
@@ -258,9 +258,14 @@ export const editProduct = async (req, res, next) => {
             return next(errorHandler(400, "Invalid Category ID!"));
         }
         req.body.category = category;
+        const { imageUrl } = req.body;
+        const imageBlur = await generateBlurHashFromImageUrl(imageUrl);
         const updatedProduct = await Product.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            {
+                ...req.body,
+                blurhash: imageBlur
+            },
             { new: true }
         );
         res.status(200).json(updatedProduct);

@@ -134,7 +134,7 @@ export const AdminsList = () => {
 
                                     <td>
 
-                                        <Button disabled={currentAdmin._id == a._id || a.super == true} style={{ color: "white" }} variant="danger" onClick={() => deleteHandler(a._id)} type="button" className="btn-sm my-2"><FontAwesomeIcon icon={faTrash} size='2x' className='mx-auto icon ' /></Button>
+                                        <Button disabled={currentAdmin._id == a._id || a.super == true || loading} style={{ color: "white" }} variant="danger" onClick={() => deleteHandler(a._id)} type="button" className="btn-sm my-2"><FontAwesomeIcon icon={faTrash} size='2x' className='mx-auto icon ' /></Button>
                                     </td>
                                 </tr>
                             )

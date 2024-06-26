@@ -215,10 +215,11 @@ export const ProductsList = () => {
                                     <td>{prod.category.name}</td>
                                     <td style={{ width: "10%" }}><img src={prod.imageUrl} className='img-fluid' style={{ width: "100%" }}></img></td>
                                     <td>
-                                        <Link to={`/admin/products/edit/${prod._id}`}>
+                                        {!loading ? (<Link to={`/admin/products/edit/${prod._id}`}>
                                             <Button style={{ color: "white" }} variant='dark' type="button" className="btn-sm my-2 me-2"><FontAwesomeIcon icon={faEdit} size='2x' className='mx-auto icon' /></Button>
-                                        </Link>
-                                        <Button style={{ color: "white" }} variant="danger" onClick={() => deleteHandler(prod._id)} type="button" className="btn-sm my-2"><FontAwesomeIcon icon={faTrash} size='2x' className='mx-auto icon ' /></Button>
+                                        </Link>) : ("PLEASE WAIT")}
+                                        
+                                        <Button disabled={loading} style={{ color: "white" }} variant="danger" onClick={() => deleteHandler(prod._id)} type="button" className="btn-sm my-2"><FontAwesomeIcon icon={faTrash} size='2x' className='mx-auto icon ' /></Button>
 
                                     </td>
                                 </tr>

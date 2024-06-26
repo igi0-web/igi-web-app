@@ -195,7 +195,7 @@ export const CertificatesList = () => {
                                     <td style={{ width: "10%" }}><img src={cer.imageUrl} className='img-fluid' style={{ width: "100%" }}></img></td>
                                     <td>
 
-                                        <Button style={{ color: "white" }} variant="danger" onClick={() => deleteHandler(cer._id)} type="button" className="btn-sm my-2"><FontAwesomeIcon icon={faTrash} size='2x' className='mx-auto icon ' /></Button>
+                                        <Button disabled={loading} style={{ color: "white" }} variant="danger" onClick={() => deleteHandler(cer._id)} type="button" className="btn-sm my-2"><FontAwesomeIcon icon={faTrash} size='2x' className='mx-auto icon ' /></Button>
 
                                     </td>
                                 </tr>
