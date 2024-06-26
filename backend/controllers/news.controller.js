@@ -1,5 +1,6 @@
 import errorHandler from "../utils/custom.error.handler.js";
 import News from "../models/news.model.js";
+import { generateBlurHashFromImageUrl } from "../utils/imagesFunctions.js";
 
 export const getNews = async (req, res, next) => {
   try {
@@ -36,7 +37,12 @@ export const createNews = async (req, res, next) => {
     if (req.admin && req.admin.id != req.params.adminId) {
       return next(errorHandler(401, "You can only create projects from your own account!"));
     }
-    const news = await News.create(req.body);
+    const { imageUrl } = req.body;
+    const imageBlur = await generateBlurHashFromImageUrl(imageUrl);
+    const news = await News.create({
+      ...req.body,
+      blurhash: imageBlur
+    });
     return res.status(201).json(news);
   } catch (error) {
     next(error);

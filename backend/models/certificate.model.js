@@ -5,6 +5,10 @@ const certificateSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    blurhash: {
+        type: String,
+        required: true
+    },
     title: {
         type: String,
         required: true

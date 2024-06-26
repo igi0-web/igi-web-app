@@ -1,8 +1,9 @@
 
 import "../index.css"
+import { ImageContainer } from "./ImageContainer";
 
 
-export const CertificateCard = ({imageUrl, title, createdAt}) => {
+export const CertificateCard = ({imageUrl, title, createdAt, blurhash}) => {
     const formatDate = (isoString) => {
         const date = new Date(isoString);
         return date.toLocaleDateString();
@@ -13,9 +14,8 @@ export const CertificateCard = ({imageUrl, title, createdAt}) => {
 
             <section className="shadow p-3 d-flex flex-column gap-2 contentsec position-relative rounded">
 
-                <div className="ratio ratio-4x3 image-container">
-                    <img src={imageUrl} className="img-fluid object-fit-contain rounded top-focused" alt="certificate image" />
-                </div>
+                
+                <ImageContainer imageUrl={imageUrl} blurHash={blurhash} type="cer" />
                 <h5 className="desiredH5 text-decoration-none clamped-text-2">{title}</h5>
                 <p className="section-p text-decoration-none">{formatDate(createdAt)}</p>
                 

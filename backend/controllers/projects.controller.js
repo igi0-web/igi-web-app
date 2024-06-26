@@ -1,12 +1,12 @@
 import errorHandler from "../utils/custom.error.handler.js";
 import Project from "../models/project.model.js";
-
+import { generateBlurHashFromImageUrl } from "../utils/imagesFunctions.js"
 export const getProjects = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || null;
     const startIndex = parseInt(req.query.startIndex) || 0;
     const projects = await Project.find({}).sort({ createdAt: -1 }).limit(limit)
-    .skip(startIndex);
+      .skip(startIndex);
     if (projects.length == 0) {
       return next(errorHandler(404, "No projects found!"));
     }
@@ -36,7 +36,14 @@ export const createProject = async (req, res, next) => {
     if (req.admin && req.admin.id != req.params.adminId) {
       return next(errorHandler(401, "You can only create projects from your own account!"));
     }
-    const project = await Project.create(req.body);
+    const { imageUrl } = req.body;
+    const imageBlur = await generateBlurHashFromImageUrl(imageUrl);
+
+    const project = await Project.create({
+      ...req.body,
+      blurhash: imageBlur
+
+    });
     return res.status(201).json(project);
   } catch (error) {
     next(error);
