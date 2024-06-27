@@ -10,7 +10,7 @@ export const CreateProduct = () => {
     const { currentAdmin } = useSelector((state) => {
         return state.admin
     })
-
+    
     const navigate = useNavigate()
     const [cats, setCats] = useState([])
     const [image, setImage] = useState(undefined);
@@ -37,13 +37,16 @@ export const CreateProduct = () => {
             const res = await fetch(`/api/products/categories/`);
             const data = await res.json();
             if (data.success === false) {
+             
                 setError(data.message)
                 setLoading(false);
                 return;
             }
             setCats(data);
+  
             setLoading(false);
         } catch (error) {
+    
             setLoading(false);
             setError("Cant fetch categories... " + error.message)
 
@@ -53,7 +56,7 @@ export const CreateProduct = () => {
 
     useEffect(() => {
 
-
+       
 
         fetchAllCats();
     }, [image])

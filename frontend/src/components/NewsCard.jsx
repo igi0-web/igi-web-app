@@ -10,8 +10,8 @@ export const NewsCard = ({ _id, title, createdAt, imageUrl, blurhash }) => {
 
     return (
         <div className='rounded'>
-            <Link to={`/news/${_id}`} className='text-decoration-none'>
-                <section className="shadow p-3 d-flex flex-column gap-2 contentsec position-relative rounded">
+            <Link to={`/news/${_id}`} className='text-decoration-none shadow-sm'>
+                <section className="shadow-sm p-3 d-flex flex-column gap-2 contentsec position-relative rounded">
 
                 <ImageContainer imageUrl={imageUrl} blurHash={blurhash} type="news"/>
                     <h5 className="desiredH5 text-decoration-none clamped-text-2" >{title}</h5>

@@ -99,17 +99,17 @@ export const ContactUs = () => {
           </div>
           <div className="row mb-3 justify-content-center gap-3 gap-lg-0">
             <div className="col-10">
-              <input id="name" name='name' type="text" className="shadow form-control rounded" placeholder="Name" required value={formData.name} onChange={handleInputChange} />
+              <input id="name" name='name' type="text" className="shadow-sm form-control rounded" placeholder="Name" required value={formData.name} onChange={handleInputChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <div className="col-10">
-              <input id="subject" name='subject' type="text" className="shadow form-control rounded" placeholder="Subject" required value={formData.subject} onChange={handleInputChange} />
+              <input id="subject" name='subject' type="text" className="shadow-sm form-control rounded" placeholder="Subject" required value={formData.subject} onChange={handleInputChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <div className="col-10">
-              <textarea id="message" className="shadow form-control rounded" name="message" cols="30" rows="10" placeholder="Type Message" value={formData.message} required onChange={handleInputChange}></textarea>
+              <textarea id="message" className="shadow-sm form-control rounded" name="message" cols="30" rows="10" placeholder="Type Message" value={formData.message} required onChange={handleInputChange}></textarea>
             </div>
           </div>
           <div className="row mb-3 mb-5 justify-content-center">

@@ -12,7 +12,7 @@ export const CertificateCard = ({imageUrl, title, createdAt, blurhash}) => {
     return (
         <div className='rounded'>
 
-            <section className="shadow p-3 d-flex flex-column gap-2 contentsec position-relative rounded">
+            <section className="shadow-sm p-3 d-flex flex-column gap-2 contentsec position-relative rounded">
 
                 
                 <ImageContainer imageUrl={imageUrl} blurHash={blurhash} type="cer" />
