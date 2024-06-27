@@ -17,22 +17,18 @@ admin.initializeApp({
   storageBucket: "gs://igi-leb-8245c.appspot.com", 
 });
 
-
-
-
-
 const storage = admin.storage();
 export {storage}
 
 export const deleteImageFromFirebase = async (imageUrl) => {
     try {
-      // Extract file path from URL
+     
       const filePath = decodeURIComponent(imageUrl.split('/o/')[1].split('?')[0]);
       
-      // Get a reference to the storage service using the default bucket
+    
       const bucket = admin.storage().bucket();
   
-      // Delete the file from storage
+  
       await bucket.file(filePath).delete();
   
       console.log("Image deleted successfully");

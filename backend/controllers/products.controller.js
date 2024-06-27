@@ -43,34 +43,6 @@ export const editCategory = async (req, res, next) => {
     }
 };
 
-// export const deleteCategory = async (req, res, next) => {
-//     try {
-//         if (req.admin && req.admin.id != req.params.adminId) {
-//             return next(errorHandler(401, "You can only delete categories from your own account!"));
-//         }
-//         const session = await mongoose.startSession();
-//         session.startTransaction();
-//         const cat = await Category.findById(req.params.id);
-
-//         if (!cat) {
-//             await session.abortTransaction();
-//             session.endSession();
-//             return next(errorHandler(404, "Category not found!"));
-//         }
-
-//         await Product.deleteMany({ category: req.params.id });
-//         await Category.findByIdAndDelete(req.params.id);
-//         await session.commitTransaction();
-//         session.endSession();
-//         res.status(200).json("Category has been deleted!");
-//     } catch (error) {
-//         await session.abortTransaction();
-//         session.endSession();
-//         next(error);
-//     }
-// };
-
-
 export const deleteCategory = async (req, res, next) => {
     let session;
     try {
@@ -121,7 +93,7 @@ export const deleteCategory = async (req, res, next) => {
 export const getCategories = async (req, res, next) => {
     try {
         const cat = await Category.find({}).sort({ createdAt: -1 });
-        console.log(cat);
+        
         if (cat.length == 0) {
             return next(errorHandler(404, "No categories found!"));
         }
@@ -151,8 +123,7 @@ export const getCategoryById = async (req, res, next) => {
 
 export const searchProducts = async (req, res, next) => {
     const query = req.query.queryTerm;
-    console.log(req.query);
-    console.log(query);
+    
     if (query != undefined && query != "") {
         try {
             const products = await Product.find({
@@ -191,20 +162,6 @@ export const getProducts = async (req, res, next) => {
         next(error);
     }
 }
-
-// export const getProductsPag = async (req, res, next) => {
-//     try {
-
-//         const products = await Product.find({}).populate('category', 'name').sort({ createdAt: -1 })
-//         if (products.length == 0) {
-//             return next(errorHandler(404, "No products found!"));
-//         }
-//         res.status(200).json(products);
-//     } catch (error) {
-//         next(error);
-//     }
-
-// }
 
 
 export const getProductById = async (req, res, next) => {
@@ -298,7 +255,7 @@ export const get6Products = async (req, res, next) => {
         const products = await Product.find({})
             .sort({ createdAt: -1 })
             .limit(6);
-        console.log(products);
+        
         if (!products || products.length === 0) {
             return next(errorHandler(404, "No products found!"));
         }

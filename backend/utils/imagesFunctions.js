@@ -19,7 +19,7 @@ async function fetchAndResizeImage(imageUrl, targetWidth, targetHeight) {
         let width = targetWidth;
         let height = targetHeight;
 
-        // Maintain aspect ratio
+        
         if (image.width > image.height) {
             height = Math.floor(targetWidth / aspectRatio);
         } else {
@@ -43,8 +43,8 @@ export const generateBlurHashFromImageUrl = async (imageUrl) => {
         console.time('BlurHash Generation Time');
         console.log('Starting BlurHash generation for:', imageUrl);
 
-        const targetWidth = 100; // Set a small target size for faster processing
-        const targetHeight = 100; // Set a small target size for faster processing
+        const targetWidth = 100; 
+        const targetHeight = 100; 
 
         const { canvas, width, height } = await fetchAndResizeImage(imageUrl, targetWidth, targetHeight);
         const context = canvas.getContext('2d');

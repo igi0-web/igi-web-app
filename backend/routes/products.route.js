@@ -10,7 +10,6 @@ router.post("/categories/create/:adminId", verifyToken, createCategory);
 router.delete("/categories/delete/:id/:adminId", verifyToken, deleteCategory);
 
 router.get("/", getProducts);
-// router.get("/pag", getProductsPag);
 router.get("/six", get6Products);
 router.get("/search", searchProducts);
 router.get("/:id", getProductById);
