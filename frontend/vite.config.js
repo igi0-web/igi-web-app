@@ -6,10 +6,13 @@ export default defineConfig({
   server:{
     proxy:{
       "/api": {
-        target: "http://localhost:3000", 
+        target: "https://igi-web-app.onrender.com/", 
         secure: false
       }
     }
+  },
+  build: {
+    chunkSizeWarningLimit: 5000
   },
   plugins: [react()],
 })
