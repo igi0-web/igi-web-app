@@ -17,8 +17,7 @@ export const AboutUs = () => {
       <hr />
 
 
-      <AboutUsRight paragraph="Our mission is to design, develop, and manufacture innovative air movement
-              solutions of the highest quality." title="Our Mission" imgSrc={aboutUs2} />
+      <AboutUsRight paragraph="We are committed to designing, developing, and manufacturing top-tier air movement solutions, HVAC and duct-installed devices that prevent fire spread like fire rated doors, MSFD etc... upholding the highest standards of quality and safety." title="Our Mission" imgSrc={aboutUs2} />
 
       <hr />
 

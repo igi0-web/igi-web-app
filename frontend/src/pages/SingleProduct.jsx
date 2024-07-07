@@ -74,13 +74,13 @@ export const SingleProduct = () => {
                             <Accordion.Item eventKey="1">
                                 <Accordion.Header>Description</Accordion.Header>
                                 <Accordion.Body>
-                                    <Card.Text>{product.description}</Card.Text>
+                                    <Card.Text className='text-secondary'>{product.description}</Card.Text>
                                 </Accordion.Body>
                             </Accordion.Item>
                             <Accordion.Item eventKey="2">
                                 <Accordion.Header>Features</Accordion.Header>
                                 <Accordion.Body>
-                                    <Card.Text>{product.features}</Card.Text>
+                                    <Card.Text className='text-secondary'>{product.features}</Card.Text>
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>

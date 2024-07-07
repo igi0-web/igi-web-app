@@ -14,7 +14,7 @@ export const NewsCard = ({ _id, title, createdAt, imageUrl, blurhash }) => {
                 <section className="shadow-sm p-3 d-flex flex-column gap-2 contentsec position-relative rounded">
 
                 <ImageContainer imageUrl={imageUrl} blurHash={blurhash} type="news"/>
-                    <h5 className="desiredH5 text-decoration-none clamped-text-2" >{title}</h5>
+                    <h5 className="desiredH5 text-decoration-none clamped-text-1" >{title}</h5>
                     <p className="section-p text-decoration-none">{formatDate(createdAt)}</p>
                     <a className="desiredBtn linkFix text-center mt-auto" href={`/news/${_id}`}>Check Event</a>
                 </section>

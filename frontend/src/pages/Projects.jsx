@@ -12,7 +12,7 @@ export const Projects = () => {
   const fetchAllProjects = async () => {
 
     try {
-      
+
       setLoading(true)
       setError("")
       const res = await fetch(`/api/projects?limit=10`);
@@ -38,17 +38,17 @@ export const Projects = () => {
     } catch (error) {
 
       setLoading(false)
-      setError("Failed to fetch projects!"+error.message);
+      setError("Failed to fetch projects!" + error.message);
     }
   }
 
 
   useEffect(() => {
-    
+
     fetchAllProjects();
   }, []);
-  
-  
+
+
 
   const onShowMoreClick = async () => {
     try {
@@ -85,10 +85,15 @@ export const Projects = () => {
         backgroundImage: `url(${backImage})`, backgroundSize: 'cover',
         backgroundPosition: 'center', backgroundRepeat: 'no-repeat', height: "300px"
       }}>
-        <h1 className="fw-bold">PROJECTS</h1>
+        <div className="d-flex flex-column justify-content-center align-items-center text-center">
+          <h1 className="fw-bold">PROJECTS</h1>
+          <h6 className="fw-bold">1000+ Projects Completed Successfully</h6>
+
+        </div>
+
       </div>
       <section className='container my-5'>
-      {error && <p className="text-danger text-center">{error}</p>}
+        {error && <p className="text-danger text-center">{error}</p>}
         <Row>
 
           {

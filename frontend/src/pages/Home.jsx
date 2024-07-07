@@ -133,7 +133,7 @@ export const Home = () => {
 
         <div class="row g-4">
 
-          <AboutCompany icon={faHammer} h2={"We Build Air Movement Products"} p={"From the smallest HVAC products to the largest ones"} />
+          <AboutCompany icon={faHammer} h2={"We Build Air Movement Products"} p={"We build HVAC and duct-installed devices that prevent fire spread, enhancing fire safety"} />
 
           <AboutCompany icon={faPerson} h2={"Each Customer is Number One"} p={"We are working hard to reach customer satisfaction"} />
 

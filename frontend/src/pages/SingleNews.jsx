@@ -55,7 +55,7 @@ export const SingleNews = () => {
                     <Col xs={12} md={6}>
                         <h1>{event.title}</h1>
 
-                        <p>{event.desc}</p>
+                        <p className='text-secondary'>{event.desc}</p>
                         <h5>{formatDate(event.createdAt)}</h5>
                     </Col>
                 </Row>

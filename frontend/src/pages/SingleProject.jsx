@@ -53,7 +53,7 @@ export const SingleProject = () => {
           <Col xs={12} md={6}>
             <h1>{project.title}</h1>
 
-            <p>{project.desc}</p>
+            <p className='text-secondary'>{project.desc}</p>
             <h5>{formatDate(project.createdAt)} - {project.country}</h5>
           </Col>
         </Row>

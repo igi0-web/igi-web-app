@@ -38,9 +38,8 @@ export const Footer = () => {
 
                         <h5 className="footerH5-white">INTERNATIONAL GROUP INDUSTRIES</h5>
                         <p className="footer-p-white">
-                            IGI team works hard to meet customer satisfaction by implementing the basic standards of
-                            HVAC
-                            products. We communicate directly with our customers via the internet or by phone so we
+                            IGI team works hard to meet customer satisfaction by implementing the standards of
+                            HVAC and duct-installed devices that prevent fire spread like fire rated doors, MSFD etc... to protect lives and properties. We communicate directly with our customers via the internet or by phone so we
                             always
                             can understand their needs.
                         </p>

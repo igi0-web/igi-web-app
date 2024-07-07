@@ -42,11 +42,11 @@ export const Certificates = () => {
 
 
   useEffect(() => {
-    
+
     fetchAllCertificates();
   }, []);
 
-  
+
 
   const onShowMoreClick = async () => {
     try {
@@ -82,13 +82,15 @@ export const Certificates = () => {
         backgroundImage: `url(${backImage})`, backgroundSize: 'cover',
         backgroundPosition: 'center', backgroundRepeat: 'no-repeat', height: "300px"
       }}>
-        <h1 className="fw-bold">CERTIFICATES</h1>
+      
+          <h1 className="fw-bold">CERTIFICATES</h1>
+         
       </div>
 
-      
+
 
       <section className='container my-5'>
-      {error && <p className="text-danger text-center">{error}</p>}
+        {error && <p className="text-danger text-center">{error}</p>}
         <Row>
 
           {

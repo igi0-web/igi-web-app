@@ -23,7 +23,8 @@ export const CreateCategory = () => {
         if (currentAdmin == null) {
           navigate("/login")
         }
-        setLoading(true)
+        setLoading(true);
+        setError("");
         try {
           const res = await fetch(`/api/products/categories/create/${currentAdmin._id}`, {
             method: "POST",
@@ -35,24 +36,24 @@ export const CreateCategory = () => {
     
           const data = await res.json();
           if (data.success === false) {
-            if (data.statusCode != 201) {
-              setLoading(false)
+            if (data.statusCode == 401) {
               navigate("/login")
-            }
-            setLoading(false)
-           
-            return;
+          }
+          setLoading(false)
+          setError(data.message);
+          return;
           }
           setLoading(false)
           
           navigate('/admin/categories');
     
         } catch (err) {
-         setError(err.message)
+          setLoading(false)
+          setError("Can't create the category! " + err.message)
         }
     
       }
-      console.log(formData);
+     
     return (
         <>
 
@@ -71,7 +72,7 @@ export const CreateCategory = () => {
 
                     <Button disabled={loading == true ? true : false} type="submit" className="my-2 desiredBtn">{loading ? "PLEASE WAIT" : "CREATE"}</Button>
                 </Form>
-                
+                {error && <p className="text-danger text-center">{error}</p>}
             </section></>
     )
 }

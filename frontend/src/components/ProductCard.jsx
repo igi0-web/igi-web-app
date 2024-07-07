@@ -12,7 +12,7 @@ export const ProductCard = ({ _id, name, code, imageUrl, description, category, 
                     <ImageContainer imageUrl={imageUrl} blurHash={blurhash}  />
                     
                     <p className="section-p text-decoration-none my-2">{category.name}</p>
-                    <h5 className="desiredH5 text-decoration-none clamped-text-2" >{name} - {code}</h5>
+                    <h5 className="desiredH5 text-decoration-none clamped-text-1" >{name} - {code}</h5>
                     <p className="text-secondary text-decoration-none clamped-text-2">{description}</p>
                     
                     <a className="desiredBtn linkFix text-center mt-auto" href={`/products/${_id}`}>Check Product</a>

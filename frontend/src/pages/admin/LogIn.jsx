@@ -48,7 +48,8 @@ export const LogIn = () => {
     return (
         <>
             <section className='container my-5'>
-                <h1 className='section-p'>Sign In</h1>
+                <h1 className='section-p'>Welcome Admin! Sign In</h1>
+                <p className='text-danger'>If you're not an admin, please return back to the website.</p>
                 <Form className='section-p' autoComplete="off" onSubmit={handleSubmit}>
                     <Form.Group controlId="email" className="my-3">
                         <Form.Label>Email Address</Form.Label>
