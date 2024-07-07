@@ -8,8 +8,9 @@ import productsRouter from "./routes/products.route.js"
 import authRouter from "./routes/auth.route.js"
 import { errorMiddleware } from './middlewares/error.middleware.js';
 import cookieParser from 'cookie-parser';
+import path from 'path'
 import adminsRouter from "./routes/admins.route.js"
-
+const __dirname = path.resolve();
 const app = express();
 
 app.use(express.json());
@@ -24,6 +25,12 @@ app.use("/api/projects", projectsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/admins", adminsRouter)
+
+app.use(express.static(path.join(__dirname, '/frontend/dist')));
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, '/frontend/dist/index.html'))
+})
 
 app.use(errorMiddleware);
 
