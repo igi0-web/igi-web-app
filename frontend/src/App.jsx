@@ -35,7 +35,13 @@ import { EditEvent } from './pages/admin/events/EditEvent';
 import { AdminsList } from './pages/admin/admins/AdminsList';
 import { CreateAdmin } from './pages/admin/admins/CreateAdmin';
 import { EditAdmin } from './pages/admin/admins/EditAdmin';
+import ReactGA from 'react-ga4'
 
+ReactGA.initialize("G-S6WJCY6VDW");
+ReactGA.send({
+  hitType: "pageview",
+  page: window.location.pathname,
+})
 function App() {
 
 

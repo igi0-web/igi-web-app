@@ -13,10 +13,10 @@ export const Filter = ({ allProductsArr, setFiltered, activeCat, setActiveCat, c
     
     return (
         <div className="filter-container">
-            <button className={activeCat === 0 ? "active" : ""} onClick={() => setActiveCat(0)}>All</button>
+            <button className={activeCat === 0 ? "active my-2" : "my-2"} onClick={() => setActiveCat(0)}>All</button>
             {categories.map((cat) => {
                 return (
-                    <button className={activeCat === cat._id ? "active" : ""} onClick={() => setActiveCat(cat._id)}>{cat.name}</button>
+                    <button className={activeCat === cat._id ? "active my-2" : "my-2"} onClick={() => setActiveCat(cat._id)}>{cat.name}</button>
                 )
 
             })}
