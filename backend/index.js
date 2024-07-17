@@ -10,7 +10,7 @@ import { errorMiddleware } from './middlewares/error.middleware.js';
 import cookieParser from 'cookie-parser';
 import path from 'path'
 import adminsRouter from "./routes/admins.route.js"
-
+import cors from 'cors'
 const app = express();
 // Allow requests from your frontend domain
 const corsOptions = {
