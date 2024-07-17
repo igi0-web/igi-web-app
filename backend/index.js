@@ -14,7 +14,7 @@ import cors from 'cors'
 const app = express();
 // Allow requests from your frontend domain
 const corsOptions = {
-    origin: 'https://igi-lebanon.com',
+    origin: ['https://igi-lebanon.com', 'https://www.igi-lebanon.com'],
     methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization'], // Include Authorization header for JWT
     credentials: true, // Allow cookies to be sent in cross-origin requests
