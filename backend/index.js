@@ -12,7 +12,14 @@ import path from 'path'
 import adminsRouter from "./routes/admins.route.js"
 const __dirname = path.resolve();
 const app = express();
-
+// Allow requests from your frontend domain
+const corsOptions = {
+    origin: 'https://igi-lebanon.com',
+    methods: ['GET', 'POST', 'DELETE', 'PUT'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+  
+  app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 

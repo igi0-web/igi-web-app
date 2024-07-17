@@ -6,8 +6,10 @@ export default defineConfig({
   server:{
     proxy:{
       "/api": {
-        target: "https://igi-web-app.onrender.com/", 
-        secure: false
+        target: "https://igi-web-app.onrender.com", 
+        secure: false,
+        changeOrigin: true,
+        
       }
     }
   },
