@@ -27,7 +27,7 @@ export const EditAdmin = () => {
     const fetchSingleAdmin = async () => {
         try {
 
-            const res = await fetch(`/api/admins/profile/${currentAdmin._id}`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/admins/profile/${currentAdmin._id}`);
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);
@@ -72,7 +72,7 @@ export const EditAdmin = () => {
         }
         setLoading(true)
         try {
-            const res = await fetch(`/api/admins/edit/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/admins/edit/${currentAdmin._id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

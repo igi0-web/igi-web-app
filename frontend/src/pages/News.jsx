@@ -17,7 +17,7 @@ export const News = () => {
 
       setLoading(true)
       setError("")
-      const res = await fetch(`/api/news?limit=10`);
+      const res = await fetch(`https://igi-web-app.onrender.com/api/news?limit=10`);
       const data = await res.json();
 
       if (data.success === false) {

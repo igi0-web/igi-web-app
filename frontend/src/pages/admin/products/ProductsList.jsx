@@ -33,7 +33,7 @@ export const ProductsList = () => {
 
             setShowMore(false);
 
-            const res = await fetch(`/api/products?limit=7`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/products?limit=7`);
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message)
@@ -72,7 +72,7 @@ export const ProductsList = () => {
 
         try {
 
-            const res = await fetch(`/api/products/delete/${id}/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/products/delete/${id}/${currentAdmin._id}`, {
                 method: "DELETE"
             });
             const data = await res.json();
@@ -94,7 +94,7 @@ export const ProductsList = () => {
 
     const fetchProductDetails = async (id) => {
         try {
-            const res = await fetch(`/api/products/${id}`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/products/${id}`);
             const product = await res.json();
             if (product.success === false) {
                 setStatusCode(product.statusCode)
@@ -133,7 +133,7 @@ export const ProductsList = () => {
             setLoading(true)
             const numberOfProducts = products.length;
             const startIndex = numberOfProducts;
-            const res = await fetch(`/api/products/?startIndex=${startIndex}&limit=7`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/products/?startIndex=${startIndex}&limit=7`);
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);

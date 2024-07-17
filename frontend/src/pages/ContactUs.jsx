@@ -14,7 +14,7 @@ export const ContactUs = () => {
     try {
       setLoading(true)
       setError("")
-      const res = await fetch("/api/cprofile");
+      const res = await fetch("https://igi-web-app.onrender.com/api/cprofile");
       const profile = await res.json();
 
       if (profile.success === false) {

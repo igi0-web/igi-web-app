@@ -34,7 +34,7 @@ export const CreateProduct = () => {
             setLoading(true);
             setError("");
 
-            const res = await fetch(`/api/products/categories/`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/products/categories/`);
             const data = await res.json();
             if (data.success === false) {
              
@@ -110,7 +110,7 @@ export const CreateProduct = () => {
         try {
             setLoading(true);
             setError("");
-            const res = await fetch(`/api/products/create/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/products/create/${currentAdmin._id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

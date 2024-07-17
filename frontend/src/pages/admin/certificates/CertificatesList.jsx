@@ -25,7 +25,7 @@ export const CertificatesList = () => {
     const fetchAllCertificates = async () => {
         try {
             setShowMore(false);
-            const res = await fetch(`/api/certificates?limit=7`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/certificates?limit=7`);
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message)
@@ -60,7 +60,7 @@ export const CertificatesList = () => {
 
         try {
 
-            const res = await fetch(`/api/certificates/delete/${id}/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/certificates/delete/${id}/${currentAdmin._id}`, {
                 method: "DELETE"
             });
             const data = await res.json();
@@ -84,7 +84,7 @@ export const CertificatesList = () => {
     }
     const fetchCertificateDetails = async (id) => {
         try {
-            const res = await fetch(`/api/certificates/${id}`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/certificates/${id}`);
             const cer = await res.json();
             if (cer.success === false) {
                 setStatusCode(cer.statusCode)

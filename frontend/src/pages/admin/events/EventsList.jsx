@@ -27,7 +27,7 @@ export const EventsList = () => {
     const fetchAllEvents = async () => {
         try {
             setShowMore(false);
-            const res = await fetch(`/api/news?limit=7`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/news?limit=7`);
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message)
@@ -62,7 +62,7 @@ export const EventsList = () => {
 
         try {
 
-            const res = await fetch(`/api/news/delete/${id}/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/news/delete/${id}/${currentAdmin._id}`, {
                 method: "DELETE"
             });
             const data = await res.json();
@@ -86,7 +86,7 @@ export const EventsList = () => {
 
     const fetchEventDetails = async (id) => {
         try {
-            const res = await fetch(`/api/news/${id}`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/news/${id}`);
             const event = await res.json();
             if (event.success === false) {
                 setStatusCode(event.statusCode)

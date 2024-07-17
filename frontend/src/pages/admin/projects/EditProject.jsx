@@ -35,7 +35,7 @@ export const EditProject = () => {
             try {
                 setLoading(true);
                 setError("");
-                const res = await fetch(`/api/projects/${params.id}`);
+                const res = await fetch(`https://igi-web-app.onrender.com/api/projects/${params.id}`);
                 const data = await res.json();
                 if (data.success === false) {
                     setError(data.message)
@@ -104,7 +104,7 @@ export const EditProject = () => {
         try {
             setLoading(true);
             setError("");
-            const res = await fetch(`/api/projects/edit/${params.id}/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/projects/edit/${params.id}/${currentAdmin._id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

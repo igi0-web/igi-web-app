@@ -39,7 +39,7 @@ export const EditProduct = () => {
                 setLoading(true);
                 setError("");
     
-                const res = await fetch(`/api/products/categories/`);
+                const res = await fetch(`https://igi-web-app.onrender.com/api/products/categories/`);
                 const data = await res.json();
                 if (data.success === false) {
                     setError(data.message)
@@ -59,7 +59,7 @@ export const EditProduct = () => {
             try {
                 setLoading(true);
                 setError("");
-                const res = await fetch(`/api/products/${params.id}`);
+                const res = await fetch(`https://igi-web-app.onrender.com/api/products/${params.id}`);
                 const data = await res.json();
                 if (data.success === false) {
                     setError(data.message)
@@ -129,7 +129,7 @@ export const EditProduct = () => {
         try {
             setLoading(true);
             setError("");
-            const res = await fetch(`/api/products/edit/${params.id}/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/products/edit/${params.id}/${currentAdmin._id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

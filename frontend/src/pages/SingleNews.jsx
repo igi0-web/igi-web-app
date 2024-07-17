@@ -15,7 +15,7 @@ export const SingleNews = () => {
         const fetchSingleEvent = async () => {
             try {
 
-                const res = await fetch(`/api/news/${params.id}`);
+                const res = await fetch(`https://igi-web-app.onrender.com/api/news/${params.id}`);
                 const data = await res.json();
                 if (data.success === false) {
 

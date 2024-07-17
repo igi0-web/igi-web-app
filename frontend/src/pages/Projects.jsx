@@ -15,7 +15,7 @@ export const Projects = () => {
 
       setLoading(true)
       setError("")
-      const res = await fetch(`/api/projects?limit=10`);
+      const res = await fetch(`https://igi-web-app.onrender.com/api/projects?limit=10`);
       const data = await res.json();
       if (data.success === false) {
         setError(data.message)
@@ -55,7 +55,7 @@ export const Projects = () => {
       setLoading(true)
       const numberOfProjects = projects.length;
       const startIndex = numberOfProjects;
-      const res = await fetch(`/api/projects/?startIndex=${startIndex}&limit=10`);
+      const res = await fetch(`https://igi-web-app.onrender.com/api/projects?startIndex=${startIndex}&limit=10`);
       const data = await res.json();
       if (data.success === false) {
         setError(data.message)

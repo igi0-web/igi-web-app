@@ -71,7 +71,7 @@ export const CreateProject = () => {
         try {
             setLoading(true);
             setError("");
-          const res = await fetch(`/api/projects/create/${currentAdmin._id}`, {
+          const res = await fetch(`https://igi-web-app.onrender.com/api/projects/create/${currentAdmin._id}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

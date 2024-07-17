@@ -45,7 +45,7 @@ export const Products = () => {
     try {
       setLoading(true)
       setError("")
-      const res = await fetch(`/api/products/categories/`);
+      const res = await fetch(`https://igi-web-app.onrender.com/api/categories`);
       const data = await res.json();
       if (data.success === false) {
         setError(data.message)

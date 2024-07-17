@@ -24,7 +24,7 @@ export const LogIn = () => {
         e.preventDefault();
         dispatch(signInStart());
         try {
-            const res = await fetch("/api/auth/sign-in", {
+            const res = await fetch("https://igi-web-app.onrender.com/api/auth/sign-in", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

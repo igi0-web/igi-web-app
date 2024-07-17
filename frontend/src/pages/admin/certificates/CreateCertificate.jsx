@@ -69,7 +69,7 @@ export const CreateCertificate = () => {
         setLoading(true);
         setError("");
         try {
-            const res = await fetch(`/api/certificates/create/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/certificates/create/${currentAdmin._id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

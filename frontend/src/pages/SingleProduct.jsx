@@ -19,7 +19,7 @@ export const SingleProduct = () => {
         const fetchSingleProduct = async () => {
             try {
 
-                const res = await fetch(`/api/products/${params.id}`);
+                const res = await fetch(`https://igi-web-app.onrender.com/api/products/${params.id}`);
                 const data = await res.json();
                 if (data.success === false) {
 

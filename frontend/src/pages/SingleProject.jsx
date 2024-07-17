@@ -16,7 +16,7 @@ export const SingleProject = () => {
     const fetchSingleProject = async () => {
       try {
 
-        const res = await fetch(`/api/projects/${params.id}`);
+        const res = await fetch(`https://igi-web-app.onrender.com/api/projects/${params.id}`);
         const data = await res.json();
         if (data.success === false) {
 

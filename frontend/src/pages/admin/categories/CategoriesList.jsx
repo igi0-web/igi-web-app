@@ -23,7 +23,7 @@ export const CategoriesList = () => {
     const fetchAllCats = async () => {
         try {
 
-            const res = await fetch(`/api/products/categories/`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/categories/`);
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message)
@@ -49,7 +49,7 @@ export const CategoriesList = () => {
 
         try {
 
-            const res = await fetch(`/api/products/categories/delete/${id}/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/categories/delete/${id}/${currentAdmin._id}`, {
                 method: "DELETE"
             });
             const data = await res.json();

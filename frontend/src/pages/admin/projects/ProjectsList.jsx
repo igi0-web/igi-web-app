@@ -27,7 +27,7 @@ export const ProjectsList = () => {
         try {
 
             setShowMore(false);
-            const res = await fetch(`/api/projects?limit=7`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/projects?limit=7`);
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message)
@@ -61,7 +61,7 @@ export const ProjectsList = () => {
 
     const fetchProjectDetails = async (id) => {
         try {
-            const res = await fetch(`/api/projects/${id}`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/projects/${id}`);
             const project = await res.json();
             if (project.success === false) {
                 setStatusCode(project.statusCode)
@@ -79,7 +79,7 @@ export const ProjectsList = () => {
 
         try {
 
-            const res = await fetch(`/api/projects/delete/${id}/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/projects/delete/${id}/${currentAdmin._id}`, {
                 method: "DELETE"
             });
             const data = await res.json();
@@ -130,7 +130,7 @@ export const ProjectsList = () => {
             setLoading(true)
             const numberOfProjects = projects.length;
             const startIndex = numberOfProjects;
-            const res = await fetch(`/api/projects/?startIndex=${startIndex}&limit=7`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/projects/?startIndex=${startIndex}&limit=7`);
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);

@@ -30,7 +30,7 @@ export const Search = () => {
             try {
                 setLoading(true)
                 setError("")
-                const res = await fetch(`/api/products/search?queryTerm=${searchTermFromUrl}`);
+                const res = await fetch(`https://igi-web-app.onrender.com/api/products?queryTerm=${searchTermFromUrl}`);
                 const data = await res.json();
                 if (data.success === false) {
                     setError(data.message)

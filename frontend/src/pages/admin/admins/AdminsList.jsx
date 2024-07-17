@@ -21,7 +21,7 @@ export const AdminsList = () => {
 
     const fetchAllAdmins = async () => {
         try {
-            const res = await fetch(`/api/admins/${currentAdmin._id}`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/admins/${currentAdmin._id}`);
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);
@@ -47,7 +47,7 @@ export const AdminsList = () => {
     const deleteAdmin = async (id) => {
 
         try {
-            const res = await fetch(`/api/admins/delete/${id}/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/admins/delete/${id}/${currentAdmin._id}`, {
                 method: "DELETE"
             });
             const data = await res.json();

@@ -14,7 +14,7 @@ export const Certificates = () => {
     try {
       setLoading(true)
       setError("")
-      const res = await fetch(`/api/certificates?limit=10`);
+      const res = await fetch(`https://igi-web-app.onrender.com/api/certificates?limit=10`);
       const data = await res.json();
       if (data.success === false) {
         setError(data.message)

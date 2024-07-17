@@ -35,7 +35,7 @@ export const EditEvent = () => {
             try {
                 setLoading(true);
                 setError("");
-                const res = await fetch(`/api/news/${params.id}`);
+                const res = await fetch(`https://igi-web-app.onrender.com/api/news/${params.id}`);
                 const data = await res.json();
                 if (data.success === false) {
                     setError(data.message)
@@ -106,7 +106,7 @@ export const EditEvent = () => {
         try {
             setLoading(true);
             setError("");
-            const res = await fetch(`/api/news/edit/${params.id}/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/news/edit/${params.id}/${currentAdmin._id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

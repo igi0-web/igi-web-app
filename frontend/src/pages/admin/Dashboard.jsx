@@ -38,7 +38,7 @@ export const Dashboard = () => {
   const fetchCProfile = async () => {
     try {
 
-      const res = await fetch(`/api/cprofile`);
+      const res = await fetch(`https://igi-web-app.onrender.com/api/cprofile/`);
       const data = await res.json();
       if (data.success === false) {
         setLocalError(data.message)
@@ -74,7 +74,7 @@ export const Dashboard = () => {
 
     try {
 
-      const res = await fetch(`/api/cprofile/edit/${currentAdmin._id}`, {
+      const res = await fetch(`https://igi-web-app.onrender.com/api/cprofile/edit/${currentAdmin._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

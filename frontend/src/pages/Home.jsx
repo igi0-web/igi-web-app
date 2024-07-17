@@ -59,7 +59,7 @@ export const Home = () => {
     try {
       setLoading(true)
       setError("")
-      const res = await fetch(`/api/products/six`);
+      const res = await fetch(`https://igi-web-app.onrender.com/api/products/six`);
       const data = await res.json();
       if (data.success === false) {
         setError(data.message)

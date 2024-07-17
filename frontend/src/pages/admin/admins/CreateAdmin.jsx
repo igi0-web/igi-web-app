@@ -28,7 +28,7 @@ export const CreateAdmin = () => {
         }
         setLoading(true)
         try {
-            const res = await fetch(`/api/admins/create/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/admins/create/${currentAdmin._id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

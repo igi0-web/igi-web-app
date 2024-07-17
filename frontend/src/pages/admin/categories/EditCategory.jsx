@@ -23,7 +23,7 @@ export const EditCategory = () => {
         const fetchSingleCat = async () => {
             try {
 
-                const res = await fetch(`/api/products/categories/${params.id}`);
+                const res = await fetch(`https://igi-web-app.onrender.com/api/categories/${params.id}`);
                 const data = await res.json();
                 if (data.success === false) {
 
@@ -58,7 +58,7 @@ export const EditCategory = () => {
         }
         setLoading(true)
         try {
-            const res = await fetch(`/api/products/categories/edit/${params.id}/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/categories/edit/${params.id}/${currentAdmin._id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
