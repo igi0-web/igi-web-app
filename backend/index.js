@@ -10,9 +10,16 @@ import { errorMiddleware } from './middlewares/error.middleware.js';
 import cookieParser from 'cookie-parser';
 import path from 'path'
 import adminsRouter from "./routes/admins.route.js"
-
+import cors from 'cors'
 const app = express();
-
+// Allow requests from your frontend domain
+const corsOptions = {
+    origin: 'https://igi-lebanon.com',
+    methods: ['GET', 'POST', 'DELETE', 'PUT'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+  
+  app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
