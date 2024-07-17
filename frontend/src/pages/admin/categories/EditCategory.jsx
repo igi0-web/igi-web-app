@@ -23,7 +23,7 @@ export const EditCategory = () => {
         const fetchSingleCat = async () => {
             try {
 
-                const res = await fetch(`https://igi-web-app.onrender.com/api/categories/${params.id}`);
+                const res = await fetch(`https://igi-web-app.onrender.com/api/products/categories/${params.id}`);
                 const data = await res.json();
                 if (data.success === false) {
 

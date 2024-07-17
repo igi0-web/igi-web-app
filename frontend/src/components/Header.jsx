@@ -27,7 +27,7 @@ export const Header = () => {
     console.log("Log out entered");
     try {
       dispatch(signOutStart());
-      const call = await fetch("/api/auth/sign-out");
+      const call = await fetch("https://igi-web-app.onrender.com/api/auth/sign-out");
       const response = await call.json();
       if (response.success === false) {
         dispatch(signOutFailure(response.message));

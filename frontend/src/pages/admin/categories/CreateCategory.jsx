@@ -26,7 +26,7 @@ export const CreateCategory = () => {
         setLoading(true);
         setError("");
         try {
-          const res = await fetch(`https://igi-web-app.onrender.com/api/categories/create/${currentAdmin._id}`, {
+          const res = await fetch(`https://igi-web-app.onrender.com/api/products/categories/create/${currentAdmin._id}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
