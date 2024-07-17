@@ -63,7 +63,8 @@ export const EventsList = () => {
         try {
 
             const res = await fetch(`https://igi-web-app.onrender.com/api/news/delete/${id}/${currentAdmin._id}`, {
-                method: "DELETE"
+                method: "DELETE",
+                credentials: 'include',
             });
             const data = await res.json();
             if (data.success === false) {

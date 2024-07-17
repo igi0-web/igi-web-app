@@ -73,7 +73,8 @@ export const ProductsList = () => {
         try {
 
             const res = await fetch(`https://igi-web-app.onrender.com/api/products/delete/${id}/${currentAdmin._id}`, {
-                method: "DELETE"
+                method: "DELETE",
+                credentials: 'include',
             });
             const data = await res.json();
             if (data.success === false) {

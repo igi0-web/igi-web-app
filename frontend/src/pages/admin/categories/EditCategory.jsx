@@ -58,11 +58,12 @@ export const EditCategory = () => {
         }
         setLoading(true)
         try {
-            const res = await fetch(`https://igi-web-app.onrender.com/api/categories/edit/${params.id}/${currentAdmin._id}`, {
+            const res = await fetch(`https://igi-web-app.onrender.com/api/products/categories/edit/${params.id}/${currentAdmin._id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: 'include',
                 body: JSON.stringify(formData),
             });
 

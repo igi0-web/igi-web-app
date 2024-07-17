@@ -27,7 +27,9 @@ export const EditAdmin = () => {
     const fetchSingleAdmin = async () => {
         try {
 
-            const res = await fetch(`https://igi-web-app.onrender.com/api/admins/profile/${currentAdmin._id}`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/admins/profile/${currentAdmin._id}`, {
+                credentials: 'include',
+            });
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);
@@ -77,6 +79,7 @@ export const EditAdmin = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: 'include',
                 body: JSON.stringify(formData),
             });
 

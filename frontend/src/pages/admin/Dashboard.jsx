@@ -38,7 +38,9 @@ export const Dashboard = () => {
   const fetchCProfile = async () => {
     try {
 
-      const res = await fetch(`https://igi-web-app.onrender.com/api/cprofile/`);
+      const res = await fetch(`https://igi-web-app.onrender.com/api/cprofile/`, {
+        credentials: 'include',
+      });
       const data = await res.json();
       if (data.success === false) {
         setLocalError(data.message)
@@ -79,6 +81,7 @@ export const Dashboard = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
 
