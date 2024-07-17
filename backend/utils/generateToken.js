@@ -6,7 +6,7 @@ const generateToken = (res, admin) => {
     .cookie("jwt", token, {
       httpOnly: true,
       secure: true, // Set to true in production (HTTPS environment)
-      sameSite: 'strict', // Recommended to prevent CSRF attacks
+      sameSite: 'None', // Recommended to prevent CSRF attacks
       path: '/',
     })
     .json({
