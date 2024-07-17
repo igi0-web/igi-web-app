@@ -16,7 +16,8 @@ const app = express();
 const corsOptions = {
     origin: 'https://igi-lebanon.com',
     methods: ['GET', 'POST', 'DELETE', 'PUT'],
-    allowedHeaders: ['Content-Type', 'jwt'],
+    allowedHeaders: ['Content-Type', 'Authorization'], // Include Authorization header for JWT
+    credentials: true, // Allow cookies to be sent in cross-origin requests
   };
   
   app.use(cors(corsOptions));

@@ -21,7 +21,9 @@ export const AdminsList = () => {
 
     const fetchAllAdmins = async () => {
         try {
-            const res = await fetch(`https://igi-web-app.onrender.com/api/admins/${currentAdmin._id}`);
+            const res = await fetch(`https://igi-web-app.onrender.com/api/admins/${currentAdmin._id}`, {
+                credentials: 'include', // Send cookies with the request
+            });
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);
